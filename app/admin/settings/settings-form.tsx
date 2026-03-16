@@ -43,7 +43,7 @@ export function SettingsForm({ initialData, recordId }: SettingsFormProps) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6" data-admin-settings-form>
         <Card className="border-white/5 bg-slate-950/50">
           <CardContent className="grid gap-6 pt-6 md:grid-cols-2">
             <FormField

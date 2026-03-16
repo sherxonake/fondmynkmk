@@ -60,7 +60,7 @@ function useImageValidation(url: string): 'checking' | 'ok' | 'broken' {
 
 export function NewsTable({ items }: { items: AdminNewsRow[] }) {
   return (
-    <div className="overflow-hidden rounded-2xl border border-white/5 bg-slate-950/40">
+    <div className="overflow-hidden rounded-2xl border border-white/5 bg-slate-950/40" data-admin-news-table>
       <div className="max-h-[600px] overflow-auto">
         <Table>
           <TableHeader className="bg-white/5">
