@@ -5,6 +5,7 @@ import { ADMIN_COOKIE_NAME, verifyAdminJwt } from "@/lib/admin-auth";
 
 const LOGIN_PATH = "/admin/login";
 const DASHBOARD_PATH = "/admin";
+const SHOULD_ENFORCE_PAGE_REDIRECT = process.env.NEXT_PUBLIC_ENFORCE_ADMIN_REDIRECT === "true";
 
 async function hasValidSession(request: NextRequest): Promise<boolean> {
   const token = request.cookies.get(ADMIN_COOKIE_NAME)?.value;
@@ -35,16 +36,15 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  if (isAdminPage || isAdminApi) {
-    if (!authenticated) {
-      if (isAdminApi) {
-        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-      }
-      const url = request.nextUrl.clone();
-      url.pathname = LOGIN_PATH;
-      url.searchParams.set("from", pathname);
-      return NextResponse.redirect(url);
-    }
+  if (isAdminApi && !authenticated) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  if (isAdminPage && !authenticated && SHOULD_ENFORCE_PAGE_REDIRECT) {
+    const url = request.nextUrl.clone();
+    url.pathname = LOGIN_PATH;
+    url.searchParams.set("from", pathname);
+    return NextResponse.redirect(url);
   }
 
   return NextResponse.next();
