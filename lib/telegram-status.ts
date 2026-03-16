@@ -7,6 +7,10 @@ export type TelegramStatus = {
 
 export async function getTelegramStatus(): Promise<TelegramStatus> {
   try {
+    const token = process.env.TELEGRAM_BOT_TOKEN;
+    if (!token) {
+      return { ok: false, label: "Нет токена Telegram" };
+    }
     const bot = getBot();
     const me = await bot.api.getMe();
     const label = me.username ? `@${me.username}` : me.first_name;

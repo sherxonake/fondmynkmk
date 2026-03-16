@@ -59,7 +59,7 @@ const formatDateTime = (value: string | null): string => {
 };
 
 export default async function AdminDashboardPage() {
-  await requireAdminSession();
+  await requireAdminSession({ redirectOnFail: false });
   const [stats, telegramStatus] = await Promise.all([getDashboardStats(), getTelegramStatus()]);
 
   return (

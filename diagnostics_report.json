@@ -1,0 +1,7 @@
+{
+  "timestamp": "2026-03-16T09:40:00Z",
+  "endpoint": "/api/admin/self-test",
+  "response": {
+    "ok": true
+  }
+}
