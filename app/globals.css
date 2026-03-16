@@ -1,0 +1,102 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* NGMK Brand Palette */
+  --color-primary-dark: #0B2B4F;
+  --color-primary-light: #F0F4FA;
+  --color-accent-gold: #C5A572;
+  --color-text-dark: #1E2A3A;
+  --color-text-light: #FFFFFF;
+  --color-white: #FFFFFF;
+  --color-accent-green: #2E7D32;
+
+  /* shadcn tokens mapped to NGMK palette */
+  --background: var(--color-white);
+  --foreground: var(--color-text-dark);
+  --card: var(--color-white);
+  --card-foreground: var(--color-text-dark);
+  --popover: var(--color-white);
+  --popover-foreground: var(--color-text-dark);
+  --primary: var(--color-primary-dark);
+  --primary-foreground: var(--color-text-light);
+  --secondary: var(--color-primary-light);
+  --secondary-foreground: var(--color-primary-dark);
+  --muted: var(--color-primary-light);
+  --muted-foreground: #5A6B7E;
+  --accent: var(--color-accent-gold);
+  --accent-foreground: var(--color-text-dark);
+  --destructive: #DC2626;
+  --destructive-foreground: var(--color-text-light);
+  --border: #DDE3ED;
+  --input: #DDE3ED;
+  --ring: var(--color-accent-gold);
+
+  --radius: 1rem;
+
+  --shadow-card: 0 10px 30px -5px rgba(0, 0, 0, 0.1), 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+@theme inline {
+  --font-sans: 'Inter', 'Inter Fallback', sans-serif;
+  --font-mono: 'Geist Mono', 'Geist Mono Fallback', monospace;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-ngmk-dark: var(--color-primary-dark);
+  --color-ngmk-light: var(--color-primary-light);
+  --color-ngmk-gold: var(--color-accent-gold);
+  --color-ngmk-text: var(--color-text-dark);
+  --color-ngmk-green: var(--color-accent-green);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Phone button pulsating glow on hover */
+.phone-pulse:hover {
+  animation: phone-glow 1.5s ease-in-out infinite;
+}
+
+@keyframes phone-glow {
+  0%, 100% {
+    box-shadow: 0 0 8px rgba(197, 165, 114, 0.3), 0 0 20px rgba(197, 165, 114, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 16px rgba(197, 165, 114, 0.55), 0 0 40px rgba(197, 165, 114, 0.25);
+  }
+}
