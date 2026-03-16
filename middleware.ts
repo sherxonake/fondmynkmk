@@ -20,6 +20,7 @@ export async function middleware(request: NextRequest) {
   const isAdminApi = pathname.startsWith("/api/admin");
   const isLoginApi = pathname === "/api/admin/login";
   const isLoginPage = pathname === LOGIN_PATH;
+  const containsLogin = pathname.includes("login");
 
   const authenticated = await hasValidSession(request);
 
@@ -31,12 +32,19 @@ export async function middleware(request: NextRequest) {
     if (authenticated) {
       const url = request.nextUrl.clone();
       url.pathname = DASHBOARD_PATH;
+      console.log("[middleware] redirect authenticated login ->", url.pathname);
       return NextResponse.redirect(url);
     }
     return NextResponse.next();
   }
 
+  if (containsLogin) {
+    console.log("[middleware] bypass for login path", pathname);
+    return NextResponse.next();
+  }
+
   if (isAdminApi && !authenticated) {
+    console.log("[middleware] admin api unauthorized", pathname);
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -44,6 +52,7 @@ export async function middleware(request: NextRequest) {
     const url = request.nextUrl.clone();
     url.pathname = LOGIN_PATH;
     url.searchParams.set("from", pathname);
+    console.log("[middleware] redirect unauthenticated ->", url.pathname, "from", pathname);
     return NextResponse.redirect(url);
   }
 
