@@ -19,9 +19,15 @@ import type {
 import { supabase } from "./supabase";
 
 type SiteSettingsRow = {
+  id: string | null;
   address: string | null;
   phone: string | null;
   trust_phone: string | null;
+  contact_email: string | null;
+  telegram_url: string | null;
+  instagram_url: string | null;
+  hero_title: string | null;
+  hero_subtitle: string | null;
   logo_url: string | null;
 };
 
@@ -92,6 +98,11 @@ const fallbackSiteSettings: SiteSettings = {
   address: "Navoiy viloyati, O'zbekiston Respublikasi",
   phone: "+998 79 223-60-21",
   trustPhone: "1150",
+  email: "press@nkmk.uz",
+  telegram: "https://t.me/nkmk",
+  instagram: "https://instagram.com/nkmk",
+  heroTitle: "NKMK Jamg'armasi",
+  heroSubtitle: "Yirik ijtimoiy loyihalarni qo'llab-quvvatlaymiz",
   logo: {
     url: "/images/logo.png",
     width: 150,
@@ -118,7 +129,9 @@ export async function getSiteSettings(): Promise<SiteSettings> {
   try {
     const { data, error } = await supabase
       .from("site_settings")
-      .select("address, phone, trust_phone, logo_url")
+      .select(
+        "id, address, phone, trust_phone, contact_email, telegram_url, instagram_url, hero_title, hero_subtitle, logo_url"
+      )
       .maybeSingle();
 
     if (error) {
@@ -135,6 +148,11 @@ export async function getSiteSettings(): Promise<SiteSettings> {
       address: row.address ?? fallbackSiteSettings.address,
       phone: row.phone ?? fallbackSiteSettings.phone,
       trustPhone: row.trust_phone ?? fallbackSiteSettings.trustPhone,
+      email: row.contact_email ?? fallbackSiteSettings.email,
+      telegram: row.telegram_url ?? fallbackSiteSettings.telegram,
+      instagram: row.instagram_url ?? fallbackSiteSettings.instagram,
+      heroTitle: row.hero_title ?? fallbackSiteSettings.heroTitle,
+      heroSubtitle: row.hero_subtitle ?? fallbackSiteSettings.heroSubtitle,
       logo: {
         url: row.logo_url ?? fallbackSiteSettings.logo.url,
         width: 150,

@@ -10,6 +10,11 @@ export interface SiteSettings {
   address: string;
   phone: string;
   trustPhone: string;
+  email: string;
+  telegram?: string;
+  instagram?: string;
+  heroTitle?: string;
+  heroSubtitle?: string;
   logo: LogoImage;
 }
 
