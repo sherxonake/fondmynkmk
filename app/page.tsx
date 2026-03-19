@@ -1,3 +1,6 @@
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { NewsStories } from "@/components/NewsStories";
@@ -35,6 +38,8 @@ export default async function HomePage() {
       getFooterColumns(),
     ]);
 
+  const safeQuote = quote ?? { text: "", author: "" };
+
   return (
     <>
       <Preloader />
@@ -45,7 +50,7 @@ export default async function HomePage() {
         <Stats items={stats} />
         <Directions items={directions} />
         <Achievements />
-        <Quote data={quote} />
+        <Quote data={safeQuote} />
         <NewsList items={newsArticles} />
         <Partners items={partners} />
       </main>

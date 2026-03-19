@@ -2,14 +2,14 @@
 
 import Image from 'next/image';
 import { useState, useEffect, useTransition } from 'react';
-import { CalendarDays, EyeOff, Eye, Trash2, Loader2 } from 'lucide-react';
+import { CalendarDays, EyeOff, Eye, Trash2, Loader2, Archive, ArchiveRestore } from 'lucide-react';
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/hooks/use-toast';
 import type { AdminNewsRow } from './types';
-import { togglePublishAction, deleteNewsAction } from './actions';
+import { togglePublishAction, deleteNewsAction, archiveNewsAction, restoreNewsAction } from './actions';
 
 const DATE_FORMATTER = new Intl.DateTimeFormat('ru-RU', {
   dateStyle: 'medium',
@@ -58,7 +58,9 @@ function useImageValidation(url: string): 'checking' | 'ok' | 'broken' {
   return state;
 }
 
-export function NewsTable({ items }: { items: AdminNewsRow[] }) {
+type NewsTableMode = 'active' | 'archived';
+
+export function NewsTable({ items, mode }: { items: AdminNewsRow[]; mode: NewsTableMode }) {
   return (
     <div className="overflow-hidden rounded-2xl border border-white/5 bg-slate-950/40" data-admin-news-table>
       <div className="max-h-[600px] overflow-auto">
@@ -74,7 +76,7 @@ export function NewsTable({ items }: { items: AdminNewsRow[] }) {
           </TableHeader>
           <TableBody>
             {items.map((item) => (
-              <NewsRow key={item.id} item={item} />
+              <NewsRow key={item.id} item={item} mode={mode} />
             ))}
           </TableBody>
         </Table>
@@ -83,12 +85,16 @@ export function NewsTable({ items }: { items: AdminNewsRow[] }) {
   );
 }
 
-function NewsRow({ item }: { item: AdminNewsRow }) {
+function NewsRow({ item, mode }: { item: AdminNewsRow; mode: NewsTableMode }) {
   const imageState = useImageValidation(item.imageUrl);
   const [isPendingToggle, startToggle] = useTransition();
   const [isPendingDelete, startDelete] = useTransition();
+  const [isPendingArchive, startArchive] = useTransition();
+  const [isPendingRestore, startRestore] = useTransition();
 
   const broken = imageState === 'broken';
+  const isArchived = mode === 'archived';
+  const disablePublishControls = isArchived || isPendingArchive || isPendingRestore;
 
   return (
     <TableRow className="border-white/5">
@@ -122,7 +128,9 @@ function NewsRow({ item }: { item: AdminNewsRow }) {
         </div>
       </TableCell>
       <TableCell>
-        {item.isPublished ? (
+        {isArchived ? (
+          <Badge className="bg-slate-500/30 text-slate-200">В архиве</Badge>
+        ) : item.isPublished ? (
           <Badge className="bg-emerald-500/20 text-emerald-200">Опубликовано</Badge>
         ) : (
           <Badge className="bg-amber-500/20 text-amber-200">Черновик</Badge>
@@ -130,53 +138,99 @@ function NewsRow({ item }: { item: AdminNewsRow }) {
       </TableCell>
       <TableCell className="text-right">
         <div className="flex items-center justify-end gap-2">
-          <Button
-            variant="ghost"
-            size="sm"
-            disabled={isPendingToggle || isPendingDelete}
-            onClick={() => {
-              startToggle(async () => {
-                try {
-                  await togglePublishAction({ id: item.id, nextPublished: !item.isPublished });
-                  toast({
-                    title: item.isPublished ? 'Новость снята с публикации' : 'Новость опубликована',
-                    description: item.title,
+          {!isArchived && (
+            <Button
+              variant="ghost"
+              size="sm"
+              disabled={isPendingToggle || disablePublishControls}
+              onClick={() => {
+                startToggle(async () => {
+                  try {
+                    await togglePublishAction({ id: item.id, nextPublished: !item.isPublished });
+                    toast({
+                      title: item.isPublished ? 'Новость снята с публикации' : 'Новость опубликована',
+                      description: item.title,
+                    });
+                  } catch (error) {
+                    const message = error instanceof Error ? error.message : 'Неизвестная ошибка';
+                    toast({ title: 'Не удалось обновить статус', description: message, variant: 'destructive' });
+                  }
+                });
+              }}
+              className="text-slate-300 hover:text-white"
+            >
+              {isPendingToggle ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : item.isPublished ? (
+                <EyeOff className="h-4 w-4" />
+              ) : (
+                <Eye className="h-4 w-4" />
+              )}
+            </Button>
+          )}
+
+          {!isArchived ? (
+            <Button
+              variant="ghost"
+              size="sm"
+              disabled={isPendingArchive || isPendingToggle}
+              onClick={() => {
+                startArchive(async () => {
+                  try {
+                    await archiveNewsAction({ id: item.id });
+                    toast({ title: 'Новость отправлена в архив', description: item.title });
+                  } catch (error) {
+                    const message = error instanceof Error ? error.message : 'Неизвестная ошибка';
+                    toast({ title: 'Не удалось архивировать новость', description: message, variant: 'destructive' });
+                  }
+                });
+              }}
+              className="text-amber-200 hover:text-white"
+            >
+              {isPendingArchive ? <Loader2 className="h-4 w-4 animate-spin" /> : <Archive className="h-4 w-4" />}
+            </Button>
+          ) : (
+            <>
+              <Button
+                variant="ghost"
+                size="sm"
+                disabled={isPendingRestore || isPendingDelete}
+                onClick={() => {
+                  startRestore(async () => {
+                    try {
+                      await restoreNewsAction({ id: item.id });
+                      toast({ title: 'Новость восстановлена', description: item.title });
+                    } catch (error) {
+                      const message = error instanceof Error ? error.message : 'Неизвестная ошибка';
+                      toast({ title: 'Не удалось восстановить новость', description: message, variant: 'destructive' });
+                    }
                   });
-                } catch (error) {
-                  const message = error instanceof Error ? error.message : 'Неизвестная ошибка';
-                  toast({ title: 'Не удалось обновить статус', description: message, variant: 'destructive' });
-                }
-              });
-            }}
-            className="text-slate-300 hover:text-white"
-          >
-            {isPendingToggle ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : item.isPublished ? (
-              <EyeOff className="h-4 w-4" />
-            ) : (
-              <Eye className="h-4 w-4" />
-            )}
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            disabled={isPendingDelete || isPendingToggle}
-            onClick={() => {
-              startDelete(async () => {
-                try {
-                  await deleteNewsAction({ id: item.id });
-                  toast({ title: 'Новость удалена', description: item.title });
-                } catch (error) {
-                  const message = error instanceof Error ? error.message : 'Неизвестная ошибка';
-                  toast({ title: 'Не удалось удалить новость', description: message, variant: 'destructive' });
-                }
-              });
-            }}
-            className="text-rose-300 hover:text-white"
-          >
-            <Trash2 className="h-4 w-4" />
-          </Button>
+                }}
+                className="text-emerald-200 hover:text-white"
+              >
+                {isPendingRestore ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArchiveRestore className="h-4 w-4" />}
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                disabled={isPendingDelete || isPendingRestore}
+                onClick={() => {
+                  startDelete(async () => {
+                    try {
+                      await deleteNewsAction({ id: item.id });
+                      toast({ title: 'Новость удалена навсегда', description: item.title });
+                    } catch (error) {
+                      const message = error instanceof Error ? error.message : 'Неизвестная ошибка';
+                      toast({ title: 'Не удалось удалить новость', description: message, variant: 'destructive' });
+                    }
+                  });
+                }}
+                className="text-rose-300 hover:text-white"
+              >
+                {isPendingDelete ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
+              </Button>
+            </>
+          )}
         </div>
       </TableCell>
     </TableRow>

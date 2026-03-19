@@ -77,6 +77,7 @@ type NewsArticleRow = {
   excerpt: string | null;
   slug: string | null;
   category: string | null;
+  is_archived: boolean | null;
 };
 
 type FooterColumnRow = {
@@ -291,8 +292,9 @@ export async function getNewsStories(): Promise<NewsStory[]> {
 export async function getNewsArticles(): Promise<NewsArticle[]> {
   const { data, error } = await supabase
     .from("news_articles")
-    .select("id, image_url, title, published_at, excerpt, slug")
+    .select("id, image_url, title, published_at, excerpt, slug, is_archived")
     .eq("is_published", true)
+    .eq("is_archived", false)
     .order("published_at", { ascending: false })
     .limit(6);
 

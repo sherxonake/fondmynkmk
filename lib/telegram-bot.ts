@@ -5,6 +5,7 @@ import { Buffer } from "node:buffer";
 import { Bot, InlineKeyboard } from "grammy";
 
 import { supabase } from "./supabase";
+import { generateSlug } from "./utils";
 
 type TelegramFileResponse = {
   ok: boolean;
@@ -48,58 +49,6 @@ const ensureEnv = (key: string): string => {
   }
   return value;
 };
-
-export function generateSlug(text: string): string {
-  const ru: Record<string, string> = {
-    а: "a",
-    б: "b",
-    в: "v",
-    г: "g",
-    д: "d",
-    е: "e",
-    ё: "yo",
-    ж: "zh",
-    з: "z",
-    и: "i",
-    й: "y",
-    к: "k",
-    л: "l",
-    м: "m",
-    н: "n",
-    о: "o",
-    п: "p",
-    р: "r",
-    с: "s",
-    т: "t",
-    у: "u",
-    ф: "f",
-    х: "h",
-    ц: "ts",
-    ч: "ch",
-    ш: "sh",
-    щ: "sch",
-    ъ: "",
-    ы: "y",
-    ь: "",
-    э: "e",
-    ю: "yu",
-    я: "ya",
-  };
-
-  const base = text
-    .toLowerCase()
-    .split("")
-    .map((char) => ru[char] ?? char)
-    .join("")
-    .replace(/[^a-z0-9\s-]/g, "")
-    .replace(/\s+/g, "-")
-    .replace(/-+/g, "-")
-    .trim()
-    .replace(/^-+|-+$/g, "");
-
-  const fallback = base || "news";
-  return `${fallback}-${Date.now()}`;
-}
 
 export async function downloadTelegramFile(fileId: string): Promise<Buffer> {
   const token = ensureEnv("TELEGRAM_BOT_TOKEN");

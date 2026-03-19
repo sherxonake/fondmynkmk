@@ -6,4 +6,5 @@ export type AdminNewsRow = {
   createdAt: string;
   publishedAt: string | null;
   isPublished: boolean;
+  isArchived: boolean;
 };
