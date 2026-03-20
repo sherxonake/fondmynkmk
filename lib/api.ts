@@ -13,6 +13,7 @@ import type {
   HeroSlide,
   NewsStory,
   NewsArticle,
+  NewsArticleDetail,
   FooterColumn,
   FooterLink,
 } from "@/types";
@@ -73,11 +74,13 @@ type NewsArticleRow = {
   id: string | null;
   image_url: string | null;
   title: string | null;
+  content: string | null;
   published_at: string | null;
   excerpt: string | null;
   slug: string | null;
   category: string | null;
   is_archived: boolean | null;
+  is_published: boolean | null;
 };
 
 type FooterColumnRow = {
@@ -115,6 +118,12 @@ const toDateString = (value: string | null): string => {
   if (!value) return "";
   const date = new Date(value);
   return Number.isNaN(date.getTime()) ? "" : date.toLocaleDateString(RU_LOCALE);
+};
+
+const toIsoString = (value: string | null): string => {
+  if (!value) return "";
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? "" : date.toISOString();
 };
 
 const toNumericId = (sourceId: string | null, fallback: number): number => {
@@ -292,7 +301,7 @@ export async function getNewsStories(): Promise<NewsStory[]> {
 export async function getNewsArticles(): Promise<NewsArticle[]> {
   const { data, error } = await supabase
     .from("news_articles")
-    .select("id, image_url, title, published_at, excerpt, slug, is_archived")
+    .select("id, image_url, title, published_at, excerpt, slug, category, is_published, is_archived")
     .eq("is_published", true)
     .eq("is_archived", false)
     .order("published_at", { ascending: false })
@@ -308,10 +317,47 @@ export async function getNewsArticles(): Promise<NewsArticle[]> {
     id: toNumericId(row.id, index + 1),
     image: row.image_url ?? "",
     title: row.title ?? "",
-    date: toDateString(row.published_at),
+    publishedAt: toIsoString(row.published_at),
     excerpt: row.excerpt ?? "",
     slug: row.slug ?? "",
+    category: row.category ?? undefined,
+    isPublished: Boolean(row.is_published),
   }));
+}
+
+export async function getNewsArticleBySlug(slug: string): Promise<NewsArticleDetail | null> {
+  if (!slug) {
+    return null;
+  }
+
+  const { data, error } = await supabase
+    .from("news_articles")
+    .select("id, title, content, excerpt, image_url, category, published_at, slug, is_published, is_archived")
+    .eq("slug", slug)
+    .eq("is_archived", false)
+    .maybeSingle();
+
+  if (error) {
+    console.error("getNewsArticleBySlug", error);
+    return null;
+  }
+
+  if (!data || data.is_published === false) {
+    return null;
+  }
+
+  const row = data as NewsArticleRow;
+  return {
+    id: row.id ?? slug,
+    title: row.title ?? "",
+    content: row.content ?? "",
+    excerpt: row.excerpt ?? "",
+    image: row.image_url ?? "",
+    category: row.category ?? undefined,
+    publishedAt: toIsoString(row.published_at),
+    slug: row.slug ?? slug,
+    isPublished: Boolean(row.is_published),
+  };
 }
 
 export async function getFooterColumns(): Promise<FooterColumn[]> {

@@ -60,9 +60,23 @@ export interface NewsArticle {
   id: number;
   image: string;
   title: string;
-  date: string;
+  publishedAt: string;
   excerpt: string;
   slug: string;
+  category?: string;
+  isPublished: boolean;
+}
+
+export interface NewsArticleDetail {
+  id: string;
+  title: string;
+  content: string;
+  excerpt: string;
+  image: string;
+  category?: string;
+  publishedAt: string;
+  slug: string;
+  isPublished: boolean;
 }
 
 export interface FooterLink {

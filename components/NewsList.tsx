@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import type { NewsArticle } from "@/types";
@@ -9,7 +10,28 @@ interface NewsListProps {
   items: NewsArticle[];
 }
 
+const DATE_FORMATTER = new Intl.DateTimeFormat("ru-RU", {
+  day: "2-digit",
+  month: "2-digit",
+  year: "numeric",
+});
+
+const NEWS_PLACEHOLDER = "/images/news-placeholder.jpg";
+
+function formatDate(value: string): string {
+  if (!value) return "";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    return "";
+  }
+  return DATE_FORMATTER.format(date);
+}
+
 function NewsCard({ item, index }: { item: NewsArticle; index: number }) {
+  const imageSrc = item.image?.trim() ? item.image : NEWS_PLACEHOLDER;
+  const href = item.slug ? `/news/${item.slug}` : "#";
+  const isLinkDisabled = !item.slug;
+
   return (
     <motion.article
       initial={{ opacity: 0, y: 30 }}
@@ -21,7 +43,7 @@ function NewsCard({ item, index }: { item: NewsArticle; index: number }) {
       {/* Image */}
       <div className="relative aspect-[16/10] overflow-hidden md:aspect-auto md:w-2/5">
         <Image
-          src={item.image}
+          src={imageSrc}
           alt={item.title}
           fill
           className="object-cover transition-transform duration-700 group-hover:scale-105"
@@ -31,7 +53,14 @@ function NewsCard({ item, index }: { item: NewsArticle; index: number }) {
 
       {/* Content */}
       <div className="flex flex-1 flex-col justify-center p-6 md:p-8">
-        <time className="mb-3 text-sm font-semibold text-[var(--color-accent-gold)]">{item.date}</time>
+        <div className="mb-3 flex flex-wrap items-center gap-3 text-sm font-semibold text-[var(--color-accent-gold)]">
+          {item.category ? (
+            <span className="rounded-full bg-[var(--color-primary-light)] px-3 py-1 text-xs uppercase tracking-wide text-[var(--color-primary-dark)]">
+              {item.category}
+            </span>
+          ) : null}
+          <time>{formatDate(item.publishedAt)}</time>
+        </div>
         <h3
           className="text-xl font-bold text-[var(--color-text-dark)] transition-colors duration-200 group-hover:text-[var(--color-primary-dark)] lg:text-2xl"
           style={{ letterSpacing: "-0.01em" }}
@@ -40,10 +69,15 @@ function NewsCard({ item, index }: { item: NewsArticle; index: number }) {
         </h3>
         <p className="mt-3 leading-relaxed text-[var(--color-text-dark)]/55">{item.excerpt}</p>
         <div className="mt-5">
-          <span className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--color-accent-gold)] transition-all duration-200 group-hover:gap-3">
+          <Link
+            href={href}
+            aria-disabled={isLinkDisabled}
+            tabIndex={isLinkDisabled ? -1 : 0}
+            className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--color-accent-gold)] transition-all duration-200 group-hover:gap-3"
+          >
             Batafsil
             <ArrowRight className="h-4 w-4" aria-hidden="true" />
-          </span>
+          </Link>
         </div>
       </div>
     </motion.article>
@@ -51,6 +85,22 @@ function NewsCard({ item, index }: { item: NewsArticle; index: number }) {
 }
 
 export function NewsList({ items }: NewsListProps) {
+  if (!items || items.length === 0) {
+    return (
+      <section id="news" className="bg-[var(--color-primary-light)] py-20 lg:py-28" aria-labelledby="news-heading">
+        <div className="mx-auto max-w-7xl px-4 lg:px-8">
+          <div className="rounded-3xl bg-[var(--color-white)]/60 p-10 text-center shadow-[var(--shadow-card)]">
+            <p className="mb-2 text-sm font-semibold tracking-widest text-[var(--color-accent-gold)] uppercase">Matbuot xizmati</p>
+            <h2 id="news-heading" className="text-3xl font-bold text-[var(--color-text-dark)]" style={{ letterSpacing: "-0.02em" }}>
+              Yangiliklar yo'q
+            </h2>
+            <p className="mt-3 text-[var(--color-text-dark)]/70">Tez orada yangi yangiliklar paydo bo'ladi.</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section
       id="news"
