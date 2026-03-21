@@ -13,6 +13,8 @@ interface HeroProps {
 const SLIDE_DURATION = 6000;
 
 export function Hero({ slides }: HeroProps) {
+  if (!slides || slides.length === 0) return null;
+
   const [current, setCurrent] = useState(0);
   const [progress, setProgress] = useState(0);
   const startTimeRef = useRef(Date.now());
@@ -119,7 +121,7 @@ export function Hero({ slides }: HeroProps) {
             transition={{ duration: 0.5 }}
             className="mt-8 max-w-2xl text-pretty text-lg leading-relaxed text-[var(--color-text-light)]/70 md:text-xl lg:text-2xl"
           >
-            {slides[current].subtitle}
+            {slides[current]?.subtitle ?? ''}
           </motion.p>
         </AnimatePresence>
 
