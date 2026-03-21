@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { ShieldCheck, Newspaper, Users, Bot } from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

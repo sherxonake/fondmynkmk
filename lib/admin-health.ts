@@ -31,17 +31,34 @@ export async function checkSiteSettingsHealth(): Promise<boolean> {
   }
 }
 
-export async function assertAdminHealth(): Promise<void> {
-  const checks = [
-    supabase.from("site_settings").select("address").limit(1),
-    supabase.from("news_articles").select("id").limit(1),
-  ];
+export type AdminHealthResult = {
+  healthy: boolean;
+  error?: string;
+};
 
-  const results = await Promise.all(checks);
-  const failure = results.find((result) => result.error);
+export async function checkAdminHealth(): Promise<AdminHealthResult> {
+  try {
+    const checks = [
+      supabase.from("site_settings").select("address").limit(1),
+      supabase.from("news_articles").select("id").limit(1),
+    ];
 
-  if (failure?.error) {
-    throw new Error(`Admin health check failed: ${failure.error.message}`);
+    const results = await Promise.all(checks);
+    const failure = results.find((result) => result.error);
+
+    if (failure?.error) {
+      const message = failure.error.message ?? "Unknown Supabase error";
+      console.error("checkAdminHealth", failure.error);
+      return { healthy: false, error: message };
+    }
+
+    return { healthy: true };
+  } catch (error) {
+    console.error("checkAdminHealth.catch", error);
+    return {
+      healthy: false,
+      error: error instanceof Error ? error.message : String(error),
+    };
   }
 }
 

@@ -1,8 +1,10 @@
+export const dynamic = "force-dynamic";
+
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { ShieldCheck, Newspaper, Settings2, Activity } from "lucide-react";
 
-import { assertAdminHealth, checkSiteSettingsHealth } from "@/lib/admin-health";
+import { checkAdminHealth, checkSiteSettingsHealth } from "@/lib/admin-health";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/toaster";
@@ -14,8 +16,7 @@ const navItems = [
 ];
 
 export default async function AdminLayout({ children }: { children: ReactNode }) {
-  await assertAdminHealth();
-  const healthOk = await checkSiteSettingsHealth();
+  const [adminHealth, healthOk] = await Promise.all([checkAdminHealth(), checkSiteSettingsHealth()]);
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
@@ -53,7 +54,7 @@ export default async function AdminLayout({ children }: { children: ReactNode })
             ))}
           </nav>
 
-          <HealthIndicator healthy={healthOk} />
+          <HealthIndicator healthy={healthOk && adminHealth.healthy} />
         </aside>
 
         <main className="flex flex-1 flex-col bg-slate-950/60 p-4 md:p-8">{children}</main>
