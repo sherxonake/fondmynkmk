@@ -176,153 +176,188 @@ export async function getSiteSettings(): Promise<SiteSettings> {
 }
 
 export async function getHeroSlides(): Promise<HeroSlide[]> {
-  const { data, error } = await supabase
-    .from("hero_slides")
-    .select("id, image_url, title, subtitle")
-    .eq("is_active", true)
-    .order("sort_order", { ascending: true });
+  try {
+    const { data, error } = await supabase
+      .from("hero_slides")
+      .select("id, image_url, title, subtitle")
+      .eq("is_active", true)
+      .order("sort_order", { ascending: true });
 
-  if (error) {
-    console.error("getHeroSlides", error);
+    if (error) {
+      console.error("getHeroSlides", error);
+      return [];
+    }
+
+    const rows = (data ?? []) as HeroSlideRow[];
+    return rows.map((slide, index) => ({
+      id: toNumericId(slide.id, index + 1),
+      image: slide.image_url ?? "",
+      title: slide.title ?? "",
+      subtitle: slide.subtitle ?? "",
+    }));
+  } catch (error) {
+    console.error("getHeroSlides.catch", error);
     return [];
   }
-
-  const rows = (data ?? []) as HeroSlideRow[];
-  return rows.map((slide, index) => ({
-    id: toNumericId(slide.id, index + 1),
-    image: slide.image_url ?? "",
-    title: slide.title ?? "",
-    subtitle: slide.subtitle ?? "",
-  }));
 }
 
 export async function getStats(): Promise<StatItem[]> {
-  const { data, error } = await supabase
-    .from("stats")
-    .select("value, label, suffix")
-    .order("sort_order", { ascending: true });
+  try {
+    const { data, error } = await supabase
+      .from("stats")
+      .select("value, label, suffix")
+      .order("sort_order", { ascending: true });
 
-  if (error) {
-    console.error("getStats", error);
+    if (error) {
+      console.error("getStats", error);
+      return [];
+    }
+
+    const rows = (data ?? []) as StatRow[];
+    return rows.map((row) => ({
+      value: row.value ?? 0,
+      label: row.label ?? "",
+      suffix: row.suffix ?? undefined,
+    }));
+  } catch (error) {
+    console.error("getStats.catch", error);
     return [];
   }
-
-  const rows = (data ?? []) as StatRow[];
-  return rows.map((row) => ({
-    value: row.value ?? 0,
-    label: row.label ?? "",
-    suffix: row.suffix ?? undefined,
-  }));
 }
 
 export async function getDirections(): Promise<DirectionItem[]> {
-  const { data, error } = await supabase
-    .from("directions")
-    .select("number, icon, title, description")
-    .order("sort_order", { ascending: true });
+  try {
+    const { data, error } = await supabase
+      .from("directions")
+      .select("number, icon, title, description")
+      .order("sort_order", { ascending: true });
 
-  if (error) {
-    console.error("getDirections", error);
+    if (error) {
+      console.error("getDirections", error);
+      return [];
+    }
+
+    const rows = (data ?? []) as DirectionRow[];
+    return rows.map((row, index) => ({
+      number: row.number ?? String(index + 1).padStart(2, "0"),
+      icon: row.icon ?? "HeartPulse",
+      title: row.title ?? "",
+      description: row.description ?? "",
+    }));
+  } catch (error) {
+    console.error("getDirections.catch", error);
     return [];
   }
-
-  const rows = (data ?? []) as DirectionRow[];
-  return rows.map((row, index) => ({
-    number: row.number ?? String(index + 1).padStart(2, "0"),
-    icon: row.icon ?? "HeartPulse",
-    title: row.title ?? "",
-    description: row.description ?? "",
-  }));
 }
 
 export async function getQuote(): Promise<QuoteData | null> {
-  const { data, error } = await supabase
-    .from("quote_data")
-    .select("text, author")
-    .maybeSingle();
+  try {
+    const { data, error } = await supabase
+      .from("quote_data")
+      .select("text, author")
+      .maybeSingle();
 
-  if (error) {
-    console.error("getQuote", error);
+    if (error) {
+      console.error("getQuote", error);
+      return null;
+    }
+
+    const row = (data ?? null) as QuoteRow | null;
+    if (!row) {
+      return null;
+    }
+
+    return {
+      text: row.text ?? "",
+      author: row.author ?? "",
+    };
+  } catch (error) {
+    console.error("getQuote.catch", error);
     return null;
   }
-
-  const row = (data ?? null) as QuoteRow | null;
-  if (!row) {
-    return null;
-  }
-
-  return {
-    text: row.text ?? "",
-    author: row.author ?? "",
-  };
 }
 
 export async function getPartners(): Promise<PartnerItem[]> {
-  const { data, error } = await supabase
-    .from("partners")
-    .select("name, logo_url")
-    .order("sort_order", { ascending: true });
+  try {
+    const { data, error } = await supabase
+      .from("partners")
+      .select("name, logo_url")
+      .order("sort_order", { ascending: true });
 
-  if (error) {
-    console.error("getPartners", error);
+    if (error) {
+      console.error("getPartners", error);
+      return [];
+    }
+
+    const rows = (data ?? []) as PartnerRow[];
+    return rows.map((row) => ({
+      name: row.name ?? "",
+      logoUrl: row.logo_url ?? undefined,
+    }));
+  } catch (error) {
+    console.error("getPartners.catch", error);
     return [];
   }
-
-  const rows = (data ?? []) as PartnerRow[];
-  return rows.map((row) => ({
-    name: row.name ?? "",
-    logoUrl: row.logo_url ?? undefined,
-  }));
 }
 
 export async function getNewsStories(): Promise<NewsStory[]> {
-  const { data, error } = await supabase
-    .from("news_stories")
-    .select("id, image_url, title, category, created_at")
-    .eq("is_active", true)
-    .order("sort_order", { ascending: true })
-    .limit(5);
+  try {
+    const { data, error } = await supabase
+      .from("news_stories")
+      .select("id, image_url, title, category, created_at")
+      .eq("is_active", true)
+      .order("sort_order", { ascending: true })
+      .limit(5);
 
-  if (error) {
-    console.error("getNewsStories", error);
+    if (error) {
+      console.error("getNewsStories", error);
+      return [];
+    }
+
+    const rows = (data ?? []) as NewsStoryRow[];
+    return rows.map((row, index) => ({
+      id: toNumericId(row.id, index + 1),
+      image: row.image_url ?? "",
+      title: row.title ?? "",
+      category: row.category ?? undefined,
+      date: toDateString(row.created_at),
+    }));
+  } catch (error) {
+    console.error("getNewsStories.catch", error);
     return [];
   }
-
-  const rows = (data ?? []) as NewsStoryRow[];
-  return rows.map((row, index) => ({
-    id: toNumericId(row.id, index + 1),
-    image: row.image_url ?? "",
-    title: row.title ?? "",
-    category: row.category ?? undefined,
-    date: toDateString(row.created_at),
-  }));
 }
 
 export async function getNewsArticles(): Promise<NewsArticle[]> {
-  const { data, error } = await supabase
-    .from("news_articles")
-    .select("id, image_url, title, published_at, excerpt, slug, category, is_published, is_archived")
-    .eq("is_published", true)
-    .eq("is_archived", false)
-    .order("published_at", { ascending: false })
-    .limit(6);
+  try {
+    const { data, error } = await supabase
+      .from("news_articles")
+      .select("id, image_url, title, published_at, excerpt, slug, category, is_published, is_archived")
+      .eq("is_published", true)
+      .eq("is_archived", false)
+      .order("published_at", { ascending: false })
+      .limit(6);
 
-  if (error) {
-    console.error("getNewsArticles", error);
+    if (error) {
+      console.error("getNewsArticles", error);
+      return [];
+    }
+
+    const rows = (data ?? []) as NewsArticleRow[];
+    return rows.map((row, index) => ({
+      id: toNumericId(row.id, index + 1),
+      image: row.image_url ?? "",
+      title: row.title ?? "",
+      publishedAt: toIsoString(row.published_at),
+      excerpt: row.excerpt ?? "",
+      slug: row.slug ?? "",
+      category: row.category ?? undefined,
+      isPublished: Boolean(row.is_published),
+    }));
+  } catch (error) {
+    console.error("getNewsArticles.catch", error);
     return [];
   }
-
-  const rows = (data ?? []) as NewsArticleRow[];
-  return rows.map((row, index) => ({
-    id: toNumericId(row.id, index + 1),
-    image: row.image_url ?? "",
-    title: row.title ?? "",
-    publishedAt: toIsoString(row.published_at),
-    excerpt: row.excerpt ?? "",
-    slug: row.slug ?? "",
-    category: row.category ?? undefined,
-    isPublished: Boolean(row.is_published),
-  }));
 }
 
 export async function getNewsArticleBySlug(slug: string): Promise<NewsArticleDetail | null> {
@@ -330,75 +365,85 @@ export async function getNewsArticleBySlug(slug: string): Promise<NewsArticleDet
     return null;
   }
 
-  const { data, error } = await supabase
-    .from("news_articles")
-    .select("id, title, content, excerpt, image_url, category, published_at, slug, is_published, is_archived")
-    .eq("slug", slug)
-    .eq("is_archived", false)
-    .maybeSingle();
+  try {
+    const { data, error } = await supabase
+      .from("news_articles")
+      .select("id, title, content, excerpt, image_url, category, published_at, slug, is_published, is_archived")
+      .eq("slug", slug)
+      .eq("is_archived", false)
+      .maybeSingle();
 
-  if (error) {
-    console.error("getNewsArticleBySlug", error);
+    if (error) {
+      console.error("getNewsArticleBySlug", error);
+      return null;
+    }
+
+    if (!data || data.is_published === false) {
+      return null;
+    }
+
+    const row = data as NewsArticleRow;
+    return {
+      id: row.id ?? slug,
+      title: row.title ?? "",
+      content: row.content ?? "",
+      excerpt: row.excerpt ?? "",
+      image: row.image_url ?? "",
+      category: row.category ?? undefined,
+      publishedAt: toIsoString(row.published_at),
+      slug: row.slug ?? slug,
+      isPublished: Boolean(row.is_published),
+    };
+  } catch (error) {
+    console.error("getNewsArticleBySlug.catch", error);
     return null;
   }
-
-  if (!data || data.is_published === false) {
-    return null;
-  }
-
-  const row = data as NewsArticleRow;
-  return {
-    id: row.id ?? slug,
-    title: row.title ?? "",
-    content: row.content ?? "",
-    excerpt: row.excerpt ?? "",
-    image: row.image_url ?? "",
-    category: row.category ?? undefined,
-    publishedAt: toIsoString(row.published_at),
-    slug: row.slug ?? slug,
-    isPublished: Boolean(row.is_published),
-  };
 }
 
 export async function getFooterColumns(): Promise<FooterColumn[]> {
-  const [{ data: columns, error: columnsError }, { data: links, error: linksError }] = await Promise.all([
-    supabase
-      .from("footer_columns")
-      .select("id, title, sort_order")
-      .order("sort_order", { ascending: true }),
-    supabase
-      .from("footer_links")
-      .select("column_id, label, href, sort_order")
-      .order("sort_order", { ascending: true }),
-  ]);
+  try {
+    const [{ data: columns, error: columnsError }, { data: links, error: linksError }] = await Promise.all([
+      supabase
+        .from("footer_columns")
+        .select("id, title, sort_order")
+        .order("sort_order", { ascending: true }),
+      supabase
+        .from("footer_links")
+        .select("column_id, label, href, sort_order")
+        .order("sort_order", { ascending: true }),
+    ]);
 
-  if (columnsError) {
-    console.error("getFooterColumns.columns", columnsError);
-  }
+    if (columnsError) {
+      console.error("getFooterColumns.columns", columnsError);
+    }
 
-  if (linksError) {
-    console.error("getFooterColumns.links", linksError);
-  }
+    if (linksError) {
+      console.error("getFooterColumns.links", linksError);
+    }
 
-  const columnRows = (columns ?? []) as FooterColumnRow[];
-  const linkRows = (links ?? []) as FooterLinkRow[];
+    const columnRows = (columns ?? []) as FooterColumnRow[];
+    const linkRows = (links ?? []) as FooterLinkRow[];
 
-  if (columnRows.length === 0) {
+    if (columnRows.length === 0) {
+      return [];
+    }
+
+    const groupedLinks = linkRows.reduce<Record<string, FooterLink[]>>((acc, link) => {
+      const bucket = acc[link.column_id] ?? [];
+      bucket.push({
+        label: link.label ?? "",
+        href: link.href ?? "#",
+      });
+      acc[link.column_id] = bucket;
+      return acc;
+    }, {});
+
+    return columnRows.map((column) => ({
+      title: column.title ?? "",
+      links: groupedLinks[column.id] ?? [],
+    }));
+  } catch (error) {
+    console.error("getFooterColumns.catch", error);
     return [];
   }
-
-  const groupedLinks = linkRows.reduce<Record<string, FooterLink[]>>((acc, link) => {
-    const bucket = acc[link.column_id] ?? [];
-    bucket.push({
-      label: link.label ?? "",
-      href: link.href ?? "#",
-    });
-    acc[link.column_id] = bucket;
-    return acc;
-  }, {});
-
-  return columnRows.map((column) => ({
-    title: column.title ?? "",
-    links: groupedLinks[column.id] ?? [],
-  }));
 }
