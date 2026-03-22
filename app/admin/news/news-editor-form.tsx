@@ -72,6 +72,7 @@ export function NewsEditorForm({ mode, initialData, newsId }: NewsEditorFormProp
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [isPreview, setIsPreview] = useState(false);
+  const [slugManuallyEdited, setSlugManuallyEdited] = useState(false);
 
   const form = useForm<NewsFormData>({
     resolver: zodResolver(newsSchema),
@@ -91,11 +92,11 @@ export function NewsEditorForm({ mode, initialData, newsId }: NewsEditorFormProp
   // Авто-генерация slug из заголовка
   const title = form.watch('title');
   useEffect(() => {
-    if (mode === 'create' && title && !form.getValues('slug')) {
+    if (mode === 'create' && title && !slugManuallyEdited) {
       const slug = generateSlug(title);
       form.setValue('slug', slug);
     }
-  }, [title, form, mode]);
+  }, [title, form, mode, slugManuallyEdited]);
 
   const onSubmit = async (data: NewsFormData) => {
     setIsLoading(true);
@@ -254,6 +255,10 @@ export function NewsEditorForm({ mode, initialData, newsId }: NewsEditorFormProp
                       id="slug"
                       {...form.register('slug')}
                       placeholder="url-адрес-новости"
+                      onChange={(e) => {
+                        form.setValue('slug', e.target.value);
+                        setSlugManuallyEdited(true);
+                      }}
                       className={cn(
                         "border-white/10 bg-slate-800/50 text-white placeholder:text-slate-500",
                         errors.slug && "border-rose-500/50"
