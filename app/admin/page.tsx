@@ -1,6 +1,7 @@
 export const dynamic = "force-dynamic";
 
 import { ShieldCheck, Newspaper, Users, Bot, Plus, ExternalLink, Edit } from "lucide-react";
+import Link from "next/link";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -102,13 +103,12 @@ export default async function AdminDashboardPage() {
               <h3 className="font-semibold text-white">Создать новость</h3>
               <p className="text-sm text-slate-400">Добавить новую публикацию</p>
             </div>
-            <Button
-              onClick={() => window.location.href = '/admin/news/new'}
-              className="bg-emerald-600 hover:bg-emerald-700"
-            >
-              <Plus className="mr-2 h-4 w-4" />
-              Создать
-            </Button>
+            <Link href="/admin/news/new">
+              <Button className="bg-emerald-600 hover:bg-emerald-700">
+                <Plus className="mr-2 h-4 w-4" />
+                Создать
+              </Button>
+            </Link>
           </CardContent>
         </Card>
 
@@ -118,14 +118,12 @@ export default async function AdminDashboardPage() {
               <h3 className="font-semibold text-white">Предпросмотр сайта</h3>
               <p className="text-sm text-slate-400">Открыть fondmynkmk.vercel.app</p>
             </div>
-            <Button
-              onClick={() => window.open('https://fondmynkmk.vercel.app', '_blank')}
-              variant="outline"
-              className="border-blue-500/30 text-blue-300 hover:bg-blue-500/10"
-            >
-              <ExternalLink className="mr-2 h-4 w-4" />
-              Открыть
-            </Button>
+            <Link href="https://fondmynkmk.vercel.app" target="_blank">
+              <Button variant="outline" className="border-blue-500/30 text-blue-300 hover:bg-blue-500/10">
+                <ExternalLink className="mr-2 h-4 w-4" />
+                Открыть
+              </Button>
+            </Link>
           </CardContent>
         </Card>
       </section>
@@ -176,14 +174,11 @@ export default async function AdminDashboardPage() {
           <CardHeader>
             <div className="flex items-center justify-between">
               <CardTitle className="text-base text-white">Последние новости</CardTitle>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => window.location.href = '/admin/news'}
-                className="text-slate-400 hover:text-white"
-              >
-                Все новости
-              </Button>
+              <Link href="/admin/news">
+                <Button variant="ghost" size="sm" className="text-slate-400 hover:text-white">
+                  Все новости
+                </Button>
+              </Link>
             </div>
           </CardHeader>
           <CardContent className="space-y-3">
@@ -201,28 +196,22 @@ export default async function AdminDashboardPage() {
                       </span>
                     </div>
                   </div>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => window.location.href = `/admin/news/${news.id}/edit`}
-                    className="text-blue-300 hover:text-white ml-2"
-                  >
-                    <Edit className="h-3.5 w-3.5" />
-                  </Button>
+                  <Link href={`/admin/news/${news.id}/edit`}>
+                    <Button variant="ghost" size="sm" className="text-blue-300 hover:text-white ml-2">
+                      <Edit className="h-3.5 w-3.5" />
+                    </Button>
+                  </Link>
                 </div>
               ))
             ) : (
               <div className="text-center py-6">
                 <p className="text-sm text-slate-400">Новостей пока нет</p>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => window.location.href = '/admin/news/new'}
-                  className="mt-2 border-emerald-500/30 text-emerald-300 hover:bg-emerald-500/10"
-                >
-                  <Plus className="mr-2 h-3.5 w-3.5" />
-                  Создать первую
-                </Button>
+                <Link href="/admin/news/new">
+                  <Button variant="outline" size="sm" className="mt-2 border-emerald-500/30 text-emerald-300 hover:bg-emerald-500/10">
+                    <Plus className="mr-2 h-3.5 w-3.5" />
+                    Создать первую
+                  </Button>
+                </Link>
               </div>
             )}
           </CardContent>

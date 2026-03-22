@@ -42,10 +42,11 @@ const CATEGORIES = [
 function generateSlug(title: string): string {
   return title
     .toLowerCase()
-    .replace(/[^a-z0-9а-яё\s-]/g, '')
+    .replace(/[''`]/g, '') // убрать апострофы
+    .replace(/[^a-z0-9а-яё\s-]/g, '') // убрать спецсимволы
     .replace(/\s+/g, '-')
     .replace(/-+/g, '-')
-    .trim('-');
+    .replace(/^[-]+|[-]+$/g, ''); // убрать дефисы в начале и конце
 }
 
 interface NewsEditorFormProps {
