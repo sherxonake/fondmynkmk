@@ -1,6 +1,7 @@
 export const dynamic = "force-dynamic";
 
 import { ShieldCheck, Newspaper, Users, Bot, Plus, ExternalLink, Edit } from "lucide-react";
+import Link from "next/link";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -95,40 +96,20 @@ export default async function AdminDashboardPage() {
       </section>
 
       {/* Быстрые действия */}
-      <section className="grid gap-4 md:grid-cols-2">
-        <Card className="border-emerald-500/20 bg-emerald-500/5">
-          <CardContent className="flex items-center justify-between p-6">
-            <div>
-              <h3 className="font-semibold text-white">Создать новость</h3>
-              <p className="text-sm text-slate-400">Добавить новую публикацию</p>
-            </div>
-            <Button
-              onClick={() => window.location.href = '/admin/news/new'}
-              className="bg-emerald-600 hover:bg-emerald-700"
-            >
-              <Plus className="mr-2 h-4 w-4" />
-              Создать
-            </Button>
-          </CardContent>
-        </Card>
-
-        <Card className="border-blue-500/20 bg-blue-500/5">
-          <CardContent className="flex items-center justify-between p-6">
-            <div>
-              <h3 className="font-semibold text-white">Предпросмотр сайта</h3>
-              <p className="text-sm text-slate-400">Открыть fondmynkmk.vercel.app</p>
-            </div>
-            <Button
-              onClick={() => window.open('https://fondmynkmk.vercel.app', '_blank')}
-              variant="outline"
-              className="border-blue-500/30 text-blue-300 hover:bg-blue-500/10"
-            >
-              <ExternalLink className="mr-2 h-4 w-4" />
-              Открыть
-            </Button>
-          </CardContent>
-        </Card>
-      </section>
+      <div className="flex gap-3 mb-8">
+        <Link href="/admin/news/new">
+          <Button className="bg-emerald-600 hover:bg-emerald-700">
+            <Plus className="mr-2 h-4 w-4" />
+            Создать новость
+          </Button>
+        </Link>
+        <Link href="https://fondmynkmk.vercel.app" target="_blank">
+          <Button variant="outline" className="border-white/10 text-slate-300 hover:text-white">
+            <ExternalLink className="mr-2 h-4 w-4" />
+            Предпросмотр сайта
+          </Button>
+        </Link>
+      </div>
 
       <section className="grid gap-4 md:grid-cols-3">
         <Card className="border-white/5 bg-slate-900/40">
