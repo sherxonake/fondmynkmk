@@ -151,7 +151,7 @@ export function Stats({ items }: StatsProps) {
           </h2>
         </motion.div>
 
-        <div className="grid grid-cols-2 gap-4 md:gap-6 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4">
           {items.length > 0 ? (
             items.map((item, i) => (
               <StatShowcase key={item.label} item={item} isVisible={isVisible} index={i} />
