@@ -184,12 +184,6 @@ export function Hero({ slides }: HeroProps) {
           <ChevronRight className="h-5 w-5" />
         </button>
       </div>
-
-      {/* Bottom gradient */}
-      <div
-        className="pointer-events-none absolute bottom-0 left-0 z-10 h-20 w-full bg-gradient-to-t from-[var(--color-white)] to-transparent"
-        aria-hidden="true"
-      />
     </section>
   );
 }
