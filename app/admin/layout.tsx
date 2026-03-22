@@ -46,7 +46,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
       {/* Мобильный header */}
-      <header className="md:hidden flex items-center justify-between p-4 border-b border-white/10">
+      <header className="@md:hidden flex items-center justify-between p-4 border-b border-white/10">
         <div className="flex items-center gap-2">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-400/10 text-emerald-300">
             <Activity className="h-4 w-4" />
@@ -62,7 +62,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       </header>
 
       {/* Мобильное меню - slide-in drawer */}
-      <div className={`md:hidden fixed inset-0 z-50 ${menuOpen ? 'block' : 'hidden'}`}>
+      <div className={`@md:hidden fixed inset-0 z-50 ${menuOpen ? 'block' : 'hidden'}`}>
         <div 
           className="absolute inset-0 bg-black/60" 
           onClick={() => setMenuOpen(false)} 
@@ -122,7 +122,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       {/* Desktop layout */}
       <div className="flex min-h-screen">
         {/* Desktop sidebar - скрыт на мобильных */}
-        <aside className="hidden md:flex w-64 flex-col border-r border-white/5 bg-slate-950/40 px-6 py-8">
+        <aside className="@md:flex hidden w-64 flex-col border-r border-white/5 bg-slate-950/40 px-6 py-8">
           <div className="mb-10 flex items-center gap-3">
             <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-400/10 text-emerald-300">
               <Activity className="h-6 w-6" />
