@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { Search } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 const categories = [
@@ -14,9 +15,25 @@ const categories = [
 export function NewsFilters() {
   const { t } = useLanguage();
   const [activeCategory, setActiveCategory] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
 
   return (
-    <div className="mb-12">
+    <div className="mb-12 space-y-6">
+      {/* Search */}
+      <div className="mx-auto max-w-md">
+        <div className="relative">
+          <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[var(--color-text-dark)]/40" />
+          <input
+            type="text"
+            placeholder={t('searchNews') || 'Yangiliklarni qidirish...'}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full rounded-full border border-[var(--color-primary-light)] bg-[var(--color-white)] py-3 pl-12 pr-4 text-[var(--color-text-dark)] placeholder-[var(--color-text-dark)]/40 transition-all duration-300 focus:border-[var(--color-accent-gold)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent-gold)]/20"
+          />
+        </div>
+      </div>
+
+      {/* Category Filters */}
       <div className="flex flex-wrap justify-center gap-3">
         {categories.map((category) => (
           <button

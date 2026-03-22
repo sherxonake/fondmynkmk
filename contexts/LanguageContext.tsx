@@ -36,6 +36,7 @@ const translations = {
     backToNews: '← Barcha yangiliklar',
     allNewsPage: 'Barcha yangiliklar',
     newsDescription: 'NKMK Jamg\'armasi faoliyati haqida so\'nggi yangiliklar',
+    searchNews: 'Yangiliklarni qidirsh...',
     
     // Directions
     directions: 'Faoliyat yo\'nalishlari',
@@ -72,6 +73,7 @@ const translations = {
     backToNews: '← Все новости',
     allNewsPage: 'Все новости',
     newsDescription: 'Последние новости о деятельности Фонда НГМК',
+    searchNews: 'Поиск новостей...',
     
     // Directions
     directions: 'Направления деятельности',

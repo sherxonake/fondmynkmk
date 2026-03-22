@@ -17,6 +17,14 @@ export const supabase = createClient(supabaseUrl, serviceRoleKey, {
   auth: {
     persistSession: false,
   },
+  db: {
+    schema: 'public',
+  },
+  global: {
+    headers: {
+      'Cache-Control': 'no-store',
+    },
+  },
 });
 
 export async function ensureStorageBucket(): Promise<void> {

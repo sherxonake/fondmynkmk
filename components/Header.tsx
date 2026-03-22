@@ -6,12 +6,14 @@ import { Phone, Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { SiteSettings } from "@/types";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface HeaderProps {
   settings: SiteSettings;
 }
 
 export function Header({ settings }: HeaderProps) {
+  const { t } = useLanguage();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -22,10 +24,10 @@ export function Header({ settings }: HeaderProps) {
   }, []);
 
   const navLinks = [
-    { label: "Biz haqimizda", href: "#about" },
-    { label: "Faoliyat", href: "#directions" },
-    { label: "Yangiliklar", href: "#news" },
-    { label: "Bog'lanish", href: "#contacts" },
+    { label: t('about'), href: "#about" },
+    { label: t('directions'), href: "#directions" },
+    { label: t('news'), href: "#news" },
+    { label: t('contact'), href: "#contacts" },
   ];
 
   return (
