@@ -38,21 +38,21 @@ function NewsCard({ item, index }: { item: NewsArticle; index: number }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
-      className="group flex flex-col overflow-hidden rounded-2xl bg-[var(--color-white)] shadow-[var(--shadow-card)] transition-all duration-300 hover:-translate-y-1 hover:shadow-xl md:flex-row"
+      className="group flex flex-col overflow-hidden rounded-2xl bg-[var(--color-white)] shadow-[var(--shadow-card)] transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
     >
       {/* Image */}
-      <div className="relative aspect-[16/10] overflow-hidden md:aspect-auto md:w-2/5">
+      <div className="relative aspect-[16/10] overflow-hidden">
         <Image
           src={imageSrc}
           alt={item.title}
           fill
           className="object-cover transition-transform duration-700 group-hover:scale-105"
-          sizes="(max-width: 768px) 100vw, 40vw"
+          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
         />
       </div>
 
       {/* Content */}
-      <div className="flex flex-1 flex-col justify-center p-6 md:p-8">
+      <div className="flex flex-1 flex-col p-6">
         <div className="mb-3 flex flex-wrap items-center gap-3 text-sm font-semibold text-[var(--color-accent-gold)]">
           {item.category ? (
             <span className="rounded-full bg-[var(--color-primary-light)] px-3 py-1 text-xs uppercase tracking-wide text-[var(--color-primary-dark)]">
@@ -62,13 +62,13 @@ function NewsCard({ item, index }: { item: NewsArticle; index: number }) {
           <time>{formatDate(item.publishedAt)}</time>
         </div>
         <h3
-          className="text-xl font-bold text-[var(--color-text-dark)] transition-colors duration-200 group-hover:text-[var(--color-primary-dark)] lg:text-2xl"
+          className="text-xl font-bold text-[var(--color-text-dark)] transition-colors duration-200 group-hover:text-[var(--color-primary-dark)]"
           style={{ letterSpacing: "-0.01em" }}
         >
           {item.title}
         </h3>
-        <p className="mt-3 leading-relaxed text-[var(--color-text-dark)]/55">{item.excerpt}</p>
-        <div className="mt-5">
+        <p className="mt-3 leading-relaxed text-[var(--color-text-dark)]/55 line-clamp-3">{item.excerpt}</p>
+        <div className="mt-auto pt-4">
           <Link
             href={href}
             aria-disabled={isLinkDisabled}
@@ -127,10 +127,20 @@ export function NewsList({ items }: NewsListProps) {
           </h2>
         </motion.div>
 
-        <div className="flex flex-col gap-6">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {items.map((item, i) => (
             <NewsCard key={item.id} item={item} index={i} />
           ))}
+        </div>
+        
+        <div className="mt-12 text-center">
+          <Link
+            href="/news"
+            className="inline-flex items-center gap-2 rounded-full bg-[var(--color-accent-gold)] px-8 py-3 text-base font-semibold text-[var(--color-primary-dark)] shadow-lg shadow-[var(--color-accent-gold)]/25 transition-all duration-300 hover:scale-[1.03] hover:shadow-xl hover:shadow-[var(--color-accent-gold)]/35"
+          >
+            Barcha yangiliklar
+            <ArrowRight className="h-5 w-5" />
+          </Link>
         </div>
       </div>
     </section>

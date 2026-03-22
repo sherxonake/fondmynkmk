@@ -187,7 +187,7 @@ export function Hero({ slides }: HeroProps) {
 
       {/* Bottom gradient */}
       <div
-        className="pointer-events-none absolute bottom-0 left-0 z-10 h-40 w-full bg-gradient-to-t from-[var(--color-white)] to-transparent"
+        className="pointer-events-none absolute bottom-0 left-0 z-10 h-20 w-full bg-gradient-to-t from-[var(--color-white)] to-transparent"
         aria-hidden="true"
       />
     </section>
