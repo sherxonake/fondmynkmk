@@ -39,15 +39,28 @@ const CATEGORIES = [
   { value: 'Madaniyat', label: 'Культура' },
 ];
 
-function generateSlug(title: string): string {
+const generateSlug = (title: string): string => {
+  const translitMap: Record<string, string> = {
+    'а':'a','б':'b','в':'v','г':'g','д':'d','е':'e',
+    'ё':'yo','ж':'zh','з':'z','и':'i','й':'y','к':'k',
+    'л':'l','м':'m','н':'n','о':'o','п':'p','р':'r',
+    'с':'s','т':'t','у':'u','ф':'f','х':'kh','ц':'ts',
+    'ч':'ch','ш':'sh','щ':'shch','ъ':'','ы':'y','ь':'',
+    'э':'e','ю':'yu','я':'ya',
+    'o\'':'o','g\'':'g',  // ўзбек
+  };
+  
   return title
     .toLowerCase()
-    .replace(/[''`]/g, '') // убрать апострофы
-    .replace(/[^a-z0-9а-яё\s-]/g, '') // убрать спецсимволы
+    .replace(/o'/g, 'o').replace(/g'/g, 'g')
+    .replace(/[''`ʻʼ]/g, '')
+    .replace(/[а-яёА-ЯЁ]/g, ch => translitMap[ch] || ch)
+    .replace(/[^a-z0-9\s-]/g, '')
+    .trim()
     .replace(/\s+/g, '-')
     .replace(/-+/g, '-')
-    .replace(/^[-]+|[-]+$/g, ''); // убрать дефисы в начале и конце
-}
+    .replace(/^-|-$/g, '');
+};
 
 interface NewsEditorFormProps {
   mode: 'create' | 'edit';
