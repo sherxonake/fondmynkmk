@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const CRITICAL_SELECTORS = ['[data-admin-news-table]', '[data-admin-settings-form]'];
 const REPORT_ENDPOINT = '/api/admin/silent-alert';
@@ -9,7 +9,15 @@ const CHECK_INTERVAL_MS = 15_000;
 const randomId = (): string => crypto.randomUUID();
 
 export function GhostTester() {
+  const [mounted, setMounted] = useState(false);
+
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+    
     let canceled = false;
     let monitorId = randomId();
 

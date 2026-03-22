@@ -46,8 +46,8 @@ const FALLBACK_SLIDES: HeroSlide[] = [
     image_url: '/images/hero-children.jpg',
     is_active: true,
     sort_order: 0,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
+    created_at: '2024-01-01T00:00:00.000Z',
+    updated_at: '2024-01-01T00:00:00.000Z',
   },
   {
     id: 'demo-2',
@@ -58,8 +58,8 @@ const FALLBACK_SLIDES: HeroSlide[] = [
     image_url: '/images/hero-hospital.jpg',
     is_active: true,
     sort_order: 1,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
+    created_at: '2024-01-01T00:00:00.000Z',
+    updated_at: '2024-01-01T00:00:00.000Z',
   },
 ];
 

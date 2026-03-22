@@ -36,8 +36,8 @@ const FALLBACK_PARTNERS: Partner[] = [
     logo_url: '/images/partner1.png',
     website_url: 'https://example1.com',
     sort_order: 0,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
+    created_at: '2024-01-01T00:00:00.000Z',
+    updated_at: '2024-01-01T00:00:00.000Z',
   },
   {
     id: 'demo-2',
@@ -45,8 +45,8 @@ const FALLBACK_PARTNERS: Partner[] = [
     logo_url: '/images/partner2.png',
     website_url: 'https://example2.com',
     sort_order: 1,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
+    created_at: '2024-01-01T00:00:00.000Z',
+    updated_at: '2024-01-01T00:00:00.000Z',
   },
 ];
 

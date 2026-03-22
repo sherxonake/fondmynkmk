@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/lib/supabase";
 import { getTelegramStatus } from "@/lib/telegram-status";
 import { SelfTestExecutor } from "@/app/admin/_components/self-test-executor";
+import { HydratedDate } from "@/app/admin/_components/hydrated-date";
 import { requireAdminSession } from "@/lib/admin-session";
 
 const numberFormatter = new Intl.NumberFormat("ru-RU");
@@ -136,7 +137,9 @@ export default async function AdminDashboardPage() {
           </CardHeader>
           <CardContent>
             <p className="text-4xl font-semibold text-white">{formatNumber(stats.totalNews)}</p>
-            <p className="text-xs text-slate-500">Последняя публикация: {formatDateTime(stats.lastPublishedAt)}</p>
+            <p className="text-xs text-slate-500">
+              Последняя публикация: <HydratedDate value={stats.lastPublishedAt} formatter={(date) => dateFormatter.format(date)} />
+            </p>
           </CardContent>
         </Card>
 
@@ -192,7 +195,7 @@ export default async function AdminDashboardPage() {
                         {news.category}
                       </Badge>
                       <span className="text-xs text-slate-500">
-                        {formatDateTime(news.published_at)}
+                        <HydratedDate value={news.published_at} formatter={(date) => dateFormatter.format(date)} />
                       </span>
                     </div>
                   </div>

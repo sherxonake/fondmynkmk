@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import { toast } from '@/hooks/use-toast';
+import { HydratedDate } from '../_components/hydrated-date';
 import type { AdminNewsRow } from './types';
 import { togglePublishAction, deleteNewsAction, archiveNewsAction, restoreNewsAction } from './actions';
 
@@ -141,9 +142,11 @@ function NewsRow({ item, mode }: { item: AdminNewsRow; mode: NewsTableMode }) {
         <div className="flex flex-col gap-1 text-sm text-slate-300">
           <span className="inline-flex items-center gap-1">
             <CalendarDays className="h-3.5 w-3.5 text-slate-500" />
-            {formatDate(item.createdAt)}
+            <HydratedDate value={item.createdAt} formatter={(date) => DATE_FORMATTER.format(date)} />
           </span>
-          <span className="text-xs text-slate-500">Публикация: {formatDate(item.publishedAt)}</span>
+          <span className="text-xs text-slate-500">
+            Публикация: <HydratedDate value={item.publishedAt} formatter={(date) => DATE_FORMATTER.format(date)} />
+          </span>
         </div>
       </TableCell>
       <TableCell>
