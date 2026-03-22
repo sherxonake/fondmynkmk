@@ -33,38 +33,45 @@ function mapRow(row: NewsRowResponse): AdminNewsRow | null {
 }
 
 async function getNewsBuckets(): Promise<{ active: AdminNewsRow[]; archived: AdminNewsRow[] }> {
-  const selectFields = "id, title, category, image_url, created_at, published_at, is_published, is_archived";
+  try {
+    const selectFields = "id, title, category, image_url, created_at, published_at, is_published, is_archived";
 
-  const [active, archived] = await Promise.all([
-    supabase
-      .from("news_articles")
-      .select(selectFields)
-      .eq("is_archived", false)
-      .order("created_at", { ascending: false })
-      .limit(50),
-    supabase
-      .from("news_articles")
-      .select(selectFields)
-      .eq("is_archived", true)
-      .order("updated_at", { ascending: false })
-      .limit(50),
-  ]);
+    const [active, archived] = await Promise.all([
+      supabase
+        .from("news_articles")
+        .select(selectFields)
+        .eq("is_archived", false)
+        .order("created_at", { ascending: false })
+        .limit(50),
+      supabase
+        .from("news_articles")
+        .select(selectFields)
+        .eq("is_archived", true)
+        .order("updated_at", { ascending: false })
+        .limit(50),
+    ]);
 
-  if (active.error) {
-    throw new Error(`Не удалось загрузить активные новости: ${active.error.message}`);
+    if (active.error) {
+      console.error("Failed to load active news:", active.error);
+      return { active: [], archived: [] };
+    }
+
+    if (archived.error) {
+      console.error("Failed to load archived news:", archived.error);
+      return { active: [], archived: [] };
+    }
+
+    const toRows = (rows: NewsRowResponse[] | null | undefined) =>
+      (rows ?? []).map(mapRow).filter((row): row is AdminNewsRow => Boolean(row));
+
+    return {
+      active: toRows(active.data as NewsRowResponse[] | null | undefined),
+      archived: toRows(archived.data as NewsRowResponse[] | null | undefined),
+    };
+  } catch (error) {
+    console.error("Unexpected error loading news buckets:", error);
+    return { active: [], archived: [] };
   }
-
-  if (archived.error) {
-    throw new Error(`Не удалось загрузить архив: ${archived.error.message}`);
-  }
-
-  const toRows = (rows: NewsRowResponse[] | null | undefined) =>
-    (rows ?? []).map(mapRow).filter((row): row is AdminNewsRow => Boolean(row));
-
-  return {
-    active: toRows(active.data as NewsRowResponse[] | null | undefined),
-    archived: toRows(archived.data as NewsRowResponse[] | null | undefined),
-  };
 }
 
 export default async function AdminNewsPage() {

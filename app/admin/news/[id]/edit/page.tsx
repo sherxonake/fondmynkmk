@@ -1,6 +1,7 @@
 import { requireAdminSession } from "@/lib/admin-session";
 import { supabase } from "@/lib/supabase";
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import { NewsEditorForm } from "../../news-editor-form";
 
 interface NewsArticle {
@@ -18,30 +19,45 @@ interface NewsArticle {
   updated_at: string;
 }
 
-async function getNewsArticle(id: string): Promise<NewsArticle> {
-  const { data, error } = await supabase
-    .from("news_articles")
-    .select("*")
-    .eq("id", id)
-    .single();
+async function getNewsArticle(id: string): Promise<NewsArticle | null> {
+  try {
+    const { data, error } = await supabase
+      .from("news_articles")
+      .select("*")
+      .eq("id", id)
+      .single();
 
-  if (error) {
-    if (error.code === "PGRST116") {
-      notFound();
+    if (error) {
+      if (error.code === "PGRST116") {
+        return null;
+      }
+      console.error("Failed to load news article:", error);
+      return null;
     }
-    throw new Error(`Не удалось загрузить новость: ${error.message}`);
-  }
 
-  if (!data) {
-    notFound();
-  }
+    if (!data) {
+      return null;
+    }
 
-  return data;
+    return data;
+  } catch (error) {
+    console.error("Unexpected error loading news article:", error);
+    return null;
+  }
 }
 
 export default async function EditNewsPage({ params }: { params: { id: string } }) {
   await requireAdminSession();
   const newsArticle = await getNewsArticle(params.id);
+
+  if (!newsArticle) {
+    return (
+      <div className="p-8 text-white">
+        <p className="text-red-400">Новость не найдена или была удалена.</p>
+        <Link href="/admin/news" className="text-emerald-400 hover:text-emerald-300">← Вернуться к новостям</Link>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">

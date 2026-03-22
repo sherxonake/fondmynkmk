@@ -5,11 +5,11 @@ import { useState, useEffect, useTransition } from 'react';
 import { CalendarDays, EyeOff, Eye, Trash2, Loader2, Archive, ArchiveRestore, Edit, Plus } from 'lucide-react';
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { useRouter } from 'next/navigation';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
 import { toast } from '@/hooks/use-toast';
-import { HydratedDate } from '../_components/hydrated-date';
+import { useRouter } from 'next/navigation';
 import type { AdminNewsRow } from './types';
 import { togglePublishAction, deleteNewsAction, archiveNewsAction, restoreNewsAction } from './actions';
 
@@ -18,11 +18,14 @@ const DATE_FORMATTER = new Intl.DateTimeFormat('ru-RU', {
   timeStyle: 'short',
 });
 
+// Серверная функция форматирования дат
 function formatDate(value: string | null): string {
   if (!value) return '—';
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return '—';
-  return DATE_FORMATTER.format(date);
+  try {
+    return DATE_FORMATTER.format(new Date(value));
+  } catch { 
+    return '—'; 
+  }
 }
 
 function useImageValidation(url: string): 'checking' | 'ok' | 'broken' {
@@ -142,10 +145,10 @@ function NewsRow({ item, mode }: { item: AdminNewsRow; mode: NewsTableMode }) {
         <div className="flex flex-col gap-1 text-sm text-slate-300">
           <span className="inline-flex items-center gap-1">
             <CalendarDays className="h-3.5 w-3.5 text-slate-500" />
-            <HydratedDate value={item.createdAt} formatter={(date) => DATE_FORMATTER.format(date)} />
+            <span suppressHydrationWarning>{formatDate(item.createdAt)}</span>
           </span>
           <span className="text-xs text-slate-500">
-            Публикация: <HydratedDate value={item.publishedAt} formatter={(date) => DATE_FORMATTER.format(date)} />
+            Публикация: <span suppressHydrationWarning>{formatDate(item.publishedAt)}</span>
           </span>
         </div>
       </TableCell>

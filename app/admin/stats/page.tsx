@@ -10,7 +10,6 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/lib/supabase";
 import { requireAdminSession } from "@/lib/admin-session";
-import { SelfTestExecutor } from "@/app/admin/_components/self-test-executor";
 
 interface StatItem {
   id: string;
@@ -147,7 +146,15 @@ export default async function AdminStatsPage() {
             Управление статистическими показателями на главной странице
           </p>
         </div>
-        <SelfTestExecutor />
+        <div className="rounded-3xl border border-white/5 bg-gradient-to-br from-slate-900/80 to-slate-950/60 p-10 shadow-2xl">
+        <p className="text-sm uppercase tracking-[0.4em] text-emerald-400">System Status</p>
+        <h2 className="mt-3 text-2xl font-semibold text-white">Мониторинг системы</h2>
+        <p className="mt-2 max-w-2xl text-sm text-slate-400">Мониторинг временно отключён для стабильности.</p>
+        <div className="mt-6 inline-flex items-center gap-3 rounded-2xl border border-emerald-500/40 bg-emerald-500/10 px-4 py-2 text-sm text-emerald-100">
+          <span className="font-semibold">Stable Mode</span>
+          <span className="text-emerald-200/70">система работает стабильно.</span>
+        </div>
+      </div>
       </div>
 
       {/* Stats Form */}
