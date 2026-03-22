@@ -126,9 +126,15 @@ export function Stats({ items }: StatsProps) {
         </motion.div>
 
         <div className="grid grid-cols-2 gap-4 md:gap-6 lg:grid-cols-4">
-          {items.map((item, i) => (
-            <StatShowcase key={item.label} item={item} isVisible={isVisible} index={i} />
-          ))}
+          {items.length > 0 ? (
+            items.map((item, i) => (
+              <StatShowcase key={item.label} item={item} isVisible={isVisible} index={i} />
+            ))
+          ) : (
+            <div className="col-span-full text-center py-12">
+              <p className="text-[var(--color-text-dark)]/50">Statistika yuklanmoqda...</p>
+            </div>
+          )}
         </div>
       </div>
     </section>
