@@ -85,7 +85,16 @@ const formatDateTime = (value: string | null): string => {
 
 export default async function AdminDashboardPage() {
   await requireAdminSession({ redirectOnFail: false });
-  const [data, telegramStatus] = await Promise.all([getDashboardStats(), getTelegramStatus()]);
+  
+  // Используем Promise.allSettled для дополнительной защиты от падений
+  const [dataResult, telegramResult] = await Promise.allSettled([
+    getDashboardStats(),
+    getTelegramStatus()
+  ]);
+  
+  const data = dataResult.status === 'fulfilled' ? dataResult.value : { stats: { totalNews: 0, partners: 0, lastPublishedAt: null }, recentNews: [] };
+  const telegramStatus = telegramResult.status === 'fulfilled' ? telegramResult.value : { ok: false, label: "Недоступен" };
+  
   const { stats, recentNews } = data;
 
   return (

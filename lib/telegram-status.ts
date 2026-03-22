@@ -11,6 +11,8 @@ export async function getTelegramStatus(): Promise<TelegramStatus> {
     if (!token) {
       return { ok: false, label: "Нет токена Telegram" };
     }
+    
+    // getBot() теперь внутри try/catch
     const bot = getBot();
     const me = await bot.api.getMe();
     const label = me.username ? `@${me.username}` : me.first_name;
