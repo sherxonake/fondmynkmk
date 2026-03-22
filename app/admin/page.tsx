@@ -1,5 +1,4 @@
-export const dynamic = "force-dynamic";
-
+import { redirect } from 'next/navigation'
 import { ShieldCheck, Newspaper, Users, Bot, Plus, ExternalLink, Edit } from "lucide-react";
 import Link from "next/link";
 
@@ -8,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/lib/supabase";
 import { getTelegramStatus } from "@/lib/telegram-status";
+import { requireAdminSession } from "@/lib/admin-session";
 
 const numberFormatter = new Intl.NumberFormat("ru-RU");
 const dateFormatter = new Intl.DateTimeFormat("ru-RU", {
@@ -84,6 +84,16 @@ async function getDashboardStats(): Promise<{ stats: DashboardStats; recentNews:
 }
 
 export default async function AdminDashboardPage() {
+  // Сначала ЖЁСТКАЯ проверка авторизации — без try/catch!
+  // Если нет токена → редирект на логин
+  try {
+    await requireAdminSession({ redirectOnFail: true })
+  } catch (error) {
+    // AdminAuthError → редирект на /admin/login
+    redirect('/admin/login')
+  }
+
+  // Только после успешной авторизации — данные
   // Используем Promise.allSettled для защиты от падений
   const [dataResult, telegramResult] = await Promise.allSettled([
     getDashboardStats(),
