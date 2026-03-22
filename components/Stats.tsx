@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import { motion, useMotionValue, useTransform, animate } from "framer-motion";
+import { Building2, Users, Map, List } from "lucide-react";
 import type { StatItem } from "@/types";
 
 interface StatsProps {
@@ -10,22 +11,27 @@ interface StatsProps {
 
 function AnimatedNumber({ target, isVisible, suffix }: { target: number; isVisible: boolean; suffix?: string }) {
   const count = useMotionValue(0);
-  const rounded = useTransform(count, (v) => Math.round(v));
-  const [display, setDisplay] = useState(0);
+  const [display, setDisplay] = useState("0");
 
   useEffect(() => {
     if (!isVisible) return;
+    
     const controls = animate(count, target, {
       duration: 2.5,
       ease: [0.16, 1, 0.3, 1],
     });
-    return controls.stop;
-  }, [count, target, isVisible]);
 
-  useEffect(() => {
-    const unsubscribe = rounded.on("change", (v) => setDisplay(v));
-    return unsubscribe;
-  }, [rounded]);
+    const unsubscribe = count.on("change", (value) => {
+      // Format large numbers with commas
+      const formatted = Math.round(value).toLocaleString();
+      setDisplay(formatted);
+    });
+
+    return () => {
+      controls.stop();
+      unsubscribe();
+    };
+  }, [count, target, isVisible]);
 
   return (
     <span aria-label={`${target}${suffix ?? ""}`}>
@@ -42,7 +48,10 @@ const statColors = [
   "from-[#C5A572] to-[#B8945A]",
 ];
 
+const statIcons = [Building2, Users, Map, List];
+
 function StatShowcase({ item, isVisible, index }: { item: StatItem; isVisible: boolean; index: number }) {
+  const Icon = statIcons[index] || Building2;
   return (
     <motion.div
       initial={{ opacity: 0, y: 50 }}
@@ -65,6 +74,11 @@ function StatShowcase({ item, isVisible, index }: { item: StatItem; isVisible: b
       </span>
 
       <div className="relative z-10 flex flex-col items-center text-center">
+        {/* Icon */}
+        <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[var(--color-text-light)]/20 backdrop-blur-sm">
+          <Icon className="h-8 w-8 text-[var(--color-text-light)]" aria-hidden="true" />
+        </div>
+        
         <span
           className="text-6xl font-black text-[var(--color-text-light)] md:text-7xl lg:text-[6rem]"
           style={{ letterSpacing: "-0.04em", lineHeight: 1 }}
@@ -102,7 +116,7 @@ export function Stats({ items }: StatsProps) {
     <section
       ref={sectionRef}
       id="stats"
-      className="relative overflow-hidden bg-[var(--color-white)] py-24 lg:py-32"
+      className="relative overflow-hidden bg-[var(--color-white)] py-16 lg:py-20"
       aria-labelledby="stats-heading"
     >
       <div className="mx-auto max-w-7xl px-4 lg:px-8">
