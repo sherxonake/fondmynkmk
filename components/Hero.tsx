@@ -104,8 +104,8 @@ export function Hero({ slides }: HeroProps) {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 0.8 }}
-          className="max-w-5xl text-balance text-4xl font-extrabold tracking-tight text-[var(--color-text-light)] sm:text-5xl md:text-6xl lg:text-7xl xl:text-[5.5rem]"
-          style={{ lineHeight: 1.05, letterSpacing: "-0.03em" }}
+          className="max-w-5xl text-balance text-3xl font-extrabold tracking-tight text-[var(--color-text-light)] sm:text-4xl md:text-5xl lg:text-6xl xl:text-[4rem]"
+          style={{ lineHeight: 1.1, letterSpacing: "-0.02em" }}
         >
           {"\"NKMK jamg'armasi\" "}
           <span className="text-[var(--color-accent-gold)]">davlat muassasasi</span>
@@ -119,7 +119,7 @@ export function Hero({ slides }: HeroProps) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -16 }}
             transition={{ duration: 0.5 }}
-            className="mt-8 max-w-2xl text-pretty text-lg leading-relaxed text-[var(--color-text-light)]/70 md:text-xl lg:text-2xl"
+            className="mt-8 max-w-3xl text-pretty text-lg leading-relaxed text-[var(--color-text-light)]/90 md:text-xl lg:text-2xl"
           >
             {slides[current]?.subtitle ?? ''}
           </motion.p>

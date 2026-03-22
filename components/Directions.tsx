@@ -35,7 +35,7 @@ function DirectionCard({ item, index }: { item: DirectionItem; index: number }) 
 
       <div className="relative z-10 flex h-16 w-16 items-center justify-center rounded-2xl bg-[var(--color-primary-light)] transition-all duration-300 group-hover:bg-[var(--color-accent-gold)]/15">
         <Icon
-          className="h-8 w-8 text-[var(--color-accent-gold)] transition-transform duration-300 group-hover:scale-110"
+          className="h-8 w-8 text-[var(--color-accent-gold)] transition-all duration-300 group-hover:text-[var(--color-primary-dark)] group-hover:scale-110"
           aria-hidden="true"
           strokeWidth={1.75}
         />

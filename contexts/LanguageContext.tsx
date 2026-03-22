@@ -34,6 +34,8 @@ const translations = {
     relatedNews: 'O\'xshash yangiliklar',
     category: 'Kategoriya',
     backToNews: '← Barcha yangiliklar',
+    allNewsPage: 'Barcha yangiliklar',
+    newsDescription: 'NKMK Jamg\'armasi faoliyati haqida so\'nggi yangiliklar',
     
     // Directions
     directions: 'Faoliyat yo\'nalishlari',
@@ -55,7 +57,7 @@ const translations = {
     contact: 'Контакты',
     
     // Hero
-    heroTitle: '"НГМК Фонд"',
+    heroTitle: '"Фонд НГМК"',
     heroSubtitle: 'государственное учреждение',
     heroLocation: 'Навоийская область, Узбекистан',
     heroAbout: 'О нас',
@@ -68,6 +70,8 @@ const translations = {
     relatedNews: 'Похожие новости',
     category: 'Категория',
     backToNews: '← Все новости',
+    allNewsPage: 'Все новости',
+    newsDescription: 'Последние новости о деятельности Фонда НГМК',
     
     // Directions
     directions: 'Направления деятельности',
