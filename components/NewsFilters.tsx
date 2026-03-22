@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Search } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
+import type { NewsArticle } from '@/types';
 
 const categories = [
   { id: 'all', name: 'Barchasi' },
@@ -12,10 +13,40 @@ const categories = [
   { id: 'Madaniyat', name: 'Madaniyat' },
 ];
 
-export function NewsFilters() {
+interface NewsFiltersProps {
+  items: NewsArticle[];
+  onFilteredItems: (items: NewsArticle[]) => void;
+}
+
+export function NewsFilters({ items, onFilteredItems }: NewsFiltersProps) {
   const { t } = useLanguage();
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
+
+  const filteredItems = useMemo(() => {
+    let filtered = items;
+
+    // Filter by category
+    if (activeCategory !== 'all') {
+      filtered = filtered.filter(item => item.category === activeCategory);
+    }
+
+    // Filter by search query
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase().trim();
+      filtered = filtered.filter(item => 
+        item.title.toLowerCase().includes(query) ||
+        item.excerpt.toLowerCase().includes(query)
+      );
+    }
+
+    return filtered;
+  }, [items, activeCategory, searchQuery]);
+
+  // Update parent component when filters change
+  useMemo(() => {
+    onFilteredItems(filteredItems);
+  }, [filteredItems, onFilteredItems]);
 
   return (
     <div className="mb-12 space-y-6">

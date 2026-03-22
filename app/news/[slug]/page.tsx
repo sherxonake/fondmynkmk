@@ -160,7 +160,7 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
                       <Link
                         key={item.id}
                         href={`/news/${item.slug}`}
-                        className="group block transition-transform hover:translate-x-1"
+                        className="group block transition-transform hover:scale-[1.02]"
                       >
                         <div className="space-y-2">
                           <h4 className="font-medium text-[var(--color-text-dark)] transition-colors group-hover:text-[var(--color-accent-gold)] line-clamp-2">

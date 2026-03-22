@@ -1,12 +1,22 @@
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
+'use client';
 
-import { getNewsArticles } from "@/lib/api";
+import { useState, useEffect } from 'react';
+import { getNewsArticles } from "@/lib/client-api";
 import { NewsGrid } from "@/components/NewsGrid";
 import { NewsFilters } from "@/components/NewsFilters";
+import type { NewsArticle } from "@/types";
 
-export default async function NewsPage() {
-  const news = await getNewsArticles();
+export default function NewsPage() {
+  const [news, setNews] = useState<NewsArticle[]>([]);
+  const [filteredNews, setFilteredNews] = useState<NewsArticle[]>([]);
+
+  // Load news on mount
+  useEffect(() => {
+    getNewsArticles().then(data => {
+      setNews(data);
+      setFilteredNews(data);
+    });
+  }, []);
 
   return (
     <div className="bg-[var(--color-primary-light)] py-16 lg:py-24">
@@ -22,10 +32,10 @@ export default async function NewsPage() {
         </div>
 
         {/* Filters */}
-        <NewsFilters />
+        <NewsFilters items={news} onFilteredItems={setFilteredNews} />
 
         {/* News Grid */}
-        <NewsGrid items={news} />
+        <NewsGrid items={news} filteredItems={filteredNews} />
       </div>
     </div>
   );

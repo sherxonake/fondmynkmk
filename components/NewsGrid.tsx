@@ -8,6 +8,7 @@ import type { NewsArticle } from "@/types";
 
 interface NewsGridProps {
   items: NewsArticle[];
+  filteredItems?: NewsArticle[];
 }
 
 const DATE_FORMATTER = new Intl.DateTimeFormat("ru-RU", {
@@ -81,24 +82,39 @@ function NewsCard({ item, index }: { item: NewsArticle; index: number }) {
   );
 }
 
-export function NewsGrid({ items }: NewsGridProps) {
-  if (!items || items.length === 0) {
+export function NewsGrid({ items, filteredItems }: NewsGridProps) {
+  const displayItems = filteredItems || items;
+  const hasResults = displayItems && displayItems.length > 0;
+  const isFiltered = filteredItems !== undefined;
+
+  if (!hasResults) {
     return (
       <div className="rounded-3xl bg-[var(--color-white)]/60 p-10 text-center shadow-[var(--shadow-card)]">
         <p className="mb-2 text-sm font-semibold tracking-widest text-[var(--color-accent-gold)] uppercase">Matbuot xizmati</p>
         <h2 className="text-3xl font-bold text-[var(--color-text-dark)]" style={{ letterSpacing: "-0.02em" }}>
-          Yangiliklar yo'q
+          {isFiltered ? 'Yangiliklar topilmadi' : 'Yangiliklar yo\'q'}
         </h2>
-        <p className="mt-3 text-[var(--color-text-dark)]/70">Tez orada yangi yangiliklar paydo bo'ladi.</p>
+        <p className="mt-3 text-[var(--color-text-dark)]/70">
+          {isFiltered ? 'Qidiruv shartlariga mos yangiliklar mavjud emas.' : 'Tez orada yangi yangiliklar paydo bo\'ladi.'}
+        </p>
       </div>
     );
   }
 
   return (
-    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-      {items.map((item, i) => (
-        <NewsCard key={item.id} item={item} index={i} />
-      ))}
+    <div>
+      {isFiltered && (
+        <div className="mb-6 text-center">
+          <p className="text-[var(--color-text-dark)]/60">
+            {displayItems.length} ta yangilik topildi
+          </p>
+        </div>
+      )}
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {displayItems.map((item: NewsArticle, i: number) => (
+          <NewsCard key={item.id} item={item} index={i} />
+        ))}
+      </div>
     </div>
   );
 }
