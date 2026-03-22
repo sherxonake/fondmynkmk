@@ -63,7 +63,7 @@ export function Header({ settings }: HeaderProps) {
         </a>
 
         {/* Desktop nav */}
-        <nav className="hidden items-center gap-8 lg:flex" aria-label="Asosiy navigatsiya">
+        <nav className="hidden items-center gap-8 md:flex" aria-label="Asosiy navigatsiya">
           {navLinks.map((link) => (
             <a
               key={link.href}
@@ -73,14 +73,16 @@ export function Header({ settings }: HeaderProps) {
               {link.label}
             </a>
           ))}
-          <LanguageSwitcher />
+          <div className="hidden md:flex">
+            <LanguageSwitcher />
+          </div>
         </nav>
 
         {/* Trust phone + Mobile toggle */}
         <div className="flex items-center gap-3">
           <a
             href={`tel:${settings.trustPhone}`}
-            className="phone-pulse group flex items-center gap-2 rounded-full border border-[var(--color-accent-gold)]/50 px-3 py-2.5 text-sm font-semibold text-[var(--color-accent-gold)] transition-all duration-300 hover:border-[var(--color-accent-gold)] hover:bg-[var(--color-accent-gold)] hover:text-[var(--color-primary-dark)] hover:shadow-[0_0_24px_rgba(197,165,114,0.45)]"
+            className="phone-pulse hidden md:flex items-center gap-2 rounded-full border border-[var(--color-accent-gold)]/50 px-3 py-2.5 text-sm font-semibold text-[var(--color-accent-gold)] transition-all duration-300 hover:border-[var(--color-accent-gold)] hover:bg-[var(--color-accent-gold)] hover:text-[var(--color-primary-dark)] hover:shadow-[0_0_24px_rgba(197,165,114,0.45)]"
           >
             <Phone className="h-4 w-4" aria-hidden="true" />
             <span className="hidden sm:inline">Ishonch telefoni</span>
@@ -89,7 +91,7 @@ export function Header({ settings }: HeaderProps) {
 
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="flex h-10 w-10 items-center justify-center rounded-lg text-[var(--color-text-light)]/70 transition-colors hover:text-[var(--color-text-light)] lg:hidden"
+            className="flex h-10 w-10 items-center justify-center rounded-lg text-[var(--color-text-light)]/70 transition-colors hover:text-[var(--color-text-light)] md:hidden"
             aria-label={menuOpen ? "Menyuni yopish" : "Menyuni ochish"}
             aria-expanded={menuOpen}
           >
@@ -106,7 +108,7 @@ export function Header({ settings }: HeaderProps) {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
-            className="overflow-hidden border-t border-[var(--color-text-light)]/10 bg-[var(--color-primary-dark)]/95 backdrop-blur-xl lg:hidden"
+            className="overflow-hidden border-t border-[var(--color-text-light)]/10 bg-[var(--color-primary-dark)]/95 backdrop-blur-xl md:hidden"
             aria-label="Mobil menyusi"
           >
             <div className="mx-auto flex max-w-7xl flex-col gap-1 px-4 py-4">
@@ -120,6 +122,19 @@ export function Header({ settings }: HeaderProps) {
                   {link.label}
                 </a>
               ))}
+              <div className="border-t border-[var(--color-text-light)]/10 pt-2">
+                <div className="px-4 py-2">
+                  <LanguageSwitcher />
+                </div>
+                <a
+                  href={`tel:${settings.trustPhone}`}
+                  onClick={() => setMenuOpen(false)}
+                  className="mx-4 flex items-center gap-2 rounded-full border border-[var(--color-accent-gold)]/50 px-4 py-2 text-sm font-semibold text-[var(--color-accent-gold)] transition-colors hover:border-[var(--color-accent-gold)] hover:bg-[var(--color-accent-gold)] hover:text-[var(--color-primary-dark)]"
+                >
+                  <Phone className="h-4 w-4" />
+                  <span>Ishonch telefoni: {settings.trustPhone}</span>
+                </a>
+              </div>
             </div>
           </motion.nav>
         )}
