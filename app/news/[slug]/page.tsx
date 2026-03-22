@@ -3,7 +3,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { getNewsArticleBySlug } from "@/lib/api";
+import { getNewsArticleBySlug, getNewsArticles } from "@/lib/api";
 
 interface NewsDetailPageProps {
   params: { slug: string };
@@ -58,6 +58,12 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
     notFound();
   }
 
+  // Get related news (exclude current article, limit to 3)
+  const allNews = await getNewsArticles();
+  const relatedNews = allNews
+    .filter(item => String(item.id) !== String(article.id) && item.category === article.category)
+    .slice(0, 3);
+
   const imageSrc = article.image?.trim() ? article.image : FALLBACK_IMAGE;
   const formattedDate = formatDate(article.publishedAt);
 
@@ -65,22 +71,31 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
     <div className="bg-[var(--color-primary-light)] py-16 lg:py-24">
       <div className="mx-auto max-w-7xl px-4 lg:px-8">
         {/* Breadcrumb */}
-        <nav className="mb-8 flex items-center gap-2 text-sm text-[var(--color-text-dark)]/60">
-          <Link href="/" className="transition hover:text-[var(--color-primary-dark)]">
-            Bosh sahifa
-          </Link>
-          <span>/</span>
-          <Link href="/news" className="transition hover:text-[var(--color-primary-dark)]">
-            Yangiliklar
-          </Link>
-          <span>/</span>
-          <span className="text-[var(--color-text-dark)]">{article.title.slice(0, 50)}...</span>
+        <nav className="mb-8" aria-label="Breadcrumb">
+          <ol className="flex items-center gap-2 text-sm text-[var(--color-text-dark)]/60">
+            <li>
+              <Link href="/" className="transition hover:text-[var(--color-accent-gold)]">
+                Bosh sahifa
+              </Link>
+            </li>
+            <li className="text-[var(--color-text-dark)]/40">→</li>
+            <li>
+              <Link href="/news" className="transition hover:text-[var(--color-accent-gold)]">
+                Yangiliklar
+              </Link>
+            </li>
+            <li className="text-[var(--color-text-dark)]/40">→</li>
+            <li className="truncate font-medium text-[var(--color-text-dark)]">
+              {article.title}
+            </li>
+          </ol>
         </nav>
 
         <div className="grid gap-12 lg:grid-cols-3">
           {/* Main Article */}
           <div className="lg:col-span-2">
             <article className="overflow-hidden rounded-3xl bg-[var(--color-white)] shadow-[var(--shadow-card)]">
+              {/* Hero Image */}
               <div className="relative h-80 w-full sm:h-96 lg:h-[32rem]">
                 <Image
                   src={imageSrc}
@@ -88,7 +103,7 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
                   fill
                   priority
                   className="object-cover"
-                  sizes="(max-width: 1024px) 100vw, 66vw"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 66vw"
                 />
               </div>
 
@@ -109,31 +124,65 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
                 <p className="text-lg text-[var(--color-text-dark)]/70">{article.excerpt}</p>
 
                 <div
-                  className="prose max-w-none text-[var(--color-text-dark)] prose-headings:text-[var(--color-text-dark)] prose-a:text-[var(--color-primary-dark)] prose-p:text-[var(--color-text-dark)] prose-p:leading-relaxed prose-img:rounded-lg prose-img:shadow-lg"
+                  className="prose max-w-none text-[var(--color-text-dark)] prose-headings:text-[var(--color-text-dark)] prose-a:text-[var(--color-primary-dark)] prose-p:text-[var(--color-text-dark)] prose-strong:text-[var(--color-text-dark)]"
                   dangerouslySetInnerHTML={{ __html: article.content || article.excerpt }}
                 />
               </div>
             </article>
+
+            {/* Back to News Button */}
+            <div className="mt-8">
+              <Link
+                href="/news"
+                className="inline-flex items-center gap-2 rounded-full bg-[var(--color-accent-gold)] px-8 py-3 text-base font-semibold text-[var(--color-primary-dark)] shadow-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-xl"
+              >
+                ← Barcha yangiliklar
+              </Link>
+            </div>
           </div>
 
           {/* Sidebar */}
-          <div className="space-y-8">
-            <div>
-              <h3 className="mb-4 text-xl font-bold text-[var(--color-text-dark)]">O'xshash yangiliklar</h3>
-              <div className="space-y-4">
-                {/* Placeholder for similar news - will implement later */}
-                <div className="rounded-xl bg-[var(--color-white)]/60 p-4 text-center text-[var(--color-text-dark)]/60">
-                  Tez orada o'xshash yangiliklar...
+          <div className="lg:col-span-1">
+            <div className="sticky top-8 space-y-8">
+              {/* Related News */}
+              {relatedNews.length > 0 && (
+                <div className="rounded-2xl bg-[var(--color-white)] p-6 shadow-[var(--shadow-card)]">
+                  <h3 className="mb-4 text-xl font-bold text-[var(--color-text-dark)]">
+                    O'xshash yangiliklar
+                  </h3>
+                  <div className="space-y-4">
+                    {relatedNews.map((item) => (
+                      <Link
+                        key={item.id}
+                        href={`/news/${item.slug}`}
+                        className="group block transition-transform hover:translate-x-1"
+                      >
+                        <div className="space-y-2">
+                          <h4 className="font-medium text-[var(--color-text-dark)] transition-colors group-hover:text-[var(--color-accent-gold)] line-clamp-2">
+                            {item.title}
+                          </h4>
+                          <p className="text-sm text-[var(--color-text-dark)]/50">
+                            {formatDate(item.publishedAt)}
+                          </p>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            </div>
+              )}
 
-            <Link
-              href="/news"
-              className="inline-flex items-center gap-2 rounded-full bg-[var(--color-accent-gold)] px-6 py-3 text-base font-semibold text-[var(--color-primary-dark)] shadow-lg shadow-[var(--color-accent-gold)]/25 transition-all duration-300 hover:scale-[1.03] hover:shadow-xl hover:shadow-[var(--color-accent-gold)]/35"
-            >
-              ← Barcha yangiliklar
-            </Link>
+              {/* Category Badge */}
+              {article.category && (
+                <div className="rounded-2xl bg-[var(--color-white)] p-6 shadow-[var(--shadow-card)]">
+                  <h3 className="mb-2 text-sm font-semibold uppercase tracking-wider text-[var(--color-accent-gold)]">
+                    Kategoriya
+                  </h3>
+                  <p className="text-lg font-medium text-[var(--color-text-dark)]">
+                    {article.category}
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
