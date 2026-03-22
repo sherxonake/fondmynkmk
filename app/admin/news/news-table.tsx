@@ -2,11 +2,12 @@
 
 import Image from 'next/image';
 import { useState, useEffect, useTransition } from 'react';
-import { CalendarDays, EyeOff, Eye, Trash2, Loader2, Archive, ArchiveRestore } from 'lucide-react';
+import { CalendarDays, EyeOff, Eye, Trash2, Loader2, Archive, ArchiveRestore, Edit, Plus } from 'lucide-react';
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { useRouter } from 'next/navigation';
 import { toast } from '@/hooks/use-toast';
 import type { AdminNewsRow } from './types';
 import { togglePublishAction, deleteNewsAction, archiveNewsAction, restoreNewsAction } from './actions';
@@ -61,25 +62,42 @@ function useImageValidation(url: string): 'checking' | 'ok' | 'broken' {
 type NewsTableMode = 'active' | 'archived';
 
 export function NewsTable({ items, mode }: { items: AdminNewsRow[]; mode: NewsTableMode }) {
+  const router = useRouter();
+
   return (
-    <div className="overflow-hidden rounded-2xl border border-white/5 bg-slate-950/40" data-admin-news-table>
-      <div className="max-h-[600px] overflow-auto">
-        <Table>
-          <TableHeader className="bg-white/5">
-            <TableRow>
-              <TableHead>Фото</TableHead>
-              <TableHead>Заголовок</TableHead>
-              <TableHead>Дата</TableHead>
-              <TableHead>Статус</TableHead>
-              <TableHead className="text-right">Действия</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {items.map((item) => (
-              <NewsRow key={item.id} item={item} mode={mode} />
-            ))}
-          </TableBody>
-        </Table>
+    <div className="space-y-4">
+      {/* Кнопка создания новости для активных */}
+      {mode === 'active' && (
+        <div className="flex justify-end">
+          <Button
+            onClick={() => router.push('/admin/news/new')}
+            className="bg-emerald-600 hover:bg-emerald-700"
+          >
+            <Plus className="mr-2 h-4 w-4" />
+            Создать новость
+          </Button>
+        </div>
+      )}
+      
+      <div className="overflow-hidden rounded-2xl border border-white/5 bg-slate-950/40" data-admin-news-table>
+        <div className="max-h-[600px] overflow-auto">
+          <Table>
+            <TableHeader className="bg-white/5">
+              <TableRow>
+                <TableHead>Фото</TableHead>
+                <TableHead>Заголовок</TableHead>
+                <TableHead>Дата</TableHead>
+                <TableHead>Статус</TableHead>
+                <TableHead className="text-right">Действия</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {items.map((item) => (
+                <NewsRow key={item.id} item={item} mode={mode} />
+              ))}
+            </TableBody>
+          </Table>
+        </div>
       </div>
     </div>
   );
@@ -91,6 +109,7 @@ function NewsRow({ item, mode }: { item: AdminNewsRow; mode: NewsTableMode }) {
   const [isPendingDelete, startDelete] = useTransition();
   const [isPendingArchive, startArchive] = useTransition();
   const [isPendingRestore, startRestore] = useTransition();
+  const router = useRouter();
 
   const broken = imageState === 'broken';
   const isArchived = mode === 'archived';
@@ -168,6 +187,16 @@ function NewsRow({ item, mode }: { item: AdminNewsRow; mode: NewsTableMode }) {
               )}
             </Button>
           )}
+
+          {/* Кнопка редактирования */}
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => router.push(`/admin/news/${item.id}/edit`)}
+            className="text-blue-300 hover:text-white"
+          >
+            <Edit className="h-4 w-4" />
+          </Button>
 
           {!isArchived ? (
             <Button

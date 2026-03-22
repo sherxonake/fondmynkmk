@@ -1,9 +1,10 @@
 export const dynamic = "force-dynamic";
 
-import { ShieldCheck, Newspaper, Users, Bot } from "lucide-react";
+import { ShieldCheck, Newspaper, Users, Bot, Plus, ExternalLink, Edit } from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { supabase } from "@/lib/supabase";
 import { getTelegramStatus } from "@/lib/telegram-status";
 import { SelfTestExecutor } from "@/app/admin/_components/self-test-executor";
@@ -21,8 +22,16 @@ interface DashboardStats {
   lastPublishedAt: string | null;
 }
 
-async function getDashboardStats(): Promise<DashboardStats> {
-  const [newsResult, partnersResult, latestPublished] = await Promise.all([
+interface RecentNews {
+  id: string;
+  title: string;
+  category: string;
+  published_at: string | null;
+  is_published: boolean;
+}
+
+async function getDashboardStats(): Promise<{ stats: DashboardStats; recentNews: RecentNews[] }> {
+  const [newsResult, partnersResult, latestPublished, recentNewsResult] = await Promise.all([
     supabase.from("news_articles").select("id", { count: "exact", head: true }),
     supabase.from("partners").select("id", { count: "exact", head: true }),
     supabase
@@ -32,6 +41,11 @@ async function getDashboardStats(): Promise<DashboardStats> {
       .order("published_at", { ascending: false })
       .limit(1)
       .maybeSingle(),
+    supabase
+      .from("news_articles")
+      .select("id, title, category, published_at, is_published")
+      .order("created_at", { ascending: false })
+      .limit(3),
   ]);
 
   if (newsResult.error) {
@@ -46,10 +60,17 @@ async function getDashboardStats(): Promise<DashboardStats> {
     throw new Error(`Не удалось получить дату последней публикации: ${latestPublished.error.message}`);
   }
 
+  if (recentNewsResult.error) {
+    throw new Error(`Не удалось получить последние новости: ${recentNewsResult.error.message}`);
+  }
+
   return {
-    totalNews: newsResult.count ?? 0,
-    partners: partnersResult.count ?? 0,
-    lastPublishedAt: latestPublished.data?.published_at ?? null,
+    stats: {
+      totalNews: newsResult.count ?? 0,
+      partners: partnersResult.count ?? 0,
+      lastPublishedAt: latestPublished.data?.published_at ?? null,
+    },
+    recentNews: (recentNewsResult.data || []) as RecentNews[],
   };
 }
 
@@ -62,7 +83,8 @@ const formatDateTime = (value: string | null): string => {
 
 export default async function AdminDashboardPage() {
   await requireAdminSession({ redirectOnFail: false });
-  const [stats, telegramStatus] = await Promise.all([getDashboardStats(), getTelegramStatus()]);
+  const [data, telegramStatus] = await Promise.all([getDashboardStats(), getTelegramStatus()]);
+  const { stats, recentNews } = data;
 
   return (
     <div className="space-y-8">
@@ -70,6 +92,42 @@ export default async function AdminDashboardPage() {
         <p className="text-sm uppercase tracking-[0.4em] text-emerald-400">Admin Control</p>
         <h1 className="text-3xl font-semibold text-white">Панель управления НГМК</h1>
         <p className="text-sm text-slate-400">Следи за публикациями, ботом и инфраструктурой — Bug Hunter мониторит всё в фоне.</p>
+      </section>
+
+      {/* Быстрые действия */}
+      <section className="grid gap-4 md:grid-cols-2">
+        <Card className="border-emerald-500/20 bg-emerald-500/5">
+          <CardContent className="flex items-center justify-between p-6">
+            <div>
+              <h3 className="font-semibold text-white">Создать новость</h3>
+              <p className="text-sm text-slate-400">Добавить новую публикацию</p>
+            </div>
+            <Button
+              onClick={() => window.location.href = '/admin/news/new'}
+              className="bg-emerald-600 hover:bg-emerald-700"
+            >
+              <Plus className="mr-2 h-4 w-4" />
+              Создать
+            </Button>
+          </CardContent>
+        </Card>
+
+        <Card className="border-blue-500/20 bg-blue-500/5">
+          <CardContent className="flex items-center justify-between p-6">
+            <div>
+              <h3 className="font-semibold text-white">Предпросмотр сайта</h3>
+              <p className="text-sm text-slate-400">Открыть fondmynkmk.vercel.app</p>
+            </div>
+            <Button
+              onClick={() => window.open('https://fondmynkmk.vercel.app', '_blank')}
+              variant="outline"
+              className="border-blue-500/30 text-blue-300 hover:bg-blue-500/10"
+            >
+              <ExternalLink className="mr-2 h-4 w-4" />
+              Открыть
+            </Button>
+          </CardContent>
+        </Card>
       </section>
 
       <section className="grid gap-4 md:grid-cols-3">
@@ -116,21 +174,57 @@ export default async function AdminDashboardPage() {
       <section className="grid gap-6 lg:grid-cols-2">
         <Card className="border-white/5 bg-slate-900/40">
           <CardHeader>
-            <CardTitle className="text-base text-white">Сводка активности</CardTitle>
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-base text-white">Последние новости</CardTitle>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => window.location.href = '/admin/news'}
+                className="text-slate-400 hover:text-white"
+              >
+                Все новости
+              </Button>
+            </div>
           </CardHeader>
-          <CardContent className="space-y-4 text-sm text-slate-300">
-            <div className="flex items-center justify-between">
-              <span>Новостная лента</span>
-              <span className="font-semibold text-white">{formatNumber(stats.totalNews)} записей</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span>Партнёрские обновления</span>
-              <span className="font-semibold text-white">{formatNumber(stats.partners)} организации</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span>Последний пост</span>
-              <span className="font-semibold text-white">{formatDateTime(stats.lastPublishedAt)}</span>
-            </div>
+          <CardContent className="space-y-3">
+            {recentNews.length > 0 ? (
+              recentNews.map((news) => (
+                <div key={news.id} className="flex items-center justify-between rounded-lg border border-white/5 bg-slate-800/50 p-3">
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-white truncate">{news.title}</p>
+                    <div className="flex items-center gap-2 mt-1">
+                      <Badge variant="secondary" className="text-xs">
+                        {news.category}
+                      </Badge>
+                      <span className="text-xs text-slate-500">
+                        {formatDateTime(news.published_at)}
+                      </span>
+                    </div>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => window.location.href = `/admin/news/${news.id}/edit`}
+                    className="text-blue-300 hover:text-white ml-2"
+                  >
+                    <Edit className="h-3.5 w-3.5" />
+                  </Button>
+                </div>
+              ))
+            ) : (
+              <div className="text-center py-6">
+                <p className="text-sm text-slate-400">Новостей пока нет</p>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => window.location.href = '/admin/news/new'}
+                  className="mt-2 border-emerald-500/30 text-emerald-300 hover:bg-emerald-500/10"
+                >
+                  <Plus className="mr-2 h-3.5 w-3.5" />
+                  Создать первую
+                </Button>
+              </div>
+            )}
           </CardContent>
         </Card>
 
