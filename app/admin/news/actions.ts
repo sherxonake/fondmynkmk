@@ -49,6 +49,26 @@ export async function togglePublishAction(input: { id: string; nextPublished: bo
   await invalidateNewsCache();
 }
 
+export async function publishNewsAction(id: string) {
+  'use server';
+  
+  await requireAdminSession();
+
+  const { error } = await supabase
+    .from('news_articles')
+    .update({ 
+      is_published: true, 
+      published_at: new Date().toISOString() 
+    })
+    .eq('id', id);
+
+  if (error) {
+    throw new Error(`Не удалось опубликовать новость: ${error.message}`);
+  }
+
+  await invalidateNewsCache();
+}
+
 export async function archiveNewsAction(input: { id: string }) {
   await requireAdminSession();
 

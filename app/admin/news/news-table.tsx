@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { useState, useEffect, useTransition } from 'react';
-import { CalendarDays, EyeOff, Eye, Trash2, Loader2, Archive, ArchiveRestore, Edit, Plus } from 'lucide-react';
+import { CalendarDays, EyeOff, Eye, Trash2, Loader2, Archive, ArchiveRestore, Edit, Plus, CheckCircle } from 'lucide-react';
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
@@ -11,7 +11,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { toast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import type { AdminNewsRow } from './types';
-import { togglePublishAction, deleteNewsAction, archiveNewsAction, restoreNewsAction } from './actions';
+import { togglePublishAction, deleteNewsAction, archiveNewsAction, restoreNewsAction, publishNewsAction } from './actions';
 
 const DATE_FORMATTER = new Intl.DateTimeFormat('ru-RU', {
   dateStyle: 'medium',
@@ -203,6 +203,19 @@ function NewsRow({ item, mode }: { item: AdminNewsRow; mode: NewsTableMode }) {
           >
             <Edit className="h-4 w-4" />
           </Button>
+
+          {/* Кнопка публикации для черновиков */}
+          {!item.isPublished && (
+            <form action={publishNewsAction.bind(null, item.id)}>
+              <button 
+                type="submit"
+                title="Опубликовать"
+                className="text-emerald-400 hover:text-emerald-300 transition-colors p-2"
+              >
+                <CheckCircle className="h-4 w-4" />
+              </button>
+            </form>
+          )}
 
           {!isArchived ? (
             <Button
