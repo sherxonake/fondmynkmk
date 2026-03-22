@@ -84,7 +84,11 @@ const formatDateTime = (value: string | null): string => {
 };
 
 export default async function AdminDashboardPage() {
-  await requireAdminSession({ redirectOnFail: false });
+  try {
+    await requireAdminSession({ redirectOnFail: false });
+  } catch {
+    // Не редиректим, просто продолжаем с fallback данными
+  }
   
   // Используем Promise.allSettled для дополнительной защиты от падений
   const [dataResult, telegramResult] = await Promise.allSettled([
