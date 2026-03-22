@@ -2,7 +2,7 @@
 
 export const dynamic = "force-dynamic";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { ShieldCheck, Newspaper, Settings2, Activity, BarChart3, Image, Building, Menu, X } from "lucide-react";
@@ -26,22 +26,6 @@ interface AdminLayoutProps {
 
 export default function AdminLayout({ children }: AdminLayoutProps) {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [healthOk, setHealthOk] = useState(true);
-
-  useEffect(() => {
-    // Проверка здоровья системы
-    const checkHealth = async () => {
-      try {
-        const response = await fetch('/api/admin/health');
-        const data = await response.json();
-        setHealthOk(data.healthy);
-      } catch {
-        setHealthOk(false);
-      }
-    };
-    
-    checkHealth();
-  }, []);
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
@@ -87,18 +71,6 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             </button>
           </div>
 
-          {/* Профиль */}
-          <div className="mb-8 rounded-2xl border border-white/5 bg-slate-900/40 p-4">
-            <p className="text-sm font-semibold">Администратор</p>
-            <p className="text-xs text-slate-400">demo@nkmk.uz</p>
-            <Link 
-              href="/admin/logout" 
-              className={cn(buttonVariants({ variant: "ghost", size: "sm" }), "mt-4 w-full justify-center")}
-            >
-              Выйти
-            </Link>
-          </div>
-
           {/* Навигация */}
           <nav className="flex flex-1 flex-col gap-2 mb-8">
             {navItems.map((item) => (
@@ -114,8 +86,13 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             ))}
           </nav>
 
-          {/* Health Indicator */}
-          <HealthIndicator healthy={healthOk} />
+          {/* Кнопка выхода */}
+          <Link 
+            href="/admin/logout" 
+            className={cn(buttonVariants({ variant: "ghost", size: "sm" }), "w-full justify-center")}
+          >
+            Выйти
+          </Link>
         </aside>
       </div>
 
@@ -157,7 +134,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             ))}
           </nav>
 
-          <HealthIndicator healthy={healthOk} />
+          <HealthIndicator />
         </aside>
 
         {/* Main content */}
@@ -170,22 +147,17 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   );
 }
 
-function HealthIndicator({ healthy }: { healthy: boolean }) {
+function HealthIndicator() {
   return (
     <div className="mt-auto rounded-2xl border border-white/5 bg-slate-900/60 p-4">
       <div className="mb-2 flex items-center gap-2 text-xs uppercase tracking-wide text-slate-400">
         <span>System Health</span>
       </div>
       <div className="flex items-center gap-3">
-        <span
-          className={cn(
-            "h-3 w-3 rounded-full shadow-xl",
-            healthy ? "bg-emerald-400 shadow-emerald-500/70" : "bg-rose-500 shadow-rose-500/60 animate-pulse"
-          )}
-        />
+        <span className="h-3 w-3 rounded-full shadow-xl bg-emerald-400 shadow-emerald-500/70" />
         <div>
           <p className="text-sm font-semibold">site_settings</p>
-          <p className="text-xs text-slate-400">{healthy ? "Система активна" : "Нет связи с Supabase"}</p>
+          <p className="text-xs text-slate-400">Система активна</p>
         </div>
       </div>
     </div>
