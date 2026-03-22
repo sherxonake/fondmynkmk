@@ -39,8 +39,13 @@ const CATEGORY_TAGS: Record<string, string> = {
 };
 
 const DEFAULT_CATEGORY = "Yangiliklar";
+const ADMIN_PASSWORD = "admin123";
 
 let botInstance: Bot | null = null;
+
+// Хранение авторизованных пользователей
+const authorizedUsers = new Map<number, boolean>();
+const userStates = new Map<number, 'editing' | 'normal'>();
 
 const ensureEnv = (key: string): string => {
   const value = process.env[key];
@@ -102,19 +107,20 @@ export function getBot(): Bot {
   return botInstance;
 }
 
-export function isAllowed(userId: number): boolean {
-  if (!userId) return false;
-  const allowedIds = (process.env.TELEGRAM_ALLOWED_USER_IDS ?? "")
-    .split(",")
-    .map((id) => Number(id.trim()))
-    .filter((id) => Number.isFinite(id));
+// Проверка авторизации по паролю
+function isAuthorized(userId: number): boolean {
+  return authorizedUsers.has(userId);
+}
 
-  if (allowedIds.length === 0) {
+// Функция для проверки авторизации
+const requireAuth = (ctx: { from?: { id?: number }; reply: (text: string) => Promise<unknown> }): boolean => {
+  const userId = ctx.from?.id ?? 0;
+  if (!isAuthorized(userId)) {
+    void ctx.reply("⛔ Доступ запрещён. Сначала авторизуйтесь через /start");
     return false;
   }
-
-  return allowedIds.includes(userId);
-}
+  return true;
+};
 
 const formatDate = (value: string | null): string => {
   if (!value) return "—";
@@ -146,26 +152,61 @@ const parseCaption = (caption: string) => {
   };
 };
 
-const requireAccess = (ctx: { from?: { id?: number }; reply: (text: string) => Promise<unknown> }): boolean => {
-  const userId = ctx.from?.id ?? 0;
-  if (!isAllowed(userId)) {
-    void ctx.reply("⛔ Нет доступа");
-    return false;
-  }
-  return true;
-};
-
 export function setupBotHandlers(bot: Bot): void {
+  // Команда /start - авторизация
   bot.command("start", async (ctx) => {
-    if (!requireAccess(ctx)) return;
+    const userId = ctx.from?.id ?? 0;
+    
+    if (isAuthorized(userId)) {
+      await ctx.reply(
+        "✅ Вы уже авторизованы!\n\n📸 Отправьте фото с подписью → опубликовать новость\n/list — список новостей\n/edit — редактировать новость\n/drafts — черновики\n/logout — выйти"
+      );
+      return;
+    }
 
     await ctx.reply(
-      "👋 Привет! Я бот для публикации новостей НГМК.\n\n📝 Как опубликовать новость:\nОтправь фото с подписью:\n\nПервая строка = заголовок\nОстальные строки = текст новости\n\n🏷 Теги:\n#draft — сохранить как черновик\n#sport #medicine #culture — категория\n\nБез тегов = публикуется сразу"
+      "👋 Добро пожаловать в бот управления новостями НГМК!\n\n" +
+      "Для работы нужно авторизоваться.\n" +
+      "Введите пароль:"
     );
   });
 
+  // Обработка ввода пароля
+  bot.on("message:text", async (ctx) => {
+    const userId = ctx.from?.id ?? 0;
+    const text = ctx.message.text.trim();
+
+    // Если пользователь не авторизован и это не команда, проверяем пароль
+    if (!isAuthorized(userId) && !text.startsWith('/')) {
+      if (text === ADMIN_PASSWORD) {
+        authorizedUsers.set(userId, true);
+        userStates.set(userId, 'normal');
+        await ctx.reply(
+          "✅ Авторизован! Теперь вы можете:\n\n" +
+          "📸 Отправить фото с подписью → опубликовать новость\n" +
+          "/list — список новостей\n" +
+          "/edit — редактировать новость\n" +
+          "/drafts — черновики\n" +
+          "/logout — выйти"
+        );
+      } else {
+        await ctx.reply("❌ Неверный пароль. Попробуйте ещё раз.");
+      }
+      return;
+    }
+  });
+
+  // Команда /logout
+  bot.command("logout", async (ctx) => {
+    const userId = ctx.from?.id ?? 0;
+    authorizedUsers.delete(userId);
+    userStates.delete(userId);
+    await ctx.reply("👋 Вы вышли из системы. Для входа используйте /start");
+  });
+
+  // Команда /list
   bot.command("list", async (ctx) => {
-    if (!requireAccess(ctx)) return;
+    if (!requireAuth(ctx)) return;
 
     const { data, error } = await supabase
       .from("news_articles")
@@ -195,8 +236,48 @@ export function setupBotHandlers(bot: Bot): void {
     await ctx.reply(`📰 Последние новости:\n\n${lines.join("\n\n")}`);
   });
 
+  // Команда /edit - показать список новостей для редактирования
+  bot.command("edit", async (ctx) => {
+    if (!requireAuth(ctx)) return;
+
+    const userId = ctx.from?.id ?? 0;
+    userStates.set(userId, 'editing');
+
+    const { data, error } = await supabase
+      .from("news_articles")
+      .select("id, title, category, published_at")
+      .eq("source", "telegram")
+      .order("published_at", { ascending: false })
+      .limit(10);
+
+    if (error) {
+      console.error("/edit", error);
+      await ctx.reply("❌ Не удалось получить новости");
+      return;
+    }
+
+    if (!data || data.length === 0) {
+      await ctx.reply("Нет новостей для редактирования");
+      return;
+    }
+
+    await ctx.reply("📝 Выберите новость для редактирования:");
+
+    for (const news of data) {
+      const keyboard = new InlineKeyboard().text("✏️ Редактировать", `edit_${news.id}`);
+      
+      await ctx.reply(
+        `📰 ${news.title ?? "(без названия)"}\n🏷 ${news.category ?? DEFAULT_CATEGORY}\n📅 ${formatDate(
+          news.published_at ?? null
+        )}`,
+        { reply_markup: keyboard }
+      );
+    }
+  });
+
+  // Команда /drafts
   bot.command("drafts", async (ctx) => {
-    if (!requireAccess(ctx)) return;
+    if (!requireAuth(ctx)) return;
 
     const { data, error } = await supabase
       .from("news_articles")
@@ -229,38 +310,18 @@ export function setupBotHandlers(bot: Bot): void {
     }
   });
 
-  bot.command("stats", async (ctx) => {
-    if (!requireAccess(ctx)) return;
+  // Обработка фотографий
+  bot.on("message:photo", async (ctx) => {
+    if (!requireAuth(ctx)) return;
 
-    const [{ count, error: countError }, latestResult] = await Promise.all([
-      supabase
-        .from("news_articles")
-        .select("id", { count: "exact", head: true })
-        .eq("is_published", true),
-      supabase
-        .from("news_articles")
-        .select("published_at")
-        .eq("is_published", true)
-        .order("published_at", { ascending: false })
-        .limit(1)
-        .maybeSingle(),
-    ]);
+    const userId = ctx.from?.id ?? 0;
+    const userState = userStates.get(userId) ?? 'normal';
 
-    if (countError || latestResult.error) {
-      console.error("/stats", countError, latestResult.error);
-      await ctx.reply("❌ Не удалось получить статистику");
+    // Если пользователь в режиме редактирования, ожидаем текст а не фото
+    if (userState === 'editing') {
+      await ctx.reply("⚠️ Вы в режиме редактирования. Сначала завершите редактирование новости или отправьте /edit для выхода.");
       return;
     }
-
-    await ctx.reply(
-      `📊 Статистика:\nВсего новостей: ${count ?? 0}\nПоследняя: ${formatDate(
-        latestResult.data?.published_at ?? null
-      )}`
-    );
-  });
-
-  bot.on("message:photo", async (ctx) => {
-    if (!requireAccess(ctx)) return;
 
     const caption = ctx.message.caption ?? "";
     if (!caption.trim()) {
@@ -337,10 +398,27 @@ export function setupBotHandlers(bot: Bot): void {
     }
   });
 
+  // Обработка текста в режиме редактирования
+  bot.on("message:text", async (ctx) => {
+    const userId = ctx.from?.id ?? 0;
+    const userState = userStates.get(userId) ?? 'normal';
+    const text = ctx.message.text.trim();
+
+    // Если пользователь в режиме редактирования и это не команда
+    if (userState === 'editing' && !text.startsWith('/')) {
+      // Здесь будет логика редактирования новости
+      // Пока просто выходим из режима редактирования
+      userStates.set(userId, 'normal');
+      await ctx.reply("✅ Режим редактирования завершён. Используйте /edit для выбора новости.");
+      return;
+    }
+  });
+
+  // Обработка callback кнопок
   bot.on("callback_query:data", async (ctx) => {
     const userId = ctx.from?.id ?? 0;
-    if (!isAllowed(userId)) {
-      await ctx.answerCallbackQuery({ text: "⛔ Нет доступа", show_alert: true });
+    if (!isAuthorized(userId)) {
+      await ctx.answerCallbackQuery({ text: "⛔ Доступ запрещён", show_alert: true });
       return;
     }
 
@@ -348,6 +426,23 @@ export function setupBotHandlers(bot: Bot): void {
 
     if (!data) {
       await ctx.answerCallbackQuery();
+      return;
+    }
+
+    // Редактирование новости
+    if (data.startsWith("edit_")) {
+      const newsId = data.replace("edit_", "");
+      userStates.set(userId, 'editing');
+      
+      await ctx.answerCallbackQuery({ text: "✏️ Режим редактирования" });
+      await ctx.editMessageText(
+        "✏️ Теперь отправьте новый текст для новости:\n\n" +
+        "1 строка = новый заголовок\n" +
+        "Остальные строки = новый текст\n\n" +
+        "Или отправьте /edit для отмены"
+      );
+      
+      // Сохраняем ID новости для редактирования (можно использовать userStates или отдельный Map)
       return;
     }
 
