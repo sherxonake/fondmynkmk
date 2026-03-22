@@ -2,7 +2,7 @@ export const dynamic = "force-dynamic";
 
 import type { ReactNode } from "react";
 import Link from "next/link";
-import { ShieldCheck, Newspaper, Settings2, Activity } from "lucide-react";
+import { ShieldCheck, Newspaper, Settings2, Activity, BarChart3 } from "lucide-react";
 
 import { checkAdminHealth, checkSiteSettingsHealth } from "@/lib/admin-health";
 import { cn } from "@/lib/utils";
@@ -12,6 +12,7 @@ import { Toaster } from "@/components/ui/toaster";
 const navItems = [
   { label: "Дашборд", href: "/admin", icon: ShieldCheck },
   { label: "Новости", href: "/admin/news", icon: Newspaper },
+  { label: "Статистика", href: "/admin/stats", icon: BarChart3 },
   { label: "Настройки", href: "/admin/settings", icon: Settings2 },
 ];
 

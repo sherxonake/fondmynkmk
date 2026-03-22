@@ -214,11 +214,14 @@ export async function getStats(): Promise<StatItem[]> {
     }
 
     const rows = (data ?? []) as StatRow[];
-    return rows.map((row) => ({
+    console.log("Raw stats from DB:", rows.length, rows);
+    const result = rows.map((row) => ({
       value: row.value ?? 0,
       label: row.label ?? "",
       suffix: row.suffix ?? undefined,
     }));
+    console.log("Processed stats:", result.length, result);
+    return result;
   } catch (error) {
     console.error("getStats.catch", error);
     return [];

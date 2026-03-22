@@ -13,6 +13,13 @@ function AnimatedNumber({ target, isVisible, suffix }: { target: number; isVisib
   const count = useMotionValue(0);
   const [display, setDisplay] = useState("0");
 
+  const formatNumber = (n: number) => {
+    if (n >= 1000) {
+      return `${Math.round(n / 1000)}K+`;
+    }
+    return n.toString();
+  };
+
   useEffect(() => {
     if (!isVisible) return;
     
@@ -22,8 +29,7 @@ function AnimatedNumber({ target, isVisible, suffix }: { target: number; isVisib
     });
 
     const unsubscribe = count.on("change", (value) => {
-      // Format large numbers with commas
-      const formatted = Math.round(value).toLocaleString();
+      const formatted = formatNumber(Math.round(value));
       setDisplay(formatted);
     });
 
@@ -80,7 +86,13 @@ function StatShowcase({ item, isVisible, index }: { item: StatItem; isVisible: b
         </div>
         
         <span
-          className="text-6xl font-black text-[var(--color-text-light)] md:text-7xl lg:text-[6rem]"
+          className={`font-black text-[var(--color-text-light)] ${
+            item.value >= 100000 
+              ? 'text-4xl md:text-5xl lg:text-[4rem]' 
+              : item.value >= 10000
+              ? 'text-5xl md:text-6xl lg:text-[5rem]'
+              : 'text-6xl md:text-7xl lg:text-[6rem]'
+          }`}
           style={{ letterSpacing: "-0.04em", lineHeight: 1 }}
         >
           <AnimatedNumber target={item.value} isVisible={isVisible} suffix={item.suffix} />
