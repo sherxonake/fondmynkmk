@@ -104,7 +104,7 @@ export function Hero({ slides }: HeroProps) {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 0.8 }}
-          className="max-w-5xl text-balance text-3xl font-extrabold tracking-tight text-[var(--color-text-light)] sm:text-4xl md:text-5xl lg:text-6xl xl:text-[4rem]"
+          className="max-w-5xl text-balance text-2xl font-extrabold tracking-tight text-[var(--color-text-light)] sm:text-3xl md:text-4xl lg:text-5xl xl:text-[4rem]"
           style={{ lineHeight: 1.1, letterSpacing: "-0.02em" }}
         >
           {"\"NKMK jamg'armasi\" "}

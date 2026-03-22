@@ -80,7 +80,7 @@ export function Header({ settings }: HeaderProps) {
         <div className="flex items-center gap-3">
           <a
             href={`tel:${settings.trustPhone}`}
-            className="phone-pulse group flex items-center gap-2 rounded-full border border-[var(--color-accent-gold)]/50 px-5 py-2.5 text-sm font-semibold text-[var(--color-accent-gold)] transition-all duration-300 hover:border-[var(--color-accent-gold)] hover:bg-[var(--color-accent-gold)] hover:text-[var(--color-primary-dark)] hover:shadow-[0_0_24px_rgba(197,165,114,0.45)]"
+            className="phone-pulse group flex items-center gap-2 rounded-full border border-[var(--color-accent-gold)]/50 px-3 py-2.5 text-sm font-semibold text-[var(--color-accent-gold)] transition-all duration-300 hover:border-[var(--color-accent-gold)] hover:bg-[var(--color-accent-gold)] hover:text-[var(--color-primary-dark)] hover:shadow-[0_0_24px_rgba(197,165,114,0.45)]"
           >
             <Phone className="h-4 w-4" aria-hidden="true" />
             <span className="hidden sm:inline">Ishonch telefoni</span>
