@@ -30,7 +30,8 @@ function formatDate(value: string): string {
 }
 
 export async function generateMetadata({ params }: NewsDetailPageProps): Promise<Metadata> {
-  const article = await getNewsArticleBySlug(params.slug);
+  const { slug } = await params;
+  const article = await getNewsArticleBySlug(slug);
 
   if (!article) {
     return {
@@ -55,7 +56,8 @@ export async function generateMetadata({ params }: NewsDetailPageProps): Promise
 }
 
 export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
-  const article = await getNewsArticleBySlug(params.slug);
+  const { slug } = await params;
+  const article = await getNewsArticleBySlug(slug);
 
   if (!article) {
     notFound();
