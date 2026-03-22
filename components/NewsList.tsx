@@ -136,10 +136,10 @@ export function NewsList({ items }: NewsListProps) {
         <div className="mt-12 text-center">
           <Link
             href="/news"
-            className="inline-flex items-center gap-2 rounded-full bg-[var(--color-accent-gold)] px-8 py-3 text-base font-semibold text-[var(--color-primary-dark)] shadow-lg shadow-[var(--color-accent-gold)]/25 transition-all duration-300 hover:scale-[1.03] hover:shadow-xl hover:shadow-[var(--color-accent-gold)]/35"
+            className="inline-flex items-center gap-2 rounded-full bg-[var(--color-accent-gold)] px-8 py-3 text-base font-semibold text-[var(--color-primary-dark)] shadow-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-xl"
           >
             Barcha yangiliklar
-            <ArrowRight className="h-5 w-5" />
+            <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
       </div>
