@@ -8,13 +8,21 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/lib/supabase";
 import { getTelegramStatus } from "@/lib/telegram-status";
-import { HydratedDate } from "@/app/admin/_components/hydrated-date";
 
 const numberFormatter = new Intl.NumberFormat("ru-RU");
 const dateFormatter = new Intl.DateTimeFormat("ru-RU", {
   dateStyle: "medium",
   timeStyle: "short",
 });
+
+function formatDate(value: string | null): string {
+  if (!value) return "—";
+  try {
+    return dateFormatter.format(new Date(value));
+  } catch {
+    return "—";
+  }
+}
 
 interface DashboardStats {
   totalNews: number;
@@ -137,7 +145,7 @@ export default async function AdminDashboardPage() {
           <CardContent>
             <p className="text-4xl font-semibold text-white">{numberFormatter.format(stats.totalNews)}</p>
             <p className="text-xs text-slate-500">
-              Последняя публикация: <HydratedDate value={stats.lastPublishedAt} formatter={(date) => dateFormatter.format(date)} />
+              Последняя публикация: <span suppressHydrationWarning>{formatDate(stats.lastPublishedAt)}</span>
             </p>
           </CardContent>
         </Card>
@@ -198,7 +206,7 @@ export default async function AdminDashboardPage() {
                         {news.category}
                       </Badge>
                       <span className="text-xs text-slate-500">
-                        <HydratedDate value={news.published_at} formatter={(date) => dateFormatter.format(date)} />
+                        <span suppressHydrationWarning>{formatDate(news.published_at)}</span>
                       </span>
                     </div>
                   </div>
