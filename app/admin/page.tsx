@@ -28,6 +28,7 @@ interface DashboardStats {
   totalNews: number;
   partners: number;
   lastPublishedAt: string | null;
+  draftsCount: number; // Добавляем количество черновиков
 }
 
 interface RecentNews {
@@ -39,15 +40,22 @@ interface RecentNews {
 
 async function getDashboardStats(): Promise<{ stats: DashboardStats; recentNews: RecentNews[] }> {
   try {
-    // Получаем количество новостей
+    // Получаем количество опубликованных новостей
     const { count: totalNews } = await supabase
       .from("news_articles")
-      .select("*", { count: "exact", head: true });
+      .select("*", { count: "exact", head: true })
+      .eq("is_published", true);
 
     // Получаем количество партнёров
     const { count: partners } = await supabase
       .from("partners")
       .select("*", { count: "exact", head: true });
+
+    // Получаем количество черновиков
+    const { count: draftsCount } = await supabase
+      .from("news_articles")
+      .select("*", { count: "exact", head: true })
+      .eq("is_published", false);
 
     // Получаем последнюю новость
     const { data: lastNews } = await supabase
@@ -71,13 +79,14 @@ async function getDashboardStats(): Promise<{ stats: DashboardStats; recentNews:
         totalNews: totalNews || 0,
         partners: partners || 0,
         lastPublishedAt: lastNews?.published_at || null,
+        draftsCount: draftsCount || 0,
       },
       recentNews: recentNews || [],
     };
   } catch (error) {
     console.error("getDashboardStats error", error);
     return {
-      stats: { totalNews: 0, partners: 0, lastPublishedAt: null },
+      stats: { totalNews: 0, partners: 0, lastPublishedAt: null, draftsCount: 0 },
       recentNews: [],
     };
   }
@@ -100,7 +109,7 @@ export default async function AdminDashboardPage() {
     getTelegramStatus()
   ]);
   
-  const data = dataResult.status === 'fulfilled' ? dataResult.value : { stats: { totalNews: 0, partners: 0, lastPublishedAt: null }, recentNews: [] };
+  const data = dataResult.status === 'fulfilled' ? dataResult.value : { stats: { totalNews: 0, partners: 0, lastPublishedAt: null, draftsCount: 0 }, recentNews: [] };
   const telegramStatus = telegramResult.status === 'fulfilled' ? telegramResult.value : { ok: false, label: "Недоступен" };
   
   const { stats, recentNews } = data;
@@ -146,7 +155,7 @@ export default async function AdminDashboardPage() {
         </Card>
       </section>
 
-      <section className="grid gap-4 md:grid-cols-3">
+      <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card className="border-white/5 bg-slate-900/40">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-slate-400">Всего новостей</CardTitle>
@@ -168,6 +177,19 @@ export default async function AdminDashboardPage() {
           <CardContent>
             <p className="text-4xl font-semibold text-white">{numberFormatter.format(stats.partners)}</p>
             <p className="text-xs text-slate-500">Организации-партнёры фонда</p>
+          </CardContent>
+        </Card>
+
+        <Card className="border-orange-500/20 bg-orange-500/5">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium text-slate-400">На модерации</CardTitle>
+            <Bot className="h-5 w-5 text-orange-300" />
+          </CardHeader>
+          <CardContent>
+            <p className="text-4xl font-semibold text-white">{numberFormatter.format(stats.draftsCount)}</p>
+            <p className="text-xs text-slate-500">
+              {stats.draftsCount > 0 ? "Новостей ожидают проверки" : "Нет новостей на модерации"}
+            </p>
           </CardContent>
         </Card>
 

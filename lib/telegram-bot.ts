@@ -142,13 +142,11 @@ const parseCaption = (caption: string) => {
   const lowerCaption = caption.toLowerCase();
   const categoryEntry = Object.entries(CATEGORY_TAGS).find(([tag]) => lowerCaption.includes(tag));
   const category = categoryEntry ? categoryEntry[1] : DEFAULT_CATEGORY;
-  const isDraft = /#draft\b/i.test(caption);
 
   return {
     title,
     content,
     category,
-    isDraft,
   };
 };
 
@@ -329,7 +327,7 @@ export function setupBotHandlers(bot: Bot): void {
       return;
     }
 
-    const { title, content, category, isDraft } = parseCaption(caption);
+    const { title, content, category } = parseCaption(caption);
     if (!title) {
       await ctx.reply("⚠️ Добавь заголовок в первую строку (без тегов)");
       return;
@@ -362,10 +360,10 @@ export function setupBotHandlers(bot: Bot): void {
         image_url: imageUrl,
         slug,
         category,
-        is_published: !isDraft,
+        is_published: false, // ВСЕГДА черновик для модерации
         source: "telegram",
         telegram_message_id: ctx.message.message_id,
-        published_at: isDraft ? null : new Date().toISOString(),
+        published_at: null, // Нет даты публикации пока не одобрено
       };
 
       const { data, error } = await supabase
@@ -380,17 +378,8 @@ export function setupBotHandlers(bot: Bot): void {
         return;
       }
 
-      const keyboard = new InlineKeyboard();
-      if (isDraft) {
-        keyboard.text("✅ Опубликовать", `publish_${data.id}`).row();
-      }
-      keyboard.text("🗑 Удалить", `delete_${data.id}`);
-
       await ctx.reply(
-        `✅ ${isDraft ? "Черновик сохранён" : "Новость опубликована"}!\n📰 ${title}\n🏷 ${category}\n${
-          isDraft ? "📝 Статус: Черновик" : "🌐 Опубликовано на сайте"
-        }`,
-        { reply_markup: keyboard }
+        `⏳ Новость отправлена на модерацию!\n\n📰 ${title}\n🏷 ${category}\n\nАдминистратор рассмотрит и опубликует её на сайте.`
       );
     } catch (error) {
       console.error("message:photo", error);
