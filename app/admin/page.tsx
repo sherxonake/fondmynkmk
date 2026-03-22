@@ -86,7 +86,8 @@ const formatDateTime = (value: string | null): string => {
 export default async function AdminDashboardPage() {
   try {
     await requireAdminSession({ redirectOnFail: false });
-  } catch {
+  } catch (e) {
+    console.error('[Dashboard] auth error, continuing:', e);
     // Не редиректим, просто продолжаем с fallback данными
   }
   

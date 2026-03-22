@@ -21,6 +21,7 @@ function handleAuthFailure(redirectOnFail: boolean, message: string): never {
   if (redirectOnFail) {
     redirect(LOGIN_PATH);
   }
+  console.error('[AdminAuth] handleAuthFailure:', message);
   throw new AdminAuthError(message);
 }
 

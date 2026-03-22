@@ -52,7 +52,9 @@ export async function verifyAdminJwt(token: string): Promise<AdminJwtPayload | n
     const { payload } = await jwtVerify(token, secretKey);
     return payload as AdminJwtPayload;
   } catch (error) {
-    console.error("verifyAdminJwt", error);
+    console.error("[AdminAuth] verifyAdminJwt failed:", error);
+    console.error("[AdminAuth] JWT secret used:", ADMIN_JWT_SECRET);
+    console.error("[AdminAuth] Token prefix:", token.substring(0, 20) + "...");
     return null;
   }
 }
