@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Phone, Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { SiteSettings } from "@/types";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 
 interface HeaderProps {
   settings: SiteSettings;
@@ -70,6 +71,7 @@ export function Header({ settings }: HeaderProps) {
               {link.label}
             </a>
           ))}
+          <LanguageSwitcher />
         </nav>
 
         {/* Trust phone + Mobile toggle */}
