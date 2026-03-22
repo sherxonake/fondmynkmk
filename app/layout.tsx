@@ -11,13 +11,23 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "\"NKMK jamg'armasi\" davlat muassasasi",
+  metadataBase: new URL('https://fondmynkmk.vercel.app'),
+  title: "NKMK Jamg'armasi | Davlat muassasasi",
   description:
     "166 ta ijtimoiy ob'yektlarni boshqaramiz va Navoiy kon-metallurgiya kombinatining 118 000 dan ortiq xodimining hayot sifatini ta'minlaymiz.",
   openGraph: {
-    title: "\"NKMK jamg'armasi\" davlat muassasasi",
+    title: "NKMK Jamg'armasi | Davlat muassasasi",
     description:
       "166 ta ijtimoiy ob'yektlarni boshqaramiz va NKMK ning 118 000 dan ortiq xodimining hayot sifatini ta'minlaymiz.",
+    url: "https://fondmynkmk.vercel.app",
+    images: [
+      {
+        url: "/images/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "NKMK Jamg'armasi",
+      },
+    ],
     locale: "uz_UZ",
     type: "website",
   },

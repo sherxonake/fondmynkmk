@@ -137,6 +137,8 @@ const getCachedArticles = unstable_cache(
 )
 ```
 
+- Всегда явно указывай стратегию кэширования в `fetch` (`cache: 'no-store'` или `next: { revalidate: X }`). Не полагайся на дефолтное поведение, так как оно меняется между Next.js 14 и 15.
+
 ### API Routes:
 ```typescript
 // app/api/news/route.ts
@@ -222,6 +224,7 @@ export function NewsCard({ article, onSelect, className }: NewsCardProps) {
 - Избегай `useEffect` для derived state — считай прямо в рендере
 - `key` в списках — всегда уникальный стабильный ID, не index
 - Мемоизация (`useMemo`, `useCallback`, `React.memo`) — только при реальной проблеме производительности, не превентивно
+- Всегда используй абсолютные импорты через алиас `@/` (например, `@/components/ui/...`). Никогда не используй относительные пути вроде `../../`.
 
 ---
 
@@ -255,6 +258,7 @@ const cardVariants = {
 - `group`, `peer` для зависимых стилей вместо JS состояния
 - Анимации — через Framer Motion для сложных, Tailwind `transition-` для простых
 - Адаптивность: mobile-first (`sm:`, `md:`, `lg:`)
+- Если по задаче нужен стандартный UI-компонент (Button, Dialog, Select, Input и т.д.), не пиши его с нуля. Сначала проверь, есть ли он в `components/ui`. Если нет — используй команду терминала `npx shadcn-ui@latest add <component_name>`, чтобы добавить его в проект, и только потом используй.
 
 ---
 
@@ -512,3 +516,4 @@ function useDebounce<T>(value: T, delay = 300): T {
 - [ ] Мобильная версия работает (если UI)
 - [ ] Loading и error состояния есть (если есть fetch)
 - [ ] ENV переменные указаны если нужны новые
+- [ ] Право на самоисправление (Self-Correction): Если после написания кода терминал, TypeScript или ESLint выдают ошибки, ты обязан прочитать их и исправить код самостоятельно до того, как отчитаться о выполнении задачи.

@@ -61,8 +61,7 @@ function StatShowcase({ item, isVisible, index }: { item: StatItem; isVisible: b
   return (
     <motion.div
       initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
+      animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
       transition={{ duration: 0.7, delay: index * 0.12, ease: [0.16, 1, 0.3, 1] }}
       className="group relative flex flex-col items-center justify-center overflow-hidden rounded-3xl p-8 lg:p-12"
     >
@@ -119,7 +118,7 @@ export function Stats({ items }: StatsProps) {
   useEffect(() => {
     const node = sectionRef.current;
     if (!node) return;
-    const observer = new IntersectionObserver(handleIntersection, { threshold: 0.15 });
+    const observer = new IntersectionObserver(handleIntersection, { threshold: 0.05 });
     observer.observe(node);
     return () => observer.disconnect();
   }, [handleIntersection]);
@@ -151,7 +150,7 @@ export function Stats({ items }: StatsProps) {
           </h2>
         </motion.div>
 
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
           {items.length > 0 ? (
             items.map((item, i) => (
               <StatShowcase key={item.label} item={item} isVisible={isVisible} index={i} />

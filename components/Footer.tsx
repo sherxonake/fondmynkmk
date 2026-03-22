@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Mail, Phone, MapPin, Send } from "lucide-react";
+import { Mail, Phone, MapPin, Send, ExternalLink } from "lucide-react";
 import { motion } from "framer-motion";
 import type { FooterColumn } from "@/types";
 
@@ -106,13 +106,25 @@ export function Footer({ columns }: FooterProps) {
             <p className="mt-5 max-w-xs text-sm leading-relaxed text-[var(--color-text-light)]/50">
               166 ta ijtimoiy ob{"'"}yektlarni boshqaramiz va NKMK ning 118 000 dan ortiq xodimining hayot sifatini ta{"'"}minlaymiz.
             </p>
+            
+            <a 
+              href="https://www.ngmk.uz" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-sm text-white/60 hover:text-white mt-3 transition-colors duration-200"
+            >
+              <ExternalLink size={14} />
+              NKMK — Bosh tashkilot
+            </a>
 
-            {/* Contact info */}
             <div className="mt-6 flex flex-col gap-3">
-              <div className="flex items-center gap-3 text-sm text-[var(--color-text-light)]/50">
-                <MapPin className="h-4 w-4 shrink-0 text-[var(--color-accent-gold)]" aria-hidden="true" />
-                <span>Navoiy viloyati, O{"'"}zbekiston</span>
-              </div>
+              <a
+                href="mailto:info@fondnkmk.uz"
+                className="flex items-center gap-2 text-sm text-white/70 transition-colors duration-200 hover:text-[var(--color-accent-gold)]"
+              >
+                <Mail size={14} />
+                info@fondnkmk.uz
+              </a>
               <div className="flex items-center gap-3 text-sm text-[var(--color-text-light)]/50">
                 <Phone className="h-4 w-4 shrink-0 text-[var(--color-accent-gold)]" aria-hidden="true" />
                 <span className="font-medium text-[var(--color-text-light)]/70">+998 79 223-60-21</span>

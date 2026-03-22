@@ -19,6 +19,18 @@ const nextConfig = {
     unoptimized: true,
     remotePatterns,
   },
+  async rewrites() {
+    return [
+      {
+        source: '/admin/:path*',
+        destination: '/admin/:path*',
+      },
+      {
+        source: '/api/admin/:path*',
+        destination: '/api/admin/:path*',
+      },
+    ];
+  },
 };
 
 export default nextConfig;
