@@ -193,14 +193,39 @@ export function Header({ settings }: HeaderProps) {
 
         {/* Trust phone + Mobile toggle */}
         <div className="flex items-center gap-3">
-          <a
-            href={`tel:${settings.trustPhone}`}
-            className="phone-pulse hidden md:flex items-center gap-2 rounded-full border border-[var(--color-accent-gold)]/50 px-3 py-2.5 text-sm font-semibold text-[var(--color-accent-gold)] transition-all duration-300 hover:border-[var(--color-accent-gold)] hover:bg-[var(--color-accent-gold)] hover:text-[var(--color-primary-dark)] hover:shadow-[0_0_24px_rgba(197,165,114,0.45)]"
-          >
-            <Phone className="h-4 w-4" aria-hidden="true" />
-            <span className="hidden sm:inline">Ishonch telefoni</span>
-            <span className="font-bold">{settings.trustPhone}</span>
-          </a>
+          <div className="relative group hidden md:block">
+            {/* Кнопка */}
+            <button className="phone-pulse flex items-center gap-2 rounded-full bg-[#c9a227] 
+                               text-white px-4 py-2 text-sm font-semibold hover:bg-[#b8911f] 
+                               transition-colors">
+              📞 Bog'lanish
+            </button>
+            
+            {/* Dropdown — появляется при hover */}
+            <div className="absolute right-0 top-full mt-2 w-64 bg-white rounded-xl shadow-xl 
+                            border border-gray-100 p-4 opacity-0 invisible 
+                            group-hover:opacity-100 group-hover:visible transition-all z-50">
+              <p className="text-xs text-gray-400 mb-3 font-medium uppercase tracking-wide">
+                Bog'lanish
+              </p>
+              <a href="tel:+998792272121" 
+                 className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 mb-2">
+                <span className="text-xl">📞</span>
+                <div>
+                  <p className="text-xs text-gray-500">Call markaz</p>
+                  <p className="font-bold text-[#0d1f3c]">+998 79 227 21 21</p>
+                </div>
+              </a>
+              <a href="tel:+998792272968"
+                 className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50">
+                <span className="text-xl">🔒</span>
+                <div>
+                  <p className="text-xs text-gray-500">Ishonch telefoni</p>
+                  <p className="font-bold text-[#0d1f3c]">+998 79 227 29 68</p>
+                </div>
+              </a>
+            </div>
+          </div>
 
           <button
             onClick={() => setMenuOpen(!menuOpen)}
