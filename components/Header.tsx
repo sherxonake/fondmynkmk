@@ -19,7 +19,8 @@ export function Header({ settings }: HeaderProps) {
   
   if (pathname?.startsWith('/admin')) return null;
 
-  const isHomePage = pathname === "/";
+  const locale = pathname?.split('/')[1] || 'uz';
+  const isHomePage = pathname === `/${locale}` || pathname === "/";
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
@@ -58,12 +59,12 @@ export function Header({ settings }: HeaderProps) {
       hasDropdown: true,
       dropdownKey: "about",
       items: [
-        { label: '"NKMK jamg\'armasi" davlat muassasasi', href: '/about' },
-        { label: 'Funksiya va vazifalar', href: '/about/functions' },
-        { label: 'Hududiy boshqarmalar', href: '/about/regions' },
-        { label: 'Rahbariyat', href: '/about/leadership' },
-        { label: 'Tashkilot ustavi', href: '/about/charter' },
-        { label: 'Tashkilot pasporti', href: '/about/passport' },
+        { label: '"NKMK jamg\'armasi" davlat muassasasi', href: `/${locale}/about` },
+        { label: 'Funksiya va vazifalar', href: `/${locale}/about/functions` },
+        { label: 'Hududiy boshqarmalar', href: `/${locale}/about/regions` },
+        { label: 'Rahbariyat', href: `/${locale}/about/leadership` },
+        { label: 'Tashkilot ustavi', href: `/${locale}/about/charter` },
+        { label: 'Tashkilot pasporti', href: `/${locale}/about/passport` },
       ]
     },
     {
@@ -71,12 +72,12 @@ export function Header({ settings }: HeaderProps) {
       hasDropdown: true,
       dropdownKey: "services",
       items: [
-        { label: 'Tibbiyot', href: '/services/medical' },
-        { label: 'Sanatoriy-profilaktoriylar', href: '/services/sanatorium' },
-        { label: 'Ovqatlantirish', href: '/services/catering' },
-        { label: 'Madaniyat va sport', href: '/services/culture-sport' },
-        { label: 'Bolalar oromgohlari', href: '/services/children-camps' },
-        { label: 'Ijtimoiy obyektlar', href: '/services/social' },
+        { label: 'Tibbiyot', href: `/${locale}/services/medical` },
+        { label: 'Sanatoriy-profilaktoriylar', href: `/${locale}/services/sanatorium` },
+        { label: 'Ovqatlantirish', href: `/${locale}/services/food` },
+        { label: 'Madaniyat va sport', href: `/${locale}/services/culture` },
+        { label: 'Bolalar oromgohlari', href: `/${locale}/services/children` },
+        { label: 'Ijtimoiy obyektlar', href: `/${locale}/services/production` },
       ]
     },
     {
@@ -84,15 +85,14 @@ export function Header({ settings }: HeaderProps) {
       hasDropdown: true,
       dropdownKey: "open-data",
       items: [
-        { label: 'Statistika', href: '/open-data/statistics' },
-        { label: 'Narxlar', href: '/open-data/prices' },
-        { label: 'Tenderlar', href: '/open-data/tenders' },
-        { label: 'Korrupsiyaga qarshi', href: '/open-data/anticorruption' },
+        { label: 'Statistik', href: `/${locale}/open-data/statistics` },
+        { label: 'Narxlar', href: `/${locale}/open-data/prices` },
+        { label: 'Tenderlar', href: `/${locale}/open-data/tenders` },
       ]
     },
     {
       label: "Yangiliklar",
-      href: "/news",
+      href: `/${locale}/news`,
       hasDropdown: false
     }
   ];
@@ -110,7 +110,7 @@ export function Header({ settings }: HeaderProps) {
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 lg:px-8">
         {/* Logo -- bigger */}
-        <a href="/" className="group flex items-center gap-3" aria-label="NKMK Jamg'armasi">
+        <a href={`/${locale}`} className="group flex items-center gap-3" aria-label="NKMK Jamg'armasi">
           <Image
             src={settings.logo.url}
             alt="NKMK Jamg'armasi logotipi"

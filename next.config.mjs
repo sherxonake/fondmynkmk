@@ -1,5 +1,7 @@
+import createNextIntlPlugin from 'next-intl/plugin';
+ 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-
+ 
 const remotePatterns = [
   {
     protocol: "https",
@@ -7,7 +9,7 @@ const remotePatterns = [
     pathname: "/wp-content/uploads/**",
   }
 ];
-
+ 
 if (supabaseUrl) {
   remotePatterns.push({
     protocol: "https",
@@ -15,7 +17,9 @@ if (supabaseUrl) {
     pathname: "/storage/v1/object/public/**",
   });
 }
-
+ 
+const withNextIntl = createNextIntlPlugin();
+ 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   typescript: {
@@ -38,5 +42,5 @@ const nextConfig = {
     ];
   },
 };
-
-export default nextConfig;
+ 
+export default withNextIntl(nextConfig);

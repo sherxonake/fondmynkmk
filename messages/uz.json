@@ -1,0 +1,45 @@
+{
+  "Navigation": {
+    "about": "Jamg'arma haqida",
+    "services": "Xizmatlar",
+    "openData": "Ochiq ma'lumotlar",
+    "news": "Yangiliklar"
+  },
+  "AboutMenu": {
+    "title": "\"NKMK jamg'armasi\" davlat muassasasi",
+    "functions": "Funksiya va vazifalar",
+    "regions": "Hududiy boshqarmalar",
+    "leadership": "Rahbariyat",
+    "charter": "Tashkilot ustavi",
+    "passport": "Tashkilot pasporti"
+  },
+  "ServicesMenu": {
+    "medical": "Tibbiyot",
+    "sanatorium": "Sanatoriy-profilaktoriylar",
+    "catering": "Ovqatlantirish",
+    "cultureSport": "Madaniyat va sport",
+    "childrenCamps": "Bolalar oromgohlari",
+    "social": "Ijtimoiy obyektlar"
+  },
+  "OpenDataMenu": {
+    "statistics": "Statistika",
+    "prices": "Narxlar",
+    "tenders": "Tenderlar",
+    "anticorruption": "Korrupsiyaga qarshi"
+  },
+  "Header": {
+    "contact": "Bog'lanish",
+    "callCenter": "Call markaz",
+    "trustPhone": "Ishonch telefoni"
+  },
+  "Footer": {
+    "subscribe": "Yangilanishlarga obuna bo'ling",
+    "subscribeDesc": "Eng so'nggi yangiliklar va tadbirlar haqida birinchi bo'lib biling",
+    "emailPlaceholder": "Email manzilingiz",
+    "subscribeBtn": "Obuna",
+    "subscribed": "Rahmat! Obuna muvaffaqiyatli amalga oshirildi.",
+    "brandDesc": "166 ta ijtimoiy ob'yektlarni boshqaramiz va NKMK ning 118 000 dan ortiq xodimining hayot sifatini ta'minlaymiz.",
+    "mainOrg": "NKMK — Bosh tashkilot",
+    "allRights": "Barcha huquqlar himoyalangan."
+  }
+}
