@@ -18,11 +18,11 @@ const leadershipData = [
       "2008 — O'zbekiston Respublikasi Bank-moliya akademiyasi"
     ],
     career: [
-      { period: "1996-2003", position: "Navoiy viloyat Qiziltepa tumani maliya bo'limida mas'ul xodim" },
-      { period: "2003-2012", position: "Navoiy viloyat Maliya boshqarmasida mas'ul xodim" },
-      { period: "2012-2014", position: "Qiziltepa tumani maliya bo'limi mudiri" },
+      { period: "1996-2003", position: "Navoiy viloyat Qiziltepa tumani moliya bo'limida mas'ul xodim" },
+      { period: "2003-2012", position: "Navoiy viloyat Moliya boshqarmasida mas'ul xodim" },
+      { period: "2012-2014", position: "Qiziltepa tumani moliya bo'limi mudiri" },
       { period: "2014-2017", position: "Uchquduq tuman hokimining ijtimoiy-iqtisodiy masalalar bo'yicha o'rinbosari" },
-      { period: "2017-2023", position: "Navoiy viloyat Maliya boshqarmasi boshlig'i" },
+      { period: "2017-2023", position: "Navoiy viloyat Moliya boshqarmasi boshlig'i" },
       { period: "2023-h.v.", position: "\"NKMK jamg'armasi\" davlat muassasasi bosh direktori" }
     ]
   },
