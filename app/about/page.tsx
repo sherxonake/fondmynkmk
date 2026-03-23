@@ -11,6 +11,7 @@ export default function AboutPage() {
       title="Biz haqimizda"
       subtitle="NKMK Jamg'armasi davlat muassasasi haqida"
       breadcrumbs={[
+        { label: "Bosh sahifa", href: "/" },
         { label: "Biz haqimizda" }
       ]}
       relatedLinks={[
