@@ -1,10 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
-import { LanguageProvider } from "@/contexts/LanguageContext";
-import { Header } from "@/components/Header";   // ← ДОБАВИТЬ
-import { Footer } from "@/components/Footer";   // ← ДОБАВИТЬ
-import { getSiteSettings, getFooterColumns } from "@/lib/api";  // ← ДОБАВИТЬ
 import "./globals.css";
 
 const inter = Inter({
@@ -47,19 +43,10 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [settings, footerColumns] = await Promise.all([
-    getSiteSettings(),
-    getFooterColumns(),
-  ]);
-
   return (
     <html lang="uz" className={inter.variable}>
       <body className="font-sans antialiased">
-        <LanguageProvider>
-          <Header settings={settings} />          {/* ← ДОБАВИТЬ */}
-          {children}
-          <Footer columns={footerColumns} />          {/* ← ДОБАВИТЬ */}
-        </LanguageProvider>
+        {children}
         <Analytics />
       </body>
     </html>
