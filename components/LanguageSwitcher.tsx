@@ -9,23 +9,25 @@ export function LanguageSwitcher() {
   const pathname = usePathname();
   const router = useRouter();
 
-  const currentLocale = LOCALES.includes(pathname?.split('/')[1] || '') 
-    ? pathname.split('/')[1] 
-    : DEFAULT_LOCALE;
+  const currentLocale = pathname?.split('/')[1] || DEFAULT_LOCALE;
 
   const switchLocale = (newLocale: string) => {
     if (!pathname) return;
     
-    const segments = pathname.split('/');
+    // Получаем текущий путь и заменяем префикс локали
+    const segments = pathname.split('/').filter(Boolean);
     
-    if (LOCALES.includes(segments[1])) {
-      segments[1] = newLocale;
+    // Если первый сегмент - это локаль, заменяем её
+    if (LOCALES.includes(segments[0])) {
+      segments[0] = newLocale;
     } else {
-      segments.splice(1, 0, newLocale);
+      // Если локали нет в пути, добавляем её в начало
+      segments.unshift(newLocale);
     }
     
-    const newPath = segments.join('/') || `/${newLocale}`;
+    const newPath = '/' + segments.join('/');
     
+    // Используем router.push для навигации без перезагрузки
     router.push(newPath);
   };
 

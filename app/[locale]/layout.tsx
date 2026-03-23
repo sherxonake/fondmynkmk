@@ -6,7 +6,7 @@ import { LanguageProvider } from "@/contexts/LanguageContext";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { getSiteSettings, getFooterColumns } from "@/lib/api";
-import "./globals.css";
+import "../globals.css";
  
 export default async function LocaleLayout({
   children,
