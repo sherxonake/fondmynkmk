@@ -320,7 +320,7 @@ export async function getNewsStories(): Promise<NewsStory[]> {
     const rows = (data ?? []) as NewsStoryRow[];
     return rows.map((row, index) => ({
       id: toNumericId(row.id, index + 1),
-      image: row.image_url === "/images/news-powerlifting.jpg" 
+      image: (row.image_url && row.image_url.includes("news-powerlifting.jpg")) 
         ? "https://fondnkmk.uz/wp-content/uploads/2025/04/photo_2025-04-14_10-40-05-780x437.jpg" 
         : (row.image_url ?? ""),
       title: row.title ?? "",
@@ -351,7 +351,7 @@ export async function getNewsArticles(): Promise<NewsArticle[]> {
     const rows = (data ?? []) as NewsArticleRow[];
     return rows.map((row, index) => ({
       id: toNumericId(row.id, index + 1),
-      image: row.image_url === "/images/news-powerlifting.jpg" 
+      image: (row.image_url && row.image_url.includes("news-powerlifting.jpg")) 
         ? "https://fondnkmk.uz/wp-content/uploads/2025/04/photo_2025-04-14_10-40-05-780x437.jpg" 
         : (row.image_url ?? ""),
       title: row.title ?? "",
