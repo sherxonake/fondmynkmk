@@ -1,7 +1,6 @@
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { NewsStories } from "@/components/NewsStories";
 import { Stats } from "@/components/Stats";
@@ -10,10 +9,8 @@ import { Achievements } from "@/components/Achievements";
 import { NewsList } from "@/components/NewsList";
 import { Quote } from "@/components/Quote";
 import { Partners } from "@/components/Partners";
-import { Footer } from "@/components/Footer";
 import { Preloader } from "@/components/Preloader";
 import {
-  getSiteSettings,
   getHeroSlides,
   getStats,
   getDirections,
@@ -21,13 +18,11 @@ import {
   getPartners,
   getNewsStories,
   getNewsArticles,
-  getFooterColumns,
 } from "@/lib/api";
 
 export default async function HomePage() {
-  const [settings, heroSlides, stats, directions, quote, partners, newsStories, newsArticles, footerColumns] =
+  const [heroSlides, stats, directions, quote, partners, newsStories, newsArticles] =
     await Promise.all([
-      getSiteSettings(),
       getHeroSlides(),
       getStats(),
       getDirections(),
@@ -35,7 +30,6 @@ export default async function HomePage() {
       getPartners(),
       getNewsStories(),
       getNewsArticles(),
-      getFooterColumns(),
     ]);
 
   const safeQuote = quote ?? { text: "", author: "" };
@@ -43,7 +37,6 @@ export default async function HomePage() {
   return (
     <>
       <Preloader />
-      <Header settings={settings} />
       <main>
         <Hero slides={heroSlides} />
         <NewsStories items={newsStories} />
@@ -54,7 +47,6 @@ export default async function HomePage() {
         <NewsList items={newsArticles} />
         <Partners items={partners} />
       </main>
-      <Footer columns={footerColumns} />
     </>
   );
 }
