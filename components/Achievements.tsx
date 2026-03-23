@@ -109,8 +109,8 @@ function PowerliftingBlock() {
       <div className="relative overflow-hidden rounded-3xl lg:w-1/2">
         <div className="relative aspect-[4/3] overflow-hidden">
           <Image
-            src="/images/news-powerlifting.jpg"
-            alt="Pauerliftingchilar yutuqlari"
+            src="https://fondnkmk.uz/wp-content/uploads/2025/04/photo_2025-04-14_10-40-05-780x437.jpg"
+            alt="NKMK sport tadbirlari"
             fill
             className="object-cover"
             sizes="(max-width: 1024px) 100vw, 50vw"
