@@ -12,7 +12,6 @@ export default function LeadershipPage() {
       title="Rahbariyat"
       subtitle="Muassasa rahbariyati tarkibi va ularning mehnat faoliyati"
       breadcrumbs={[
-        { label: "Bosh sahifa", href: "/" },
         { label: "Jamg'arma haqida", href: "/about" },
         { label: "Rahbariyat" }
       ]}
