@@ -242,7 +242,7 @@ export function LeadershipClient() {
         )}
 
         {/* Other Leaders */}
-        <div className="grid gap-8 lg:grid-cols-3">
+        <div className="grid gap-8 md:grid-cols-2">
           {otherLeaders.map((leader) => (
             <LeaderCard key={leader.id} leader={leader} />
           ))}
