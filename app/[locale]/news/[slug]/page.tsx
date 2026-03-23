@@ -1,12 +1,12 @@
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
-
 import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { getNewsArticleBySlug, getNewsArticles } from "@/lib/api";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 interface NewsDetailPageProps {
   params: Promise<{ slug: string; locale: string }>;

@@ -7,6 +7,8 @@ import { NewsGrid } from "@/components/NewsGrid";
 import { NewsFilters } from "@/components/NewsFilters";
 import type { NewsArticle } from "@/types";
 
+export const dynamic = 'force-dynamic';
+
 export default function NewsPage() {
   const t = useTranslations('News');
   const [news, setNews] = useState<NewsArticle[]>([]);
