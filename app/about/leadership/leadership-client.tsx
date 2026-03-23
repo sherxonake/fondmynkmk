@@ -1,259 +1,144 @@
 "use client";
 
-import { useState } from "react";
-import Image from "next/image";
 import { motion } from "framer-motion";
-import { ChevronDown, ChevronUp, User, Briefcase, GraduationCap } from "lucide-react";
 
-const leadershipData = [
+const leaders = [
   {
-    id: "director",
     name: "Ochilov Dilshod Murodullayevich",
-    position: "Navoiy kon-metallurgiya kombinati jamg'armasi davlat muassasasi direktori",
-    photo: "https://fondnkmk.uz/wp-content/uploads/2024/01/DSC_6043-768x512.jpg",
-    birthYear: 1976,
-    isMain: true,
+    position: "Bosh direktor",
+    age: "50 yosh, 1976-yilda tug'ilgan",
+    initials: "OD",
     education: [
-      "2004 — Buxoro oziq-ovqat va yengil sanoat texnologiyalari instituti",
-      "2008 — O'zbekiston Respublikasi Bank-moliya akademiyasi"
+      { year: "2004", place: "Buxoro oziq-ovqat va yengil sanoat texnologiyalari instituti" },
+      { year: "2008", place: "O'zbekiston Respublikasi Bank-moliya akademiyasi" }
     ],
     career: [
-      { period: "1996-2003", position: "Navoiy viloyat Qiziltepa tumani maliya bo'limida mas'ul xodim" },
-      { period: "2003-2012", position: "Navoiy viloyat Maliya boshqarmasida mas'ul xodim" },
-      { period: "2012-2014", position: "Qiziltepa tumani maliya bo'limi mudiri" },
-      { period: "2014-2017", position: "Uchquduq tuman hokimining ijtimoiy-iqtisodiy masalalar bo'yicha o'rinbosari" },
-      { period: "2017-2023", position: "Navoiy viloyat Maliya boshqarmasi boshlig'i" },
-      { period: "2023-h.v.", position: "\"NKMK jamg'armasi\" davlat muassasasi bosh direktori" }
+      { years: "1996–2003", role: "Navoiy viloyat Qiziltepa tumani maliya bo'limida mas'ul xodim" },
+      { years: "2003–2012", role: "Navoiy viloyat Maliya boshqarmasida mas'ul xodim" },
+      { years: "2012–2014", role: "Qiziltepa tumani maliya bo'limi mudiri" },
+      { years: "2014–2017", role: "Uchquduq tuman hokimining ijtimoiy-iqtisodiy masalalar bo'yicha o'rinbosari" },
+      { years: "2017–2023", role: "Navoiy viloyat Maliya boshqarmasi boshlig'i" },
+      { years: "2023–h.v.", role: "\"NKMK jamg'armasi\" davlat muassasasi bosh direktori", current: true }
     ]
   },
   {
-    id: "deputy-economics",
     name: "Altinov Suxrab Rustamovich",
     position: "Direktorning iqtisod va tijorat masalalari bo'yicha o'rinbosari",
-    photo: "http://fondnkmk.uz/wp-content/uploads/2023/04/Suhrob-Rustamovich-2-249x300.jpg",
-    birthYear: 1983,
-    isMain: false,
+    age: "43 yosh, 1983-yilda tug'ilgan",
+    initials: "AS",
     education: [
-      "2007 — Jahon iqtisodiyoti va diplomatiyasi universiteti"
+      { year: "2007", place: "Jahon iqtisodiyoti va diplomatiyasi universiteti" }
     ],
     career: [
-      { period: "2007-2021", position: "NKMK davlat korxonasi Ijtimoiy rivojlantirish bo'limi (turli lavozimlar)" },
-      { period: "2021-h.v.", position: "\"NKMK jamg'armasi\" bosh direktorining umumiy masalalar va kadrlar bo'yicha o'rinbosari" }
+      { years: "2007–2021", role: "NKMK davlat korxonasi Ijtimoiy rivojlantirish bo'limi (turli lavozimlar)" },
+      { years: "2021–h.v.", role: "\"NKMK jamg'armasi\" bosh direktorining umumiy masalalar va kadrlar bo'yicha o'rinbosari", current: true }
     ]
   },
   {
-    id: "chief-engineer",
     name: "Ibragimov Asliddin Abdiqodirovich",
     position: "Bosh muhandis",
-    photo: "http://fondnkmk.uz/wp-content/uploads/2023/04/Asliddin-Abduqodirovich-235x300.jpg",
-    birthYear: 1983,
-    isMain: false,
+    age: "43 yosh, 1983-yilda tug'ilgan",
+    initials: "IA",
     education: [
-      "2008 — Samarqand davlat arxitektura qurilish instituti"
+      { year: "2008", place: "Samarqand davlat arxitektura qurilish instituti" }
     ],
     career: [
-      { period: "2002-2021", position: "NKMK davlat korxonasida turli muhandislik lavozimlari" },
-      { period: "2021-h.v.", position: "\"NKMK jamg'armasi\" bosh muhandisi" }
+      { years: "2002–2021", role: "NKMK davlat korxonasida turli muhandislik lavozimlari" },
+      { years: "2021–h.v.", role: "\"NKMK jamg'armasi\" bosh muhandisi", current: true }
     ]
   },
   {
-    id: "department-head",
     name: "Numonov Maqsud Muminovich",
     position: "Xodimlar va tashkiliy rivojlanish boshqarmasi boshlig'i",
-    photo: "http://fondnkmk.uz/wp-content/uploads/2023/04/Maqsud-aka-2-230x300.jpg",
-    birthYear: 1986,
-    isMain: false,
+    age: "40 yosh, 1986-yilda tug'ilgan",
+    initials: "NM",
     education: [
-      "2008 — Navoiy davlat pedagogika instituti"
+      { year: "2008", place: "Navoiy davlat pedagogika instituti" }
     ],
     career: [
-      { period: "2007-2016", position: "NKMK davlat korxonasida turli lavozimlar" },
-      { period: "2016-2021", position: "NKMK kadrlar bo'limi boshlig'i" },
-      { period: "2021-h.v.", position: "\"NKMK jamg'armasi\" xodimlar boshqarmasi boshlig'i" }
+      { years: "2007–2016", role: "NKMK davlat korxonasida turli lavozimlar" },
+      { years: "2016–2021", role: "NKMK kadrlar bo'limi boshlig'i" },
+      { years: "2021–h.v.", role: "\"NKMK jamg'armasi\" xodimlar boshqarmasi boshlig'i", current: true }
     ]
   }
 ];
 
-interface LeaderCardProps {
-  leader: typeof leadershipData[0];
-  isExpanded: boolean;
-  onToggle: () => void;
-}
-
-function LeaderCard({ leader, isExpanded, onToggle }: LeaderCardProps) {
-  const age = new Date().getFullYear() - leader.birthYear;
-
+function ProfileCard({ leader, index }: { leader: typeof leaders[0]; index: number }) {
   return (
-    <motion.article
+    <motion.div
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.6 }}
-      className={`overflow-hidden rounded-2xl bg-white shadow-lg transition-all duration-300 hover:shadow-xl ${
-        leader.isMain ? 'md:col-span-2 lg:col-span-3' : ''
-      }`}
+      transition={{ duration: 0.6, delay: index * 0.1 }}
+      className="bg-white rounded-xl shadow-sm border-l-4 border-[#c9a227] p-8 mb-6"
     >
-      <div className={`flex flex-col ${leader.isMain ? 'md:flex-row' : 'lg:flex-row'} gap-6 p-6 lg:p-8`}>
-        {/* Photo */}
-        <div className={`flex-shrink-0 ${leader.isMain ? 'md:w-1/3' : 'lg:w-1/3'}`}>
-          <div className="relative aspect-[4/5] overflow-hidden rounded-xl shadow-lg">
-            <Image
-              src={leader.photo}
-              alt={leader.name}
-              fill
-              className="object-cover transition-transform duration-700 hover:scale-105"
-              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            />
-          </div>
+      {/* ШАПКА */}
+      <div className="flex items-start gap-6 mb-6 pb-6 border-b border-gray-100">
+        {/* Аватар */}
+        <div className="w-20 h-20 rounded-full bg-[#0d1f3c] flex items-center justify-center 
+                        text-white text-2xl font-bold shrink-0">
+          {leader.initials}
+        </div>
+        {/* Имя и должность */}
+        <div className="flex-1">
+          <h2 className="text-2xl font-bold text-[#0d1f3c] mb-1">{leader.name}</h2>
+          <p className="text-[#c9a227] font-medium mb-2">{leader.position}</p>
+          <span className="bg-[#f0f4ff] text-[#0d1f3c] text-sm px-3 py-1 rounded-full">
+            {leader.age}
+          </span>
+        </div>
+      </div>
+
+      {/* КОНТЕНТ — 2 колонки */}
+      <div className="grid md:grid-cols-[1fr_2fr] gap-8">
+        
+        {/* ЛЕВАЯ — Образование */}
+        <div>
+          <h3 className="flex items-center gap-2 font-semibold text-[#0d1f3c] mb-4">
+            🎓 Ta'lim
+          </h3>
+          <ul className="space-y-3">
+            {leader.education.map((edu, i) => (
+              <li key={i} className="flex gap-3 text-sm">
+                <span className="text-[#c9a227] font-bold shrink-0">{edu.year}</span>
+                <span className="text-[#0d1f3c]/70">{edu.place}</span>
+              </li>
+            ))}
+          </ul>
         </div>
 
-        {/* Content */}
-        <div className="flex-1">
-          <div className="mb-4">
-            <h2 className={`font-bold text-[#0d1f3c] transition-colors ${
-              leader.isMain ? 'text-3xl lg:text-4xl' : 'text-2xl lg:text-3xl'
-            }`} style={{ letterSpacing: "-0.02em" }}>
-              {leader.name}
-            </h2>
-            <p className={`font-semibold text-[#c9a84c] mt-2 ${
-              leader.isMain ? 'text-lg' : 'text-base'
-            }`}>
-              {leader.position}
-            </p>
-            <p className="text-sm text-[#0d1f3c]/60 mt-1">
-              {age} yosh, {leader.birthYear}-yilda tug'ilgan
-            </p>
-          </div>
-
-          {/* Expandable sections */}
-          <div className="space-y-4">
-            {/* Biography */}
-            <div className="border border-[#0d1f3c]/10 rounded-lg overflow-hidden">
-              <button
-                onClick={onToggle}
-                className="w-full flex items-center justify-between p-4 text-left hover:bg-[#f8fafc] transition-colors"
-              >
-                <div className="flex items-center gap-3">
-                  <User className="h-5 w-5 text-[#c9a84c]" />
-                  <span className="font-semibold text-[#0d1f3c]">Biografiyasi</span>
-                </div>
-                {isExpanded ? (
-                  <ChevronUp className="h-5 w-5 text-[#0d1f3c]/60" />
-                ) : (
-                  <ChevronDown className="h-5 w-5 text-[#0d1f3c]/60" />
-                )}
-              </button>
-              
-              <motion.div
-                initial={{ height: 0, opacity: 0 }}
-                animate={isExpanded ? { height: "auto", opacity: 1 } : { height: 0, opacity: 0 }}
-                transition={{ duration: 0.3 }}
-                className="overflow-hidden"
-              >
-                <div className="p-4 pt-0">
-                  <div className="flex items-center gap-2 mb-3">
-                    <GraduationCap className="h-4 w-4 text-[#c9a84c]" />
-                    <span className="font-medium text-[#0d1f3c]/80">Ma'lumoti:</span>
-                  </div>
-                  <ul className="space-y-2">
-                    {leader.education.map((item, index) => (
-                      <li key={index} className="flex items-start gap-2">
-                        <span className="text-[#c9a84c] mt-1">•</span>
-                        <span className="text-[#0d1f3c]/70">{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </motion.div>
-            </div>
-
-            {/* Career */}
-            <div className="border border-[#0d1f3c]/10 rounded-lg overflow-hidden">
-              <button
-                onClick={onToggle}
-                className="w-full flex items-center justify-between p-4 text-left hover:bg-[#f8fafc] transition-colors"
-              >
-                <div className="flex items-center gap-3">
-                  <Briefcase className="h-5 w-5 text-[#c9a84c]" />
-                  <span className="font-semibold text-[#0d1f3c]">Mehnat faoliyati</span>
-                </div>
-                {isExpanded ? (
-                  <ChevronUp className="h-5 w-5 text-[#0d1f3c]/60" />
-                ) : (
-                  <ChevronDown className="h-5 w-5 text-[#0d1f3c]/60" />
-                )}
-              </button>
-              
-              <motion.div
-                initial={{ height: 0, opacity: 0 }}
-                animate={isExpanded ? { height: "auto", opacity: 1 } : { height: 0, opacity: 0 }}
-                transition={{ duration: 0.3 }}
-                className="overflow-hidden"
-              >
-                <div className="p-4 pt-0">
-                  <ul className="space-y-3">
-                    {leader.career.map((item, index) => (
-                      <li key={index} className="flex gap-3">
-                        <span className="flex-shrink-0 font-semibold text-[#c9a84c] text-sm mt-0.5">
-                          {item.period}
-                        </span>
-                        <span className="text-[#0d1f3c]/70">{item.position}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </motion.div>
-            </div>
+        {/* ПРАВАЯ — Timeline карьеры */}
+        <div>
+          <h3 className="flex items-center gap-2 font-semibold text-[#0d1f3c] mb-4">
+            💼 Mehnat faoliyati
+          </h3>
+          <div className="relative pl-4 border-l-2 border-gray-200">
+            {leader.career.map((item, i) => (
+              <div key={i} className={`relative mb-4 pl-4 ${item.current ? 'bg-[#fefce8] rounded-lg p-3 -ml-4' : ''}`}>
+                {/* Точка на линии */}
+                <div className={`absolute -left-[21px] top-1 w-3 h-3 rounded-full border-2 
+                               ${item.current ? 'bg-[#c9a227] border-[#c9a227]' : 'bg-white border-gray-300'}`} />
+                <span className={`text-xs font-bold px-2 py-0.5 rounded-full mb-1 inline-block
+                                ${item.current ? 'bg-[#c9a227] text-white' : 'bg-gray-100 text-gray-600'}`}>
+                  {item.years}
+                </span>
+                <p className="text-sm text-[#0d1f3c]/80">{item.role}</p>
+              </div>
+            ))}
           </div>
         </div>
       </div>
-    </motion.article>
+    </motion.div>
   );
 }
 
 export function LeadershipClient() {
-  const [expandedCards, setExpandedCards] = useState<Set<string>>(new Set());
-
-  const toggleCard = (id: string) => {
-    setExpandedCards(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(id)) {
-        newSet.delete(id);
-      } else {
-        newSet.add(id);
-      }
-      return newSet;
-    });
-  };
-
-  const mainLeader = leadershipData.find(leader => leader.isMain);
-  const otherLeaders = leadershipData.filter(leader => !leader.isMain);
-
   return (
     <section className="py-16 lg:py-24">
       <div className="mx-auto max-w-7xl px-4 lg:px-8">
-        {/* Main Leader */}
-        {mainLeader && (
-          <div className="mb-12">
-            <LeaderCard
-              leader={mainLeader}
-              isExpanded={expandedCards.has(mainLeader.id)}
-              onToggle={() => toggleCard(mainLeader.id)}
-            />
-          </div>
-        )}
-
-        {/* Other Leaders */}
-        <div className="grid gap-8 lg:grid-cols-3">
-          {otherLeaders.map((leader) => (
-            <LeaderCard
-              key={leader.id}
-              leader={leader}
-              isExpanded={expandedCards.has(leader.id)}
-              onToggle={() => toggleCard(leader.id)}
-            />
-          ))}
-        </div>
+        {leaders.map((leader, index) => (
+          <ProfileCard key={leader.initials} leader={leader} index={index} />
+        ))}
       </div>
     </section>
   );
