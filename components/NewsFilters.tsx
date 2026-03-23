@@ -2,7 +2,6 @@
 
 import { useState, useMemo } from 'react';
 import { Search } from 'lucide-react';
-import { useTranslations } from 'next-intl';
 import type { NewsArticle } from '@/types';
 
 const categories = [
@@ -19,7 +18,6 @@ interface NewsFiltersProps {
 }
 
 export function NewsFilters({ items, onFilteredItems }: NewsFiltersProps) {
-  const t = useTranslations('News');
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -56,7 +54,7 @@ export function NewsFilters({ items, onFilteredItems }: NewsFiltersProps) {
           <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[var(--color-text-dark)]/40" />
           <input
             type="text"
-            placeholder={t('searchNews') || 'Yangiliklarni qidirish...'}
+            placeholder="Yangiliklarni qidirish..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full rounded-full border border-[var(--color-primary-light)] bg-[var(--color-white)] py-3 pl-12 pr-4 text-[var(--color-text-dark)] placeholder-[var(--color-text-dark)]/40 transition-all duration-300 focus:border-[var(--color-accent-gold)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent-gold)]/20"

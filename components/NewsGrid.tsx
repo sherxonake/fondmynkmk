@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import { useTranslations } from 'next-intl';
 import type { NewsArticle } from "@/types";
 
 interface NewsGridProps {
@@ -30,7 +29,6 @@ function formatDate(value: string): string {
 }
 
 function NewsCard({ item, index }: { item: NewsArticle; index: number }) {
-  const t = useTranslations('News');
   const imageSrc = item.image?.trim() ? item.image : NEWS_PLACEHOLDER;
   const href = item.slug ? `/news/${item.slug}` : "#";
 
@@ -85,7 +83,7 @@ function NewsCard({ item, index }: { item: NewsArticle; index: number }) {
             href={href}
             className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--color-accent-gold)] transition-all duration-200 group-hover:gap-3"
           >
-            {t('readMore')}
+            {"Ko'proq o'qish"}
             <ArrowRight className="h-4 w-4" aria-hidden="true" />
           </Link>
         </div>
@@ -95,7 +93,6 @@ function NewsCard({ item, index }: { item: NewsArticle; index: number }) {
 }
 
 export function NewsGrid({ items, filteredItems }: NewsGridProps) {
-  const t = useTranslations('News');
   const displayItems = filteredItems || items;
   const hasResults = displayItems && displayItems.length > 0;
   const isFiltered = filteredItems !== undefined;
@@ -103,12 +100,12 @@ export function NewsGrid({ items, filteredItems }: NewsGridProps) {
   if (!hasResults) {
     return (
       <div className="rounded-3xl bg-[var(--color-white)]/60 p-10 text-center shadow-[var(--shadow-card)]">
-        <p className="mb-2 text-sm font-semibold tracking-widest text-[var(--color-accent-gold)] uppercase">{t('pressService')}</p>
+        <p className="mb-2 text-sm font-semibold tracking-widest text-[var(--color-accent-gold)] uppercase">Matbuot xizmati</p>
         <h2 className="text-3xl font-bold text-[var(--color-text-dark)]" style={{ letterSpacing: "-0.02em" }}>
-          {isFiltered ? t('noNewsFound') : t('noNews')}
+          {isFiltered ? "Yangiliklar topilmadi" : "Yangiliklar yo'q"}
         </h2>
         <p className="mt-3 text-[var(--color-text-dark)]/70">
-          {isFiltered ? t('noNewsFilterDesc') : t('noNewsDesc')}
+          {isFiltered ? "Qidiruv natijasi bo'sh" : "Yangiliklar tez orada qo'shiladi"}
         </p>
       </div>
     );
@@ -119,7 +116,7 @@ export function NewsGrid({ items, filteredItems }: NewsGridProps) {
       {isFiltered && (
         <div className="mb-6 text-center">
           <p className="text-[var(--color-text-dark)]/60">
-            {displayItems.length} {t('newsFound')}
+            {displayItems.length} {"ta yangilik topildi"}
           </p>
         </div>
       )}

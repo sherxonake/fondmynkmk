@@ -5,6 +5,10 @@
 import type { NewsArticle } from "@/types";
 
 export async function getNewsArticles(): Promise<NewsArticle[]> {
+  if (typeof window === 'undefined') {
+    return [];
+  }
+
   try {
     const response = await fetch('/api/news', {
       cache: 'no-store',
