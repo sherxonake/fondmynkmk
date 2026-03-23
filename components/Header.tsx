@@ -104,7 +104,7 @@ export function Header({ settings }: HeaderProps) {
       transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
       className={`fixed top-0 right-0 left-0 z-50 transition-all duration-500 ${
         isHomePage 
-          ? scrolled ? 'bg-[#0d1f3c]/95 backdrop-blur-md py-3' : 'bg-transparent py-5 backdrop-blur-[2px]'
+          ? scrolled ? 'bg-[#0d1f3c]/95 backdrop-blur-sm py-3' : 'bg-transparent py-5'
           : 'bg-[#0d1f3c] py-3 shadow-lg'
       }`}
     >
@@ -123,7 +123,7 @@ export function Header({ settings }: HeaderProps) {
             <span className="text-base font-bold tracking-tight text-[var(--color-text-light)] lg:text-lg">
               NKMK Jamg{"'"}armasi
             </span>
-            <span className="text-[11px] font-medium tracking-wide text-[var(--color-text-light)]/40 uppercase">
+            <span className="text-[11px] font-medium tracking-wide text-[var(--color-text-light)]/70 uppercase">
               Davlat muassasasi
             </span>
           </div>
@@ -141,8 +141,8 @@ export function Header({ settings }: HeaderProps) {
                 <>
                   <button
                     onClick={() => toggleDropdown(item.dropdownKey!)}
-                    className={`flex items-center gap-1 text-sm font-medium transition-colors duration-200 ${
-                      isHomePage ? 'text-white/70 hover:text-white' : 'text-white/80 hover:text-white'
+                    className={`flex items-center gap-1 text-sm font-medium antialiased transition-colors duration-200 ${
+                      isHomePage ? 'text-white hover:text-white' : 'text-white hover:text-white'
                     }`}
                     aria-expanded={openDropdown === item.dropdownKey}
                     aria-haspopup="true"
@@ -182,8 +182,8 @@ export function Header({ settings }: HeaderProps) {
               ) : (
                 <a
                   href={item.href}
-                  className={`text-sm font-medium transition-colors duration-200 ${
-                    isHomePage ? 'text-white/70 hover:text-white' : 'text-white/80 hover:text-white'
+                  className={`text-sm font-medium antialiased transition-colors duration-200 ${
+                    isHomePage ? 'text-white hover:text-white' : 'text-white hover:text-white'
                   }`}
                 >
                   {item.label}
@@ -235,7 +235,7 @@ export function Header({ settings }: HeaderProps) {
           <button
             onClick={() => setMenuOpen(!menuOpen)}
             className={`flex h-10 w-10 items-center justify-center rounded-lg transition-colors ${
-              isHomePage ? 'text-white/70 hover:text-white' : 'text-white/80 hover:text-white'
+              isHomePage ? 'text-white hover:text-white' : 'text-white hover:text-white'
             } md:hidden`}
             aria-label={menuOpen ? "Menyuni yopish" : "Menyuni ochish"}
             aria-expanded={menuOpen}
