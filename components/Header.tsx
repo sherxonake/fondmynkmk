@@ -16,6 +16,9 @@ interface HeaderProps {
 export function Header({ settings }: HeaderProps) {
   const { t } = useLanguage();
   const pathname = usePathname();
+  
+  if (pathname?.startsWith('/admin')) return null;
+
   const isHomePage = pathname === "/";
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);

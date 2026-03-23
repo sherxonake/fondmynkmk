@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { Mail, Phone, MapPin, Send, ExternalLink } from "lucide-react";
 import { motion } from "framer-motion";
+import { usePathname } from "next/navigation";
 import type { FooterColumn } from "@/types";
 
 interface FooterProps {
@@ -25,6 +26,10 @@ function SocialIcon({ href, label, children }: { href: string; label: string; ch
 }
 
 export function Footer({ columns }: FooterProps) {
+  const pathname = usePathname();
+  
+  if (pathname?.startsWith('/admin')) return null;
+
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
