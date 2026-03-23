@@ -320,7 +320,9 @@ export async function getNewsStories(): Promise<NewsStory[]> {
     const rows = (data ?? []) as NewsStoryRow[];
     return rows.map((row, index) => ({
       id: toNumericId(row.id, index + 1),
-      image: row.image_url ?? "",
+      image: row.image_url === "/images/news-powerlifting.jpg" 
+        ? "https://fondnkmk.uz/wp-content/uploads/2025/04/photo_2025-04-14_10-40-05-780x437.jpg" 
+        : (row.image_url ?? ""),
       title: row.title ?? "",
       category: row.category ?? undefined,
       date: toDateString(row.created_at),
@@ -349,7 +351,9 @@ export async function getNewsArticles(): Promise<NewsArticle[]> {
     const rows = (data ?? []) as NewsArticleRow[];
     return rows.map((row, index) => ({
       id: toNumericId(row.id, index + 1),
-      image: row.image_url ?? "",
+      image: row.image_url === "/images/news-powerlifting.jpg" 
+        ? "https://fondnkmk.uz/wp-content/uploads/2025/04/photo_2025-04-14_10-40-05-780x437.jpg" 
+        : (row.image_url ?? ""),
       title: row.title ?? "",
       publishedAt: toIsoString(row.published_at),
       excerpt: row.excerpt ?? "",
