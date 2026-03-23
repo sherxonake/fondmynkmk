@@ -185,7 +185,11 @@ export function Header({ settings }: HeaderProps) {
                 <a
                   href={item.href}
                   className={`text-sm font-medium transition-colors duration-200 ${
-                    isHomePage ? 'text-white/70 hover:text-white' : 'text-white/80 hover:text-white'
+                    item.label === "Bog'lanish"
+                      ? 'rounded-full px-4 py-1.5 text-sm font-medium transition-all bg-[#c9a84c] text-[#0d1f3c] hover:bg-[#c9a84c]/80'
+                      : isHomePage 
+                        ? 'text-white/70 hover:text-white' 
+                        : 'text-white/80 hover:text-white'
                   }`}
                 >
                   {item.label}
@@ -307,7 +311,11 @@ export function Header({ settings }: HeaderProps) {
                     <a
                       href={item.href}
                       onClick={() => setMenuOpen(false)}
-                      className="rounded-lg px-4 py-3 text-base font-medium text-[var(--color-text-light)]/80 transition-colors hover:bg-[var(--color-text-light)]/5 hover:text-[var(--color-text-light)]"
+                      className={`rounded-lg px-4 py-3 text-base font-medium transition-colors ${
+                        item.label === "Bog'lanish"
+                          ? 'bg-[#c9a84c] text-[#0d1f3c] hover:bg-[#c9a84c]/80'
+                          : 'text-[var(--color-text-light)]/80 hover:bg-[var(--color-text-light)]/5 hover:text-[var(--color-text-light)]'
+                      }`}
                     >
                       {item.label}
                     </a>
