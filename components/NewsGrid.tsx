@@ -49,6 +49,16 @@ function NewsCard({ item, index }: { item: NewsArticle; index: number }) {
           className="object-cover transition-transform duration-700 group-hover:scale-105"
           sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
         />
+        {/* Логотип фонда поверх фото */}
+        <div className="absolute bottom-3 left-3">
+          <Image 
+            src="/images/logo.png"
+            width={60} 
+            height={60}
+            alt="NKMK Jamg'armasi"
+            className="opacity-90 drop-shadow-lg"
+          />
+        </div>
       </div>
 
       {/* Content */}

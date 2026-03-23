@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import { Phone, Menu, X } from "lucide-react";
+import { Phone, Menu, X, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { SiteSettings } from "@/types";
 import { LanguageSwitcher } from "./LanguageSwitcher";
@@ -16,6 +16,8 @@ export function Header({ settings }: HeaderProps) {
   const { t } = useLanguage();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const dropdownRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -23,11 +25,75 @@ export function Header({ settings }: HeaderProps) {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const navLinks = [
-    { label: t('about'), href: "#about" },
-    { label: t('directions'), href: "#directions" },
-    { label: t('news'), href: "#news" },
-    { label: t('contact'), href: "#contacts" },
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (openDropdown) {
+        const clickedElement = event.target as Element;
+        const isDropdownClick = Object.values(dropdownRefs.current).some(
+          ref => ref?.contains(clickedElement)
+        );
+        if (!isDropdownClick) {
+          setOpenDropdown(null);
+        }
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [openDropdown]);
+
+  const toggleDropdown = (dropdown: string) => {
+    setOpenDropdown(openDropdown === dropdown ? null : dropdown);
+  };
+
+  const navItems = [
+    {
+      label: "Jamg'arma haqida",
+      hasDropdown: true,
+      dropdownKey: "about",
+      items: [
+        { label: '"NKMK jamg\'armasi" davlat muassasasi', href: '/about' },
+        { label: 'Funksiya va vazifalar', href: '/about/functions' },
+        { label: 'Hududiy boshqarmalar', href: '/about/regions' },
+        { label: 'Rahbariyat', href: '/about/leadership' },
+        { label: 'Tashkilot ustavi', href: '/about/charter' },
+        { label: 'Tashkilot pasporti', href: '/about/passport' },
+      ]
+    },
+    {
+      label: "Xizmatlar",
+      hasDropdown: true,
+      dropdownKey: "services",
+      items: [
+        { label: 'Tibbiyot', href: '/services/medical' },
+        { label: 'Sanatoriy-profilaktoriylar', href: '/services/sanatorium' },
+        { label: 'Ovqatlantirish', href: '/services/catering' },
+        { label: 'Madaniyat va sport', href: '/services/culture-sport' },
+        { label: 'Bolalar oromgohlari', href: '/services/children-camps' },
+        { label: 'Ijtimoiy obyektlar', href: '/services/social' },
+      ]
+    },
+    {
+      label: "Ochiq ma'lumotlar",
+      hasDropdown: true,
+      dropdownKey: "open-data",
+      items: [
+        { label: 'Statistika', href: '/open-data/statistics' },
+        { label: 'Narxlar', href: '/open-data/prices' },
+        { label: 'Tenderlar', href: '/open-data/tenders' },
+        { label: 'Korrupsiyaga qarshi', href: '/open-data/anticorruption' },
+      ]
+    },
+    {
+      label: "Yangiliklar",
+      href: "/news",
+      hasDropdown: false
+    },
+    {
+      label: "Bog'lanish",
+      href: "/contact",
+      hasDropdown: false
+    }
   ];
 
   return (
@@ -63,15 +129,62 @@ export function Header({ settings }: HeaderProps) {
         </a>
 
         {/* Desktop nav */}
-        <nav className="hidden items-center gap-8 md:flex" aria-label="Asosiy navigatsiya">
-          {navLinks.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              className="text-sm font-medium text-[var(--color-text-light)]/70 transition-colors duration-200 hover:text-[var(--color-text-light)]"
-            >
-              {link.label}
-            </a>
+        <nav className="hidden items-center gap-6 md:flex" aria-label="Asosiy navigatsiya">
+          {navItems.map((item) => (
+            <div key={item.label} className="relative" ref={(el) => {
+              if (item.hasDropdown && item.dropdownKey) {
+                dropdownRefs.current[item.dropdownKey] = el;
+              }
+            }}>
+              {item.hasDropdown ? (
+                <>
+                  <button
+                    onClick={() => toggleDropdown(item.dropdownKey!)}
+                    className="flex items-center gap-1 text-sm font-medium text-[var(--color-text-light)]/70 transition-colors duration-200 hover:text-[var(--color-text-light)]"
+                    aria-expanded={openDropdown === item.dropdownKey}
+                    aria-haspopup="true"
+                  >
+                    {item.label}
+                    <ChevronDown 
+                      className={`h-4 w-4 transition-transform duration-200 ${
+                        openDropdown === item.dropdownKey ? 'rotate-180' : ''
+                      }`}
+                    />
+                  </button>
+                  <AnimatePresence>
+                    {openDropdown === item.dropdownKey && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.2 }}
+                        className="absolute top-full left-0 mt-2 min-w-[280px] rounded-lg bg-[var(--color-primary-dark)] shadow-xl border border-[var(--color-text-light)]/10"
+                      >
+                        <div className="py-2">
+                          {item.items?.map((subItem) => (
+                            <a
+                              key={subItem.href}
+                              href={subItem.href}
+                              className="block px-4 py-3 text-sm text-white transition-colors duration-200 hover:bg-[var(--color-accent-gold)] hover:text-[var(--color-primary-dark)]"
+                              onClick={() => setOpenDropdown(null)}
+                            >
+                              {subItem.label}
+                            </a>
+                          ))}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </>
+              ) : (
+                <a
+                  href={item.href}
+                  className="text-sm font-medium text-[var(--color-text-light)]/70 transition-colors duration-200 hover:text-[var(--color-text-light)]"
+                >
+                  {item.label}
+                </a>
+              )}
+            </div>
           ))}
           <div className="hidden md:flex">
             <LanguageSwitcher />
@@ -112,15 +225,60 @@ export function Header({ settings }: HeaderProps) {
             aria-label="Mobil menyusi"
           >
             <div className="mx-auto flex max-w-7xl flex-col gap-1 px-4 py-4">
-              {navLinks.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setMenuOpen(false)}
-                  className="rounded-lg px-4 py-3 text-base font-medium text-[var(--color-text-light)]/80 transition-colors hover:bg-[var(--color-text-light)]/5 hover:text-[var(--color-text-light)]"
-                >
-                  {link.label}
-                </a>
+              {navItems.map((item) => (
+                <div key={item.label}>
+                  {item.hasDropdown ? (
+                    <div>
+                      <button
+                        onClick={() => toggleDropdown(item.dropdownKey!)}
+                        className="flex w-full items-center justify-between rounded-lg px-4 py-3 text-base font-medium text-[var(--color-text-light)]/80 transition-colors hover:bg-[var(--color-text-light)]/5 hover:text-[var(--color-text-light)]"
+                        aria-expanded={openDropdown === item.dropdownKey}
+                      >
+                        {item.label}
+                        <ChevronDown 
+                          className={`h-4 w-4 transition-transform duration-200 ${
+                            openDropdown === item.dropdownKey ? 'rotate-180' : ''
+                          }`}
+                        />
+                      </button>
+                      <AnimatePresence>
+                        {openDropdown === item.dropdownKey && (
+                          <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: "auto" }}
+                            exit={{ opacity: 0, height: 0 }}
+                            transition={{ duration: 0.2 }}
+                            className="overflow-hidden"
+                          >
+                            <div className="bg-[var(--color-text-light)]/5">
+                              {item.items?.map((subItem) => (
+                                <a
+                                  key={subItem.href}
+                                  href={subItem.href}
+                                  onClick={() => {
+                                    setOpenDropdown(null);
+                                    setMenuOpen(false);
+                                  }}
+                                  className="block px-8 py-3 text-sm text-[var(--color-text-light)]/70 transition-colors hover:bg-[var(--color-text-light)]/10 hover:text-[var(--color-text-light)]"
+                                >
+                                  {subItem.label}
+                                </a>
+                              ))}
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  ) : (
+                    <a
+                      href={item.href}
+                      onClick={() => setMenuOpen(false)}
+                      className="rounded-lg px-4 py-3 text-base font-medium text-[var(--color-text-light)]/80 transition-colors hover:bg-[var(--color-text-light)]/5 hover:text-[var(--color-text-light)]"
+                    >
+                      {item.label}
+                    </a>
+                  )}
+                </div>
               ))}
               <div className="border-t border-[var(--color-text-light)]/10 pt-2">
                 <div className="px-4 py-2">
