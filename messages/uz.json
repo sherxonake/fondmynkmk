@@ -36,6 +36,25 @@
     "callCenter": "Call markaz",
     "trustPhone": "Ishonch telefoni"
   },
+  "News": {
+    "allNews": "Barcha yangiliklar",
+    "description": "NKMK Jamg'armasi faoliyati haqida so'nggi yangiliklar",
+    "searchNews": "Yangiliklarni qidirish...",
+    "readMore": "Batafsil",
+    "pressService": "Matbuot xizmati",
+    "noNews": "Yangiliklar yo'q",
+    "noNewsFound": "Yangiliklar topilmadi",
+    "noNewsDesc": "Tez orada yangi yangiliklar paydo bo'ladi.",
+    "noNewsFilterDesc": "Qidiruv shartlariga mos yangiliklar mavjud emas.",
+    "newsFound": "ta yangilik topildi",
+    "categories": {
+      "all": "Barchasi",
+      "sport": "Sport",
+      "medical": "Tibbiyot",
+      "leisure": "Dam olish",
+      "culture": "Madaniyat"
+    }
+  },
   "Footer": {
     "subscribe": "Yangilanishlarga obuna bo'ling",
     "subscribeDesc": "Eng so'nggi yangiliklar va tadbirlar haqida birinchi bo'lib biling",

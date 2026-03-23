@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import { Search } from 'lucide-react';
-import { useLanguage } from '@/contexts/LanguageContext';
+import { useTranslations } from 'next-intl';
 import type { NewsArticle } from '@/types';
 
 const categories = [
@@ -19,7 +19,7 @@ interface NewsFiltersProps {
 }
 
 export function NewsFilters({ items, onFilteredItems }: NewsFiltersProps) {
-  const { t } = useLanguage();
+  const t = useTranslations('News');
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
 

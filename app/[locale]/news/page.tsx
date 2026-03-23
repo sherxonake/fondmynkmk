@@ -1,12 +1,14 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 import { getNewsArticles } from "@/lib/client-api";
 import { NewsGrid } from "@/components/NewsGrid";
 import { NewsFilters } from "@/components/NewsFilters";
 import type { NewsArticle } from "@/types";
 
 export default function NewsPage() {
+  const t = useTranslations('News');
   const [news, setNews] = useState<NewsArticle[]>([]);
   const [filteredNews, setFilteredNews] = useState<NewsArticle[]>([]);
 
@@ -24,10 +26,10 @@ export default function NewsPage() {
         {/* Header */}
         <div className="mb-12 text-center">
           <h1 className="text-3xl font-bold text-[var(--color-text-dark)] md:text-4xl lg:text-5xl" style={{ letterSpacing: "-0.02em" }}>
-            Barcha yangiliklar
+            {t('allNews')}
           </h1>
           <p className="mt-4 text-lg text-[var(--color-text-dark)]/70">
-            NKMK Jamg'armasi faoliyati haqida so'nggi yangiliklar
+            {t('description')}
           </p>
         </div>
 
