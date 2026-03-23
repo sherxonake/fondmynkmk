@@ -1,6 +1,12 @@
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 
-const remotePatterns = [];
+const remotePatterns = [
+  {
+    protocol: "https",
+    hostname: "fondnkmk.uz",
+    pathname: "/wp-content/uploads/**",
+  }
+];
 
 if (supabaseUrl) {
   remotePatterns.push({

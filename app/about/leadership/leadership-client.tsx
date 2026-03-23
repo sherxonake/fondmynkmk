@@ -10,7 +10,7 @@ const leadershipData = [
     id: "director",
     name: "Ochilov Dilshod Murodullayevich",
     position: "Navoiy kon-metallurgiya kombinati jamg'armasi davlat muassasasi direktori",
-    photo: "http://fondnkmk.uz/wp-content/uploads/2024/01/DSC_6043-300x200.jpg",
+    photo: "https://fondnkmk.uz/wp-content/uploads/2024/01/DSC_6043-768x512.jpg",
     birthYear: 1976,
     isMain: true,
     education: [
