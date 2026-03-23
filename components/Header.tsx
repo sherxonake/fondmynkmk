@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { Phone, Menu, X, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { usePathname } from "next/navigation";
 import type { SiteSettings } from "@/types";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -14,6 +15,8 @@ interface HeaderProps {
 
 export function Header({ settings }: HeaderProps) {
   const { t } = useLanguage();
+  const pathname = usePathname();
+  const isHomePage = pathname === "/";
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
@@ -102,9 +105,9 @@ export function Header({ settings }: HeaderProps) {
       animate={{ y: 0 }}
       transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
       className={`fixed top-0 right-0 left-0 z-50 transition-all duration-500 ${
-        scrolled
-          ? "border-b border-[var(--color-text-light)]/10 bg-[var(--color-primary-dark)]/85 py-3 shadow-lg backdrop-blur-2xl"
-          : "bg-transparent py-5 backdrop-blur-[2px]"
+        isHomePage 
+          ? scrolled ? 'bg-[#0d1f3c]/95 backdrop-blur-md py-3' : 'bg-transparent py-5 backdrop-blur-[2px]'
+          : 'bg-[#0d1f3c] py-3 shadow-lg'
       }`}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 lg:px-8">
@@ -140,7 +143,9 @@ export function Header({ settings }: HeaderProps) {
                 <>
                   <button
                     onClick={() => toggleDropdown(item.dropdownKey!)}
-                    className="flex items-center gap-1 text-sm font-medium text-[var(--color-text-light)]/70 transition-colors duration-200 hover:text-[var(--color-text-light)]"
+                    className={`flex items-center gap-1 text-sm font-medium transition-colors duration-200 ${
+                      isHomePage ? 'text-white/70 hover:text-white' : 'text-white/80 hover:text-white'
+                    }`}
                     aria-expanded={openDropdown === item.dropdownKey}
                     aria-haspopup="true"
                   >
@@ -179,7 +184,9 @@ export function Header({ settings }: HeaderProps) {
               ) : (
                 <a
                   href={item.href}
-                  className="text-sm font-medium text-[var(--color-text-light)]/70 transition-colors duration-200 hover:text-[var(--color-text-light)]"
+                  className={`text-sm font-medium transition-colors duration-200 ${
+                    isHomePage ? 'text-white/70 hover:text-white' : 'text-white/80 hover:text-white'
+                  }`}
                 >
                   {item.label}
                 </a>
@@ -229,7 +236,9 @@ export function Header({ settings }: HeaderProps) {
 
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="flex h-10 w-10 items-center justify-center rounded-lg text-[var(--color-text-light)]/70 transition-colors hover:text-[var(--color-text-light)] md:hidden"
+            className={`flex h-10 w-10 items-center justify-center rounded-lg transition-colors ${
+              isHomePage ? 'text-white/70 hover:text-white' : 'text-white/80 hover:text-white'
+            } md:hidden`}
             aria-label={menuOpen ? "Menyuni yopish" : "Menyuni ochish"}
             aria-expanded={menuOpen}
           >
