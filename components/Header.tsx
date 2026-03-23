@@ -104,7 +104,7 @@ export function Header({ settings }: HeaderProps) {
       transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
       className={`fixed top-0 right-0 left-0 z-50 isolate transition-all duration-500 ${
         isHomePage 
-          ? scrolled ? 'bg-[#0d1f3c]/95 backdrop-blur-sm py-3' : 'bg-transparent py-5'
+          ? scrolled ? 'bg-[#0d1f3c]/95 py-3' : 'bg-transparent py-5'
           : 'bg-[#0d1f3c] py-3 shadow-lg'
       }`}
     >
@@ -141,8 +141,8 @@ export function Header({ settings }: HeaderProps) {
                 <>
                   <button
                     onClick={() => toggleDropdown(item.dropdownKey!)}
-                    className={`flex items-center gap-1 text-sm font-medium subpixel-antialiased rendering-optimizeLegibility transition-colors duration-200 ${
-                      isHomePage ? 'text-[#ffffff] hover:text-[#ffffff]' : 'text-[#ffffff] hover:text-[#ffffff]'
+                    className={`flex items-center gap-1 text-sm font-medium subpixel-antialiased transition-colors duration-200 ${
+                      isHomePage ? 'text-white hover:text-white' : 'text-white hover:text-white'
                     }`}
                     aria-expanded={openDropdown === item.dropdownKey}
                     aria-haspopup="true"
@@ -182,8 +182,8 @@ export function Header({ settings }: HeaderProps) {
               ) : (
                 <a
                   href={item.href}
-                  className={`text-sm font-medium subpixel-antialiased rendering-optimizeLegibility transition-colors duration-200 ${
-                    isHomePage ? 'text-[#ffffff] hover:text-[#ffffff]' : 'text-[#ffffff] hover:text-[#ffffff]'
+                  className={`text-sm font-medium subpixel-antialiased transition-colors duration-200 ${
+                    isHomePage ? 'text-white hover:text-white' : 'text-white hover:text-white'
                   }`}
                 >
                   {item.label}
@@ -235,7 +235,7 @@ export function Header({ settings }: HeaderProps) {
           <button
             onClick={() => setMenuOpen(!menuOpen)}
             className={`flex h-10 w-10 items-center justify-center rounded-lg transition-colors ${
-              isHomePage ? 'text-[#ffffff] hover:text-[#ffffff]' : 'text-[#ffffff] hover:text-[#ffffff]'
+              isHomePage ? 'text-white hover:text-white' : 'text-white hover:text-white'
             } md:hidden`}
             aria-label={menuOpen ? "Menyuni yopish" : "Menyuni ochish"}
             aria-expanded={menuOpen}
@@ -253,7 +253,7 @@ export function Header({ settings }: HeaderProps) {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
-            className="overflow-hidden border-t border-[var(--color-text-light)]/10 bg-[var(--color-primary-dark)]/95 backdrop-blur-xl md:hidden"
+            className="overflow-hidden border-t border-[var(--color-text-light)]/10 bg-[var(--color-primary-dark)]/95 md:hidden"
             aria-label="Mobil menyusi"
           >
             <div className="mx-auto flex max-w-7xl flex-col gap-1 px-4 py-4">
@@ -263,7 +263,7 @@ export function Header({ settings }: HeaderProps) {
                     <div>
                       <button
                         onClick={() => toggleDropdown(item.dropdownKey!)}
-                        className="flex w-full items-center justify-between rounded-lg px-4 py-3 text-base font-medium text-[var(--color-text-light)]/80 transition-colors hover:bg-[var(--color-text-light)]/5 hover:text-[var(--color-text-light)]"
+                        className="flex w-full items-center justify-between rounded-lg px-4 py-3 text-base font-medium text-white subpixel-antialiased transition-colors hover:bg-[var(--color-text-light)]/10"
                         aria-expanded={openDropdown === item.dropdownKey}
                       >
                         {item.label}
@@ -291,7 +291,7 @@ export function Header({ settings }: HeaderProps) {
                                     setOpenDropdown(null);
                                     setMenuOpen(false);
                                   }}
-                                  className="block px-8 py-3 text-sm text-[var(--color-text-light)]/70 transition-colors hover:bg-[var(--color-text-light)]/10 hover:text-[var(--color-text-light)]"
+                                  className="block px-8 py-3 text-sm font-medium text-white subpixel-antialiased transition-colors hover:bg-[var(--color-text-light)]/15"
                                 >
                                   {subItem.label}
                                 </a>
@@ -305,7 +305,7 @@ export function Header({ settings }: HeaderProps) {
                     <a
                       href={item.href}
                       onClick={() => setMenuOpen(false)}
-                      className="rounded-lg px-4 py-3 text-base font-medium text-[var(--color-text-light)]/80 transition-colors hover:bg-[var(--color-text-light)]/5 hover:text-[var(--color-text-light)]"
+                      className="rounded-lg px-4 py-3 text-base font-medium text-white subpixel-antialiased transition-colors hover:bg-[var(--color-text-light)]/10"
                     >
                       {item.label}
                     </a>
