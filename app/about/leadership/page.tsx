@@ -1,3 +1,4 @@
+import { InnerPageLayout } from '@/components/ui/InnerPageLayout';
 import { LeadershipClient } from './leadership-client';
 
 export const metadata = {
@@ -6,5 +7,34 @@ export const metadata = {
 };
 
 export default function LeadershipPage() {
-  return <LeadershipClient />;
+  return (
+    <InnerPageLayout
+      title="Rahbariyat"
+      subtitle="Muassasa rahbariyati tarkibi va ularning mehnat faoliyati"
+      breadcrumbs={[
+        { label: "Bosh sahifa", href: "/" },
+        { label: "Jamg'arma haqida", href: "/about" },
+        { label: "Rahbariyat" }
+      ]}
+      relatedLinks={[
+        {
+          label: "Funksiya va vazifalar",
+          href: "/about/functions",
+          description: "Muassasaning asosiy funksiyalari"
+        },
+        {
+          label: "Hududiy boshqarmalar",
+          href: "/about/regions",
+          description: "Viloyatlar bo'yicha boshqarmalar"
+        },
+        {
+          label: "Tashkilot pasporti",
+          href: "/about/passport",
+          description: "Muassasa haqida umumiy ma'lumot"
+        }
+      ]}
+    >
+      <LeadershipClient />
+    </InnerPageLayout>
+  );
 }

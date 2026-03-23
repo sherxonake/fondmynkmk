@@ -89,7 +89,7 @@ function LeaderCard({ leader, isExpanded, onToggle }: LeaderCardProps) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.6 }}
-      className={`overflow-hidden rounded-2xl bg-[var(--color-white)] shadow-[var(--shadow-card)] transition-all duration-300 hover:shadow-xl ${
+      className={`overflow-hidden rounded-2xl bg-white shadow-lg transition-all duration-300 hover:shadow-xl ${
         leader.isMain ? 'md:col-span-2 lg:col-span-3' : ''
       }`}
     >
@@ -110,17 +110,17 @@ function LeaderCard({ leader, isExpanded, onToggle }: LeaderCardProps) {
         {/* Content */}
         <div className="flex-1">
           <div className="mb-4">
-            <h2 className={`font-bold text-[var(--color-text-dark)] transition-colors ${
+            <h2 className={`font-bold text-[#0d1f3c] transition-colors ${
               leader.isMain ? 'text-3xl lg:text-4xl' : 'text-2xl lg:text-3xl'
             }`} style={{ letterSpacing: "-0.02em" }}>
               {leader.name}
             </h2>
-            <p className={`font-semibold text-[var(--color-accent-gold)] mt-2 ${
+            <p className={`font-semibold text-[#c9a84c] mt-2 ${
               leader.isMain ? 'text-lg' : 'text-base'
             }`}>
               {leader.position}
             </p>
-            <p className="text-sm text-[var(--color-text-dark)]/60 mt-1">
+            <p className="text-sm text-[#0d1f3c]/60 mt-1">
               {age} yosh, {leader.birthYear}-yilda tug'ilgan
             </p>
           </div>
@@ -128,19 +128,19 @@ function LeaderCard({ leader, isExpanded, onToggle }: LeaderCardProps) {
           {/* Expandable sections */}
           <div className="space-y-4">
             {/* Biography */}
-            <div className="border border-[var(--color-text-light)]/10 rounded-lg overflow-hidden">
+            <div className="border border-[#0d1f3c]/10 rounded-lg overflow-hidden">
               <button
                 onClick={onToggle}
-                className="w-full flex items-center justify-between p-4 text-left hover:bg-[var(--color-primary-light)]/50 transition-colors"
+                className="w-full flex items-center justify-between p-4 text-left hover:bg-[#f8fafc] transition-colors"
               >
                 <div className="flex items-center gap-3">
-                  <User className="h-5 w-5 text-[var(--color-accent-gold)]" />
-                  <span className="font-semibold text-[var(--color-text-dark)]">Biografiyasi</span>
+                  <User className="h-5 w-5 text-[#c9a84c]" />
+                  <span className="font-semibold text-[#0d1f3c]">Biografiyasi</span>
                 </div>
                 {isExpanded ? (
-                  <ChevronUp className="h-5 w-5 text-[var(--color-text-dark)]/60" />
+                  <ChevronUp className="h-5 w-5 text-[#0d1f3c]/60" />
                 ) : (
-                  <ChevronDown className="h-5 w-5 text-[var(--color-text-dark)]/60" />
+                  <ChevronDown className="h-5 w-5 text-[#0d1f3c]/60" />
                 )}
               </button>
               
@@ -152,14 +152,14 @@ function LeaderCard({ leader, isExpanded, onToggle }: LeaderCardProps) {
               >
                 <div className="p-4 pt-0">
                   <div className="flex items-center gap-2 mb-3">
-                    <GraduationCap className="h-4 w-4 text-[var(--color-accent-gold)]" />
-                    <span className="font-medium text-[var(--color-text-dark)]/80">Ma'lumoti:</span>
+                    <GraduationCap className="h-4 w-4 text-[#c9a84c]" />
+                    <span className="font-medium text-[#0d1f3c]/80">Ma'lumoti:</span>
                   </div>
                   <ul className="space-y-2">
                     {leader.education.map((item, index) => (
                       <li key={index} className="flex items-start gap-2">
-                        <span className="text-[var(--color-accent-gold)] mt-1">•</span>
-                        <span className="text-[var(--color-text-dark)]/70">{item}</span>
+                        <span className="text-[#c9a84c] mt-1">•</span>
+                        <span className="text-[#0d1f3c]/70">{item}</span>
                       </li>
                     ))}
                   </ul>
@@ -168,19 +168,19 @@ function LeaderCard({ leader, isExpanded, onToggle }: LeaderCardProps) {
             </div>
 
             {/* Career */}
-            <div className="border border-[var(--color-text-light)]/10 rounded-lg overflow-hidden">
+            <div className="border border-[#0d1f3c]/10 rounded-lg overflow-hidden">
               <button
                 onClick={onToggle}
-                className="w-full flex items-center justify-between p-4 text-left hover:bg-[var(--color-primary-light)]/50 transition-colors"
+                className="w-full flex items-center justify-between p-4 text-left hover:bg-[#f8fafc] transition-colors"
               >
                 <div className="flex items-center gap-3">
-                  <Briefcase className="h-5 w-5 text-[var(--color-accent-gold)]" />
-                  <span className="font-semibold text-[var(--color-text-dark)]">Mehnat faoliyati</span>
+                  <Briefcase className="h-5 w-5 text-[#c9a84c]" />
+                  <span className="font-semibold text-[#0d1f3c]">Mehnat faoliyati</span>
                 </div>
                 {isExpanded ? (
-                  <ChevronUp className="h-5 w-5 text-[var(--color-text-dark)]/60" />
+                  <ChevronUp className="h-5 w-5 text-[#0d1f3c]/60" />
                 ) : (
-                  <ChevronDown className="h-5 w-5 text-[var(--color-text-dark)]/60" />
+                  <ChevronDown className="h-5 w-5 text-[#0d1f3c]/60" />
                 )}
               </button>
               
@@ -194,10 +194,10 @@ function LeaderCard({ leader, isExpanded, onToggle }: LeaderCardProps) {
                   <ul className="space-y-3">
                     {leader.career.map((item, index) => (
                       <li key={index} className="flex gap-3">
-                        <span className="flex-shrink-0 font-semibold text-[var(--color-accent-gold)] text-sm mt-0.5">
+                        <span className="flex-shrink-0 font-semibold text-[#c9a84c] text-sm mt-0.5">
                           {item.period}
                         </span>
-                        <span className="text-[var(--color-text-dark)]/70">{item.position}</span>
+                        <span className="text-[#0d1f3c]/70">{item.position}</span>
                       </li>
                     ))}
                   </ul>
@@ -230,53 +230,31 @@ export function LeadershipClient() {
   const otherLeaders = leadershipData.filter(leader => !leader.isMain);
 
   return (
-    <>
-      {/* Hero Section */}
-      <section className="bg-[var(--color-primary-dark)] text-white py-20 lg:py-28">
-        <div className="mx-auto max-w-7xl px-4 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center"
-          >
-            <h1 className="text-4xl font-bold lg:text-6xl mb-4" style={{ letterSpacing: "-0.02em" }}>
-              Rahbariyat
-            </h1>
-            <p className="text-xl text-[var(--color-text-light)]/80 max-w-3xl mx-auto">
-              "NKMK jamg'armasi" davlat muassasasi rahbariyati tarkibi va ularning mehnat faoliyati
-            </p>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Leadership Content */}
-      <section className="bg-[var(--color-primary-light)] py-16 lg:py-24">
-        <div className="mx-auto max-w-7xl px-4 lg:px-8">
-          {/* Main Leader */}
-          {mainLeader && (
-            <div className="mb-12">
-              <LeaderCard
-                leader={mainLeader}
-                isExpanded={expandedCards.has(mainLeader.id)}
-                onToggle={() => toggleCard(mainLeader.id)}
-              />
-            </div>
-          )}
-
-          {/* Other Leaders */}
-          <div className="grid gap-8 lg:grid-cols-3">
-            {otherLeaders.map((leader) => (
-              <LeaderCard
-                key={leader.id}
-                leader={leader}
-                isExpanded={expandedCards.has(leader.id)}
-                onToggle={() => toggleCard(leader.id)}
-              />
-            ))}
+    <section className="py-16 lg:py-24">
+      <div className="mx-auto max-w-7xl px-4 lg:px-8">
+        {/* Main Leader */}
+        {mainLeader && (
+          <div className="mb-12">
+            <LeaderCard
+              leader={mainLeader}
+              isExpanded={expandedCards.has(mainLeader.id)}
+              onToggle={() => toggleCard(mainLeader.id)}
+            />
           </div>
+        )}
+
+        {/* Other Leaders */}
+        <div className="grid gap-8 lg:grid-cols-3">
+          {otherLeaders.map((leader) => (
+            <LeaderCard
+              key={leader.id}
+              leader={leader}
+              isExpanded={expandedCards.has(leader.id)}
+              onToggle={() => toggleCard(leader.id)}
+            />
+          ))}
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 }
