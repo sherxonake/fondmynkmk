@@ -28,6 +28,10 @@
     "anticorruption": "Korrupsiyaga qarshi"
   },
   "Header": {
+    "about": "Jamg'arma haqida",
+    "services": "Xizmatlar",
+    "openData": "Ochiq ma'lumotlar",
+    "news": "Yangiliklar",
     "contact": "Bog'lanish",
     "callCenter": "Call markaz",
     "trustPhone": "Ishonch telefoni"

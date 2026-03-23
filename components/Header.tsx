@@ -7,14 +7,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import { usePathname } from "next/navigation";
 import type { SiteSettings } from "@/types";
 import { LanguageSwitcher } from "./LanguageSwitcher";
-import { useLanguage } from "@/contexts/LanguageContext";
+import { useTranslations } from 'next-intl';
 
 interface HeaderProps {
   settings: SiteSettings;
 }
 
 export function Header({ settings }: HeaderProps) {
-  const { t } = useLanguage();
+  const t = useTranslations('Header');
   const pathname = usePathname();
   
   if (pathname?.startsWith('/admin')) return null;
@@ -55,7 +55,7 @@ export function Header({ settings }: HeaderProps) {
 
   const navItems = [
     {
-      label: "Jamg'arma haqida",
+      label: t('about'),
       hasDropdown: true,
       dropdownKey: "about",
       items: [
@@ -68,7 +68,7 @@ export function Header({ settings }: HeaderProps) {
       ]
     },
     {
-      label: "Xizmatlar",
+      label: t('services'),
       hasDropdown: true,
       dropdownKey: "services",
       items: [
@@ -81,7 +81,7 @@ export function Header({ settings }: HeaderProps) {
       ]
     },
     {
-      label: "Ochiq ma'lumotlar",
+      label: t('openData'),
       hasDropdown: true,
       dropdownKey: "open-data",
       items: [
@@ -91,7 +91,7 @@ export function Header({ settings }: HeaderProps) {
       ]
     },
     {
-      label: "Yangiliklar",
+      label: t('news'),
       href: `/${locale}/news`,
       hasDropdown: false
     }

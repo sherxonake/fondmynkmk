@@ -28,6 +28,10 @@
     "anticorruption": "Антикоррупция"
   },
   "Header": {
+    "about": "О фонде",
+    "services": "Услуги",
+    "openData": "Открытые данные",
+    "news": "Новости",
     "contact": "Связаться",
     "callCenter": "Call центр",
     "trustPhone": "Телефон доверия"
