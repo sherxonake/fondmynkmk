@@ -130,10 +130,10 @@ export function Footer({ columns }: FooterProps) {
                 <Mail size={14} />
                 info@fondnkmk.uz
               </a>
-              <div className="flex items-center gap-3 text-sm text-[var(--color-text-light)]/50">
-                <Phone className="h-4 w-4 shrink-0 text-[var(--color-accent-gold)]" aria-hidden="true" />
-                <span className="font-medium text-[var(--color-text-light)]/70">+998 79 223-60-21</span>
-              </div>
+             <div className="flex items-center gap-3 text-sm text-[var(--color-text-light)]/50">
+                 <Phone className="h-4 w-4 shrink-0 text-[var(--color-accent-gold)]" aria-hidden="true" />
+                 <a href="tel:+998792272121" className="font-medium text-[var(--color-text-light)]/70">+998 79 227 21 21</a>
+             </div>
             </div>
           </div>
 

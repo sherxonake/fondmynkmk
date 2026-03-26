@@ -32,22 +32,31 @@ export function Header({ settings }: HeaderProps) {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (openDropdown) {
-        const clickedElement = event.target as Element;
-        const isDropdownClick = Object.values(dropdownRefs.current).some(
-          ref => ref?.contains(clickedElement)
-        );
-        if (!isDropdownClick) {
-          setOpenDropdown(null);
-        }
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [openDropdown]);
+   useEffect(() => {
+     const handleClickOutside = (event: MouseEvent) => {
+       if (openDropdown) {
+         const clickedElement = event.target as Element;
+         const isDropdownClick = Object.values(dropdownRefs.current).some(
+           ref => ref?.contains(clickedElement)
+         );
+         if (!isDropdownClick) {
+           setOpenDropdown(null);
+         }
+       }
+     };
+ 
+     document.addEventListener('mousedown', handleClickOutside);
+     return () => document.removeEventListener('mousedown', handleClickOutside);
+   }, [openDropdown]);
+ 
+   // Lock body scroll when mobile menu is open
+   useEffect(() => {
+     if (menuOpen) {
+       document.body.classList.add('overflow-hidden');
+     } else {
+       document.body.classList.remove('overflow-hidden');
+     }
+   }, [menuOpen]);
 
   const toggleDropdown = (dropdown: string) => {
     setOpenDropdown(openDropdown === dropdown ? null : dropdown);
@@ -80,16 +89,16 @@ export function Header({ settings }: HeaderProps) {
         { label: 'Ijtimoiy obyektlar', href: `/${locale}/services/production` },
       ]
     },
-    {
-      label: t('openData'),
-      hasDropdown: true,
-      dropdownKey: "open-data",
-      items: [
-        { label: 'Statistik', href: `/${locale}/open-data/statistics` },
-        { label: 'Narxlar', href: `/${locale}/open-data/prices` },
-        { label: 'Tenderlar', href: `/${locale}/open-data/tenders` },
-      ]
-    },
+     // {
+     //   label: t('openData'),
+     //   hasDropdown: true,
+     //   dropdownKey: "open-data",
+     //   items: [
+     //     { label: 'Statistik', href: `/${locale}/open-data/statistics` },
+     //     { label: 'Narxlar', href: `/${locale}/open-data/prices` },
+     //     { label: 'Tenderlar', href: `/${locale}/open-data/tenders` },
+     //   ]
+     // },
     {
       label: t('news'),
       href: `/${locale}/news`,
