@@ -253,7 +253,7 @@ export function Header({ settings }: HeaderProps) {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
-            className="overflow-hidden border-t border-[var(--color-text-light)]/10 bg-[var(--color-primary-dark)]/95 md:hidden"
+             className="overflow-hidden border-t border-[var(--color-text-light)]/10 bg-[var(--color-primary-dark)]/95 z-50 md:hidden"
             aria-label="Mobil menyusi"
           >
             <div className="mx-auto flex max-w-7xl flex-col gap-1 px-4 py-4">

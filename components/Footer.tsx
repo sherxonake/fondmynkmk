@@ -193,9 +193,9 @@ export function Footer({ columns }: FooterProps) {
           </div>
 
           <div className="flex items-center gap-4 text-xs text-[var(--color-text-light)]/30">
-            <a href="#" className="transition-colors hover:text-[var(--color-text-light)]/60">Sayt xaritasi</a>
+             <a href="/" className="transition-colors hover:text-[var(--color-text-light)]/60">Sayt xaritasi</a>
             <span aria-hidden="true">|</span>
-            <a href="#" className="transition-colors hover:text-[var(--color-text-light)]/60">Maxfiylik siyosati</a>
+             <a href="/" className="transition-colors hover:text-[var(--color-text-light)]/60">Maxfiylik siyosati</a>
           </div>
         </div>
       </div>

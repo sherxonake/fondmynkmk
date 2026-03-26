@@ -20,8 +20,8 @@ export default function AboutPage() {
         { label: "Hududiy boshqarmalar", href: "/about/regions", description: "Viloyatlar bo'yicha boshqarmalar" },
       ]}
     >
-      {/* Jamg'arma haqida */}
-      <section className="mb-12">
+       {/* Jamg'arma haqida */}
+       <section id="about" className="mb-12">
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8">
           <div className="flex items-start gap-4 mb-6">
             <div className="text-4xl">🏛️</div>

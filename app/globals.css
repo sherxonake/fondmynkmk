@@ -85,6 +85,10 @@
   body {
     @apply bg-background text-foreground;
   }
+  /* Fix for fixed header overlapping anchor targets */
+  [id] {
+    scroll-margin-top: 80px;
+  }
 }
 
 /* Phone button pulsating glow on hover */
