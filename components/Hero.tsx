@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { usePathname } from "next/navigation";
 import type { HeroSlide } from "@/types";
 
 interface HeroProps {
@@ -14,6 +15,9 @@ const SLIDE_DURATION = 6000;
 
 export function Hero({ slides }: HeroProps) {
   if (!slides || slides.length === 0) return null;
+
+  const pathname = usePathname();
+  const locale = pathname?.split('/')[1] || 'uz';
 
   const [current, setCurrent] = useState(0);
   const [progress, setProgress] = useState(0);
@@ -132,18 +136,18 @@ export function Hero({ slides }: HeroProps) {
           transition={{ delay: 0.7, duration: 0.6 }}
           className="mt-12 flex flex-col items-center gap-4 sm:flex-row"
         >
-          <a
-            href="#about"
-            className="inline-flex items-center rounded-full bg-[var(--color-accent-gold)] px-8 py-4 text-base font-bold text-[var(--color-primary-dark)] shadow-lg shadow-[var(--color-accent-gold)]/25 transition-all duration-300 hover:scale-[1.03] hover:shadow-xl hover:shadow-[var(--color-accent-gold)]/35"
-          >
-            Biz haqimizda
-          </a>
-          <a
-            href="#news"
-            className="inline-flex items-center rounded-full border border-[var(--color-text-light)]/20 bg-[var(--color-text-light)]/5 px-8 py-4 text-base font-semibold text-[var(--color-text-light)] backdrop-blur-sm transition-all duration-300 hover:border-[var(--color-text-light)]/40 hover:bg-[var(--color-text-light)]/10"
-          >
-            Yangiliklar
-          </a>
+           <a
+             href={`/${locale}#about`}
+             className="inline-flex items-center rounded-full bg-[var(--color-accent-gold)] px-8 py-4 text-base font-bold text-[var(--color-primary-dark)] shadow-lg shadow-[var(--color-accent-gold)]/25 transition-all duration-300 hover:scale-[1.03] hover:shadow-xl hover:shadow-[var(--color-accent-gold)]/35"
+           >
+             Biz haqimizda
+           </a>
+           <a
+             href={`/${locale}#news`}
+             className="inline-flex items-center rounded-full border border-[var(--color-text-light)]/20 bg-[var(--color-text-light)]/5 px-8 py-4 text-base font-semibold text-[var(--color-text-light)] backdrop-blur-sm transition-all duration-300 hover:border-[var(--color-text-light)]/40 hover:bg-[var(--color-text-light)]/10"
+           >
+             Yangiliklar
+           </a>
         </motion.div>
       </div>
 
