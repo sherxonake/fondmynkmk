@@ -93,19 +93,11 @@ export async function restoreNewsAction(input: { id: string }) {
 
 export async function deleteNewsAction(input: { id: string }) {
   await requireAdminSession();
-  const cookieHeader = await buildCookieHeader();
-  const response = await fetch(`${INTERNAL_BASE_URL}/api/admin/news/${input.id}`, {
-    method: 'DELETE',
-    cache: 'no-store',
-    headers: {
-      ...(cookieHeader ? { Cookie: cookieHeader } : {}),
-    },
-  });
 
-  if (!response.ok) {
-    const payload = (await response.json().catch(() => null)) as { error?: string } | null;
-    const message = payload?.error ?? 'Не удалось удалить новость';
-    throw new Error(message);
+  const { error } = await supabase.from('news_articles').delete().eq('id', input.id);
+
+  if (error) {
+    throw new Error(`Не удалось удалить новость: ${error.message}`);
   }
 
   await invalidateNewsCache();
