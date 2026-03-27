@@ -351,7 +351,7 @@ export function setupBotHandlers(bot: Bot): void {
         return;
       }
 
-      const slug = generateSlug(title);
+       const slug = `${generateSlug(title)}-${Date.now()}`;
       const excerptSource = content || title;
       const payload: NewsArticleInsert = {
         title,
